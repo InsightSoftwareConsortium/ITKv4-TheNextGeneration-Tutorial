@@ -71,11 +71,33 @@ ITKv4
 }
 
 
-\section{Introduction}
-
+\centeredlargetext{white}{black}{
+10 Years Old
+}
 
 \centeredlargetext{white}{black}{
+\$ 5 Million
+}
+
+\centeredlargetext{white}{black}{
+ARRA Funds
+}
+
+\centeredlargetext{white}{black}{
+1.5 Years
+}
+
+\centeredlargetext{white}{black}{
+Next 10 Years
+}
+
+\centeredlargetext{black}{white}{
 Apache 2.0 License
+}
+
+\centeredlargetext{black}{white}{
+Patented Directory\\
+Removed
 }
 
 
@@ -85,6 +107,7 @@ New Software Process
 
 \begin{frame}
 \frametitle{Software Process}
+\Huge
 \begin{itemize}
 \item Git
 \pause
@@ -100,6 +123,7 @@ Modularization
 
 \begin{frame}
 \frametitle{Modularization}
+\Huge
 \begin{itemize}
 \item 98 Modules
 \pause
@@ -110,12 +134,24 @@ Modularization
 \end{frame}
 
 
-\begin{frame}[fragile]
-\frametitle{Modules Size}
-\begin{center}
-  \includegraphics[width=0.5\paperwidth]{moduleSizePlot.pdf}
-\end{center}
+{
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{background canvas}{
+  \includegraphics[width=\paperwidth,height=\paperheight]{moduleSizePlot.pdf}
+}
+\begin{frame}[plain]
 \end{frame}
+}
+
+
+{
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{background canvas}{
+  \includegraphics[width=\paperwidth,height=\paperheight]{moduleSizePlotNoThirdParty.pdf}
+}
+\begin{frame}[plain]
+\end{frame}
+}
 
 
 \centeredlargetext{white}{black}{
@@ -129,10 +165,13 @@ FEM Refactoring
 
 \begin{frame}
 \frametitle{FEM Refactoring}
+\Huge
 \begin{itemize}
 \item Code Clean up
 \pause
 \item Removed subversive pointers
+\pause
+\item FEM IO
 \end{itemize}
 \end{frame}
 
@@ -143,6 +182,7 @@ Level Sets Refactoring
 
 \begin{frame}
 \frametitle{Level Sets Refactoring}
+\Huge
 \begin{itemize}
 \item Generalization for Images and Meshes
 \pause
@@ -157,6 +197,7 @@ Image Registration Refactoring
 
 \begin{frame}
 \frametitle{Image Registration Refactoring}
+\Huge
 \begin{itemize}
 \item Composite Transform
 \pause
@@ -173,13 +214,16 @@ GPU
 
 
 \begin{frame}
-\frametitle{Image Registration Refactoring}
+\frametitle{GPU}
+\Huge
 \begin{itemize}
-\item Composite Transform
+\item GPU Module
 \pause
-\item Symmetric Registration
+\item GPU Image
 \pause
-\item Transforms IO
+\item GPU ImageToImageFilter
+\pause
+\item Factories
 \end{itemize}
 \end{frame}
 
@@ -190,7 +234,30 @@ SimpleITK
 
 
 \begin{frame}
+\frametitle{SimpleITK}
+\Huge
+\begin{itemize}
+\item Hiding Templates
+\pause
+\item Smarter IO
+\pause
+\item Procedural Programming
+\pause
+\item Easier Wrapping
+\pause
+\item Binary Distribution
+\end{itemize}
+\end{frame}
+
+
+\centeredlargetext{white}{black}{
+New Fields
+}
+
+
+\begin{frame}
 \frametitle{New Fields}
+\Huge
 \begin{itemize}
 \item Microscopy
 \pause
@@ -199,6 +266,92 @@ SimpleITK
 \item Remote Sensing
 \end{itemize}
 \end{frame}
+
+
+\centeredlargetext{white}{black}{
+Video Bridge
+}
+
+
+\begin{frame}
+\frametitle{Video Bridge}
+\Huge
+\begin{itemize}
+\item OpenCV
+\pause
+\item VXL
+\pause
+\item Video Filters
+\end{itemize}
+\end{frame}
+
+
+\centeredlargetext{white}{black}{
+Microscopy
+}
+
+
+\begin{frame}
+\frametitle{Microscopy}
+\Huge
+\begin{itemize}
+\item Deconvolution
+\pause
+\item Denoising
+\pause
+\item Color correction
+\pause
+\item Colocalization
+\pause
+\item File Formats
+\end{itemize}
+\end{frame}
+
+
+\centeredlargetext{black}{white}{
+Large Images
+}
+
+
+\begin{frame}
+\frametitle{Large Images}
+\Huge
+\begin{itemize}
+\item JPEG 2000
+\pause
+\item Tiling
+\pause
+\item HDF5
+\pause
+\item Multi-Resolution Levels
+\end{itemize}
+\end{frame}
+
+
+\centeredlargetext{black}{white}{
+Insight Journal
+}
+
+\begin{frame}
+\frametitle{Insight Journal}
+\Huge
+\begin{itemize}
+\item Git Backend
+\pause
+\item Virtual Appliances
+\pause
+\item CDE
+\pause
+\item Reproducible Research
+\end{itemize}
+\end{frame}
+
+
+\centeredlargetext{white}{black}{
+Live Long\\
+and\\
+Prosper !
+}
 
 
 \end{document}
