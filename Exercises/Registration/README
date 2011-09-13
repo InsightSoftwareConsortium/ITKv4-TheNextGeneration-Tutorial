@@ -1,0 +1,12 @@
+#
+# should also add
+#
+# itkThevenazMutualInformationImageToImageObjectMetric
+http://review.source.kitware.com/#change,2716
+# DemonsImageToImageObjectMetric
+http://review.source.kitware.com/#change,2715
+# parameter scale estimator 
+http://review.source.kitware.com/#change,2628
+# and maybe Change Iff3c02f3: ENH: Adding resizing of transform parameters option.
+http://review.source.kitware.com/#change,2665
+# potentially a BSpline example as well (if nick or hans can help)
