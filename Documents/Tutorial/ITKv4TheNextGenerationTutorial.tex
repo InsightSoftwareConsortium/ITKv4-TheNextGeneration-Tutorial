@@ -3,6 +3,11 @@
 
 \usepackage{graphics}
 
+\newcommand{\lstlistingwithnumber}[3]{
+\begin{center}
+\lstinputlisting[linerange={#1-#2},firstnumber=#1,numbers=left]{#3}
+\end{center}
+}
 
 \newcommand{\centeredlargetext}[3]{
 {
