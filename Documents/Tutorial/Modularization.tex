@@ -1,0 +1,140 @@
+\documentclass[18pt]{beamer}
+\usetheme{Madrid}
+
+\usepackage{graphics}
+
+
+\newcommand{\centeredlargetext}[3]{
+{
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{background canvas}{bg={#1}}
+\color{#2}
+\begin{frame}[plain]
+\fontsize{28pt}{28pt}\selectfont
+\center
+\begin{center}
+{#3}
+\end{center}
+\end{frame}
+}}
+
+
+
+\begin{document}
+
+\title[ITKv4]{ITKv4 - Modularization}
+\institute[Insight Software Consortium]{Insight Software Consortium}
+\date[Sept 2011]{Sept 2011}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+{
+\setbeamertemplate{navigation symbols}{}
+\begin{frame}[plain]
+\center
+\begin{center}
+This presentation is copyrighted by\\
+The \textbf{Insight Software Consortium}\\
+\bigskip
+distributed under the\\
+\textbf{Creative Commons by Attribution License 3.0}\\
+\url{http://creativecommons.org/licenses/by/3.0}\\
+\end{center}
+\end{frame}
+}
+
+
+\begin{frame}
+  \tableofcontents
+\end{frame}
+
+\begin{frame}
+\frametitle{Why Modularization}
+\begin{itemize}
+\item Growth management
+\pause
+\item Software quality improvement
+\pause
+\item Facilitating add-ons
+\pause
+\item Separate third party libraries
+\pause
+\item Optional Components
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{ITK Module Grouping}
+\begin{itemize}
+\item  How many groups?
+\pause
+\item  Grouping criteria
+\pause
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{ Visualize module depedency}
+\begin{itemize}
+\item  vtk picture
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Modular darshboard }
+\begin{itemize}
+\item  Module-by-module dashboard submission
+\pause
+\item  Code coverage per module
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{How to add a module into ITK}
+\begin{itemize}
+\item Where to put a module (categorization)
+\pause
+\item How to construct a module (CMake magic)
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Modularizatoin checklist}
+
+\begin{itemize}
+\item  Module categorization: module group, module name
+\pause
+\item  Directory hierarchy: include, test, src
+\pause
+\item  CMake configuration: CMakeLists.txt
+\pause
+\item  Module dependency: itk-module.cmake
+\pause
+\item  Add tests, \href{http://www.vtk.org/Wiki/ITK/Git/Develop/Data#Workflow}{\textcolor{red}{add testing data}}
+\pause
+\item  Documentation
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{A toy example: ITKRAT}
+
+\begin{itemize}
+\item  itkRobustAutomaticThresholdImageFilter(RAT)
+\pause
+\item  An external module: ITKRAT
+\end{itemize}
+\end{frame}
+
+\centeredlargetext{white}{black}{
+Details about ITK Modularization can be found at \href{http://www.itk.org/Wiki/ITK_Release_4/Modularization}{\textcolor{red}{Wiki Page}}.
+}
+
+
+\end{document}
