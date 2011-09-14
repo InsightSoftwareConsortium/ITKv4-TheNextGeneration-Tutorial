@@ -76,3 +76,14 @@ add_custom_target(ShortTutorialPresentation ALL
    WORKING_DIRECTORY ${ITKv4TheNextGenerationTutorialPresentation_BINARY_DIR}
    )
 
+add_custom_target(ITKv4LevelSets ALL
+   COMMAND ${PDFLATEX_COMPILER}
+        ${ITKv4TheNextGenerationTutorialPresentation_SOURCE_DIR}/ITKv4LevelSets.tex
+        -output-directory ${ITKv4TheNextGenerationTutorialPresentation_BINARY_DIR}
+   COMMAND ${PDFLATEX_COMPILER}
+        ${ITKv4TheNextGenerationTutorialPresentation_SOURCE_DIR}/ITKv4LevelSets.tex
+        -output-directory ${ITKv4TheNextGenerationTutorialPresentation_BINARY_DIR}
+   DEPENDS ${COPY_RESULTS} ${REPORT_ELEMENTS}
+   WORKING_DIRECTORY ${ITKv4TheNextGenerationTutorialPresentation_BINARY_DIR}
+   )
+
