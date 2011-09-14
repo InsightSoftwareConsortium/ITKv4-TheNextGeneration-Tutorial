@@ -40,12 +40,23 @@ Introduction
 
 \begin{frame}
 \frametitle{What is a level-set function?}
-\begin{itemize}
-\item Implicit function $\phi : \Omega \rightarrow \mathbb{R}$
-\item If $\phi(p) = 0$, $p$ is on the interface $\Gamma$
-\item If $\phi(p) < 0$, $p$ is inside
-\item Else $p$ is outside
-\end{itemize}
+\begin{columns}
+\column{0.4\textwidth}
+  \begin{block}
+  \begin{itemize}
+  \item Implicit function $\phi : \Omega \rightarrow \mathbb{R}$
+  \item If $\phi(p) = 0$, $p$ is on the interface $\Gamma$
+  \item If $\phi(p) < 0$, $p$ is inside
+  \item Else $p$ is outside
+  \end{itemize}
+  \end{block}
+% \column{0.4\textwidth}
+% \begin{center}
+%  \includegraphics{IntroLevelSet.png}
+ % IntroLevelSet.png: 192x194 pixel, 72dpi, 6.77x6.84 cm, bb=0 0 192 194
+% \end{center}
+
+\begin{columns}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -195,105 +206,6 @@ Introduction
   \item<3-> PDE Parameters tuning
 \end{itemize}
 \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% \section{Overview of the Level-Sets in ITKv3}
-% \centeredlargetext{white}{black}{
-% Overview of the Level-Sets in ITKv3
-% }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% \begin{frame}
-% \frametitle{PDE Model in ITKv3}
-% \begin{equation*}
-%  \frac{\partial \phi}{\partial \tau} = 
-%       \alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi
--
-%       \beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi\| +
-%       \gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
-%       \text{div}\ \frac{\overrightarrow{\nabla}
-%       \phi}{\|\overrightarrow{\nabla} \phi\|}    
-% \end{equation*}
-% 
-% \begin{columns}
-%   \column{0.3\textwidth}
-%   \begin{block}<2->{Advection}
-%     $\alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi$
-%     \begin{itemize}
-%      \item $\alpha$: coefficient
-%      \item $A(p)$:\\ Advection field
-%     \end{itemize}
-% 
-%   \end{block}
-% 
-%   \column{0.3\textwidth}
-%   \begin{block}<3->{Propagation}
-%     $\beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi\|$
-%     \begin{itemize}
-%       \item $\beta$: coefficient
-%       \item $P(p)$:\\ Propagation field
-%     \end{itemize}
-% 
-%   \end{block}
-% 
-%   \column{0.3\textwidth}
-%   \begin{block}<4>{Curvature}
-%     $\gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
-%       \text{div}\ \frac{\overrightarrow{\nabla}
-%       \phi}{\|\overrightarrow{\nabla} \phi\|}$
-%     \begin{itemize}
-%      \item $\gamma$: coefficient
-%     \end{itemize}
-%     \vspace{0.8cm}
-%   \end{block}
-% \end{columns}
-% 
-% \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% \begin{frame}
-% \frametitle{PDE Model in ITKv3}
-% \begin{equation*}
-%  \frac{\partial \phi}{\partial \tau} = 
-%       \alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi
--
-%       \beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi\| +
-%       \gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
-%       \text{div}\ \frac{\overrightarrow{\nabla}
-%       \phi}{\|\overrightarrow{\nabla} \phi\|}    
-% \end{equation*}
-% 
-% \begin{columns}
-%  
-%   \column{0.4\textwidth}
-%   \begin{block}{Function}
-%     Discretization of the PDE
-%     \vspace{1.2cm}
-%   \end{block}
-% 
-%   \column{0.4\textwidth}
-%   \begin{block}{Solver}
-%     Iterative evolution of $\phi$
-%     \begin{enumerate}
-%           \item ''Dense''
-%           \item ''Sparse''
-%     \end{enumerate}
-%   \end{block}
-% \end{columns}
-% 
-% \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -483,33 +395,6 @@ Add a curvature term to the example
 \centeredlargetext{white}{black}{
 Change the represesentation from Whitaker's to Shi's
 }
-
-% \begin{frame}
-% \frametitle{Multi Level Sets}
-% \begin{itemize}
-%   \item N Level Sets function evolving at the same time
-%   \item Geometrical Constraints
-% \end{itemize}
-% \end{frame}
-% 
-% \end{colum}
-
-
-% \include{SoftwarePreparation1}
-
-% \include{ITKOverview}
-
-% \include{SoftwarePreparation2}
-
-% \include{SoftwareEnvironment}
-
-% \include{ITKIntroduction}
-
-% \include{OpenCVIntroduction}
-
-% \include{ITKOpenCVBridge}
-
-% \include{ITKVideoFilters}
 
 \begin{frame}
 \frametitle{Wrap-up}
