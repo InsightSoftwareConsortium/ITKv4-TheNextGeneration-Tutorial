@@ -1,0 +1,507 @@
+%\documentclass[handout,18pt]{beamer}
+\documentclass[18pt]{beamer}
+\usetheme{Madrid}
+
+\usepackage{graphics}
+\usepackage{listings}
+\usepackage{url}
+
+\definecolor{listcomment}{rgb}{0.0,0.0,1.0}
+\definecolor{listkeyword}{rgb}{0.5,0.0,0.0}
+\definecolor{listidentifier}{rgb}{0.0,0.3,0.0}
+\definecolor{listdirective}{rgb}{0.5,0.0,1.0}
+\definecolor{liststring}{rgb}{1.0,0.0,1.0}
+\definecolor{listnumbers}{gray}{0.65}
+\definecolor{listlightgray}{gray}{0.955}
+\definecolor{listwhite}{gray}{1.0}
+\definecolor{listbackground}{rgb}{0.9,0.9,1.0}
+
+
+\lstset{language=C++}
+\lstset{numbers=left}
+\lstset{frame=tb}
+\lstset{xleftmargin=0.05\linewidth}
+\lstset{backgroundcolor=\color{listbackground}}
+\lstset{basicstyle=\tiny}
+\lstset{keywordstyle=\color{listkeyword}\bfseries}
+\lstset{identifierstyle=\color{listidentifier}}
+\lstset{directivestyle=\color{listdirective}}
+\lstset{commentstyle=\color{listcomment}}
+\lstset{stringstyle=\ttfamily\color{liststring}}
+\lstset{showstringspaces=false}
+
+\newcommand{\lstlistingwithnumber}[3]{
+\begin{center}
+\lstinputlisting[linerange={#1-#2},firstnumber=#1,numbers=left]{#3}
+\end{center}
+}
+
+\newcommand{\centeredlargetext}[3]{
+{
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{background canvas}{bg={#1}}
+\color{#2}
+\begin{frame}[plain]
+\fontsize{36pt}{36pt}\selectfont
+\center
+\begin{center}
+{#3}
+\end{center}
+\end{frame}
+}}
+
+\newcommand{\centeredhugetext}[3]{
+{
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{background canvas}{bg={#1}}
+\fontsize{72pt}{72pt}\selectfont
+\color{#2}
+\begin{frame}[plain]
+\center
+\begin{center}
+{#3}
+\end{center}
+\end{frame}
+}}
+
+
+\begin{document}
+
+\title[ITKv4 - Level Sets]{ITKv4: New Level Sets Framework}
+
+\institute[Insight Software Consortium]{Insight Software Consortium\\
+Megason Lab, Department of Systems Biology, Harvard Medical School}
+\date[September 2011]{September 2011}
+
+\begin{frame}
+\titlepage
+\begin{center}
+\begin{tabular}{cp{.3\textwidth}p{.3\textwidth}p{.3\textwidth}c}
+% &
+% \centering\includegraphics[height=2cm]{arnaud} &
+% \centering\includegraphics[height=2cm]{kishore} &
+% \centering\includegraphics[height=2cm]{sean} & \\
+&
+\centering{}Arnaud Gelas &
+\centering{}Kishore Mosaliganti &
+\centering{}Sean Megason & \\
+\end{tabular}
+\end{center}
+\end{frame}
+
+
+{
+\setbeamertemplate{navigation symbols}{}
+\begin{frame}[plain]
+\center
+\begin{center}
+This presentation is copyrighted by\\
+The \textbf{Insight Software Consortium}\\
+\bigskip
+distributed under the\\
+\textbf{Creative Commons by Attribution License 3.0}\\
+\url{http://creativecommons.org/licenses/by/3.0}\\
+\end{center}
+\end{frame}
+}
+
+
+%\begin{frame}
+%  \tableofcontents
+%\end{frame}
+
+\section{Introduction}
+\centeredlargetext{white}{black}{
+Introduction
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{What is a level-set function?}
+\begin{itemize}
+\item Implicit function $\phi : \Omega \rightarrow \mathbb{R}$
+\item If $\phi(p) = 0$, $p$ is on the interface $\Gamma$
+\item If $\phi(p) < 0$, $p$ is inside
+\item Else $p$ is outside
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+ \frametitle{Level-Set Evolution}
+\begin{itemize}
+  \item Deforms the level-set function
+  \begin{itemize}
+    \item Driven by given PDE
+    \begin{enumerate}
+      \item<2->[yo1]
+      \begin{equation*}
+      \frac{\partial \phi}{\partial \tau} = 
+      \alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi +
+      \gamma \cdot \text{div}\left( \frac{\overrightarrow{\nabla}
+      \phi}{\|\overrightarrow{\nabla} \phi\|} \right) \cdot
+    \|\overrightarrow{\nabla}
+      \phi\|
+      \end{equation*}
+      \item<3->[yo2]
+      \begin{equation*}
+      \frac{\partial \phi}{\partial \tau} = 
+      \alpha \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi \| +
+      \gamma \cdot \text{div}\left( \frac{\overrightarrow{\nabla}
+      \phi}{\|\overrightarrow{\nabla} \phi\|} \right) \cdot
+    \|\overrightarrow{\nabla}
+      \phi\|
+      \end{equation*}
+      \item<4->[yo3]
+      \begin{equation*}
+      \frac{\partial \phi}{\partial \tau} = \delta_{\epsilon}(\phi) 
+      \left(
+      - \lambda_{in} \left( I - \mu_{in} \right) + 
+      \lambda_{out} \left( I - \mu_{out} \right)
+      \right)
+      \end{equation*}
+    \end{enumerate}
+    \item<5-> Iterative computation
+    \item<6> Topological flexibility
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Challenges in Segmentation?}
+\begin{itemize}
+  \item<2-> PDE Term choice
+    \begin{itemize}
+      \item Advection terms ?
+      \item Propagation terms ?
+      \item Region terms ?
+      \item Regularization terms ?
+    \end{itemize}
+  \item<3-> PDE Parameters tuning
+  \item<4-> Stopping criterion
+    \begin{itemize}
+      \item Number of Iterations ?
+      \item Variation of interface length / area ?
+      \item Variation of shape area / volume ?
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Overview of the Level-Sets in ITKv3}
+\centeredlargetext{white}{black}{
+Overview of the Level-Sets in ITKv3
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}
+\frametitle{PDE Model in ITKv3}
+\begin{equation*}
+ \frac{\partial \phi}{\partial \tau} = 
+      \alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi -
+      \beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi\| +
+      \gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
+      \text{div}\ \frac{\overrightarrow{\nabla}
+      \phi}{\|\overrightarrow{\nabla} \phi\|}    
+\end{equation*}
+
+\begin{columns}
+  \column{0.3\textwidth}
+  \begin{block}<2->{Advection}
+    $\alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi$
+    \begin{itemize}
+     \item $\alpha$: coefficient
+     \item $A(p)$:\\ Advection field
+    \end{itemize}
+
+  \end{block}
+
+  \column{0.3\textwidth}
+  \begin{block}<3->{Propagation}
+    $\beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi\|$
+    \begin{itemize}
+      \item $\beta$: coefficient
+      \item $P(p)$:\\ Propagation field
+    \end{itemize}
+
+  \end{block}
+
+  \column{0.3\textwidth}
+  \begin{block}<4>{Curvature}
+    $\gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
+      \text{div}\ \frac{\overrightarrow{\nabla}
+      \phi}{\|\overrightarrow{\nabla} \phi\|}$
+    \begin{itemize}
+     \item $\gamma$: coefficient
+    \end{itemize}
+    \vspace{0.8cm}
+  \end{block}
+\end{columns}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% \begin{frame}
+% \frametitle{PDE Model in ITKv3}
+% \begin{equation*}
+%  \frac{\partial \phi}{\partial \tau} = 
+%       \alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi
+-
+%       \beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi\| +
+%       \gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
+%       \text{div}\ \frac{\overrightarrow{\nabla}
+%       \phi}{\|\overrightarrow{\nabla} \phi\|}    
+% \end{equation*}
+% 
+% \begin{columns}
+%  
+%   \column{0.4\textwidth}
+%   \begin{block}{Function}
+%     Discretization of the PDE
+%     \vspace{1.2cm}
+%   \end{block}
+% 
+%   \column{0.4\textwidth}
+%   \begin{block}{Solver}
+%     Iterative evolution of $\phi$
+%     \begin{enumerate}
+%           \item ''Dense''
+%           \item ''Sparse''
+%     \end{enumerate}
+%   \end{block}
+% \end{columns}
+% 
+% \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Overview of the Level-Sets in ITKv4}
+\centeredlargetext{white}{black}{
+Overview of the Level-Sets in ITKv4
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Level Sets Representation}
+\begin{itemize}
+  \item Discrete
+  \begin{itemize}
+    \item Dense     *********** Images
+    \item Sparse 
+    \begin{enumerate}
+      \item Whitaker  *********** Images 
+      \item Shi       *********** Images 
+      \item Malcolm   *********** Images 
+    \end{enumerate}
+  \end{itemize}
+  \item Parametric
+  \begin{itemize}
+    \item Easy integration of new representation
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Level Sets Equation}
+
+\begin{columns}
+  \column{0.47\textwidth} 
+  \begin{block}<2->{Term}
+    \begin{itemize}
+      \item Contribution for $\phi$ evolution
+      \item Contribution for time step computation
+      \item Coefficient
+    \end{itemize} 
+  \alert<3->{Easy to contribute new terms!}
+  \end{block}
+
+  \column{0.47\textwidth}
+  \begin{block}<4->{TermContainer}
+    \begin{itemize}
+      \item Represent a given PDEs
+      \item Mix of any term
+      \item Independant of the representation
+    \end{itemize}
+  \alert<5->{Easy to contribute new PDEs!}
+  \end{block}
+
+\end{columns}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Title}
+  \begin{itemize}
+    \item N Level-Sets function evolving at the same time
+    \item Geometrical Constraints
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Create a level-set function from binary mask}
+  \lstlistingwithnumber{87}{94}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{98}{100}{SingleLevelSetWhitaker.cxx}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Create a domain for the level-set function}
+  \lstlistingwithnumber{106}{110}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{114}{125}{SingleLevelSetWhitaker.cxx}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Setting up the level-set container}
+  \lstlistingwithnumber{129}{135}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{137}{144}{SingleLevelSetWhitaker.cxx}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Setting up the level-set container}
+  \lstlistingwithnumber{129}{135}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{137}{144}{SingleLevelSetWhitaker.cxx}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Creating PDE Terms}
+  \begin{itemize}
+    \item Chan and Vese internal term
+    \lstlistingwithnumber{151}{158}{SingleLevelSetWhitaker.cxx}
+    \item Chan and Vese external term
+    \lstlistingwithnumber{162}{169}{SingleLevelSetWhitaker.cxx}
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Setting up PDE}
+  \lstlistingwithnumber{174}{178}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{180}{182}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{184}{185}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{188}{191}{SingleLevelSetWhitaker.cxx}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Stopping criterion}
+  \lstlistingwithnumber{193}{196}{SingleLevelSetWhitaker.cxx}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Starts the evolution}
+  \begin{itemize}
+    \item Set a stopping criterion
+    \lstlistingwithnumber{193}{196}{SingleLevelSetWhitaker.cxx}
+    \item Evolve
+    \lstlistingwithnumber{198}{204}{SingleLevelSetWhitaker.cxx}
+    \lstlistingwithnumber{208}{208}{SingleLevelSetWhitaker.cxx}
+  \end{itemize}
+\end{frame}
+
+% \begin{frame}
+% \frametitle{Multi Level Sets}
+% \begin{itemize}
+%   \item N Level Sets function evolving at the same time
+%   \item Geometrical Constraints
+% \end{itemize}
+% \end{frame}
+% 
+% \end{colum}
+
+
+% \include{SoftwarePreparation1}
+
+% \include{ITKOverview}
+
+% \include{SoftwarePreparation2}
+
+% \include{SoftwareEnvironment}
+
+% \include{ITKIntroduction}
+
+% \include{OpenCVIntroduction}
+
+% \include{ITKOpenCVBridge}
+
+% \include{ITKVideoFilters}
+
+\begin{frame}
+\frametitle{Wrap-up}
+\begin{itemize}
+  \item Send us feedback (good or bad)
+  \begin{itemize}
+    \item \url{arnaud_gelas@hms.harvard.edu} 
+    \item \url{kishore_mosaliganti@hms.harvard.edu} 
+    \item \url{sean_megason@hms.harvard.edu}
+  \end{itemize}
+%   \item Raffle\\
+% \includegraphics[height=1.5in]{asus}
+\end{itemize}
+\end{frame}
+
+
+\end{document}
