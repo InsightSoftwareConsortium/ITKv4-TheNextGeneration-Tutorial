@@ -53,7 +53,7 @@ Introduction
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
- \frametitle{Level-Set Evolution}
+\frametitle{Level-Set Evolution}
 \begin{itemize}
   \item Deforms the level-set function
   \begin{itemize}
@@ -68,6 +68,30 @@ Introduction
     \|\overrightarrow{\nabla}
       \phi\|
       \end{equation*}
+      \only<2>{
+      \begin{columns}
+        \column{0.3\textwidth}
+        \begin{block}{Advection}
+        \begin{center}
+          $\alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla}
+\phi$ \\
+        \end{center}
+        $\alpha$: coefficient\\
+        $A(p)$: Advection field
+        \end{block}
+
+        \column{0.3\textwidth}
+        \begin{block}{Curvature}
+        \begin{center}
+          $\gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
+            \text{div}\ \frac{\overrightarrow{\nabla}
+            \phi}{\|\overrightarrow{\nabla} \phi\|}$\\
+        \end{center}
+          $\gamma$: coefficient
+        \end{block}
+      \end{columns}
+    }
+
       \item<3->[yo2]
       \begin{equation*}
       \frac{\partial \phi}{\partial \tau} = 
@@ -77,7 +101,29 @@ Introduction
     \|\overrightarrow{\nabla}
       \phi\|
       \end{equation*}
-      \item<4->[yo3]
+      \only<3>{
+      \begin{columns}
+        \column{0.3\textwidth}
+        \begin{block}<3>{Propagation}
+          \begin{center}
+          $\beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi\|$ \\
+          \end{center}
+          $\beta$: coefficient \\
+          $P(p)$: Propagation field
+        \end{block}
+
+        \column{0.3\textwidth}
+        \begin{block}{Curvature}
+          \begin{center}
+          $\gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
+            \text{div}\ \frac{\overrightarrow{\nabla}
+            \phi}{\|\overrightarrow{\nabla} \phi\|}$\\
+          \end{center}
+          $\gamma$: coefficient
+        \end{block}
+      \end{columns}
+      }
+      \item<4->[Chan and Vese]
       \begin{equation*}
       \frac{\partial \phi}{\partial \tau} = \delta_{\epsilon}(\phi) 
       \left(
@@ -85,9 +131,30 @@ Introduction
       \lambda_{out} \left( I - \mu_{out} \right)
       \right)
       \end{equation*}
+      \only<4>{
+      \begin{columns}
+        \column{0.3\textwidth}
+        \begin{block}{Chan And Vese Internal}
+          \begin{center}
+          $\delta_{\epsilon}(\phi) \left( \lambda_{in} \left( I - \mu_{in}
+\right)\right)$ \\
+          \end{center}
+          $\lambda_{in}$: coefficient \\
+          $\mu_{in}$: Internal Mean
+        \end{block}
+
+        \column{0.3\textwidth}
+        \begin{block}{Chan And Vese External}
+          \begin{center}
+          $\delta_{\epsilon}(\phi) \left( \lambda_{out} \left( I - \mu_{out}
+\right)\right)$ \\
+          \end{center}
+          $\lambda_{out}$: coefficient \\
+          $\mu_{out}$: External Mean
+        \end{block}
+      \end{columns}
+      }
     \end{enumerate}
-    \item<5-> Iterative computation
-    \item<6> Topological flexibility
   \end{itemize}
 \end{itemize}
 \end{frame}
@@ -97,22 +164,35 @@ Introduction
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
-\frametitle{Challenges in Segmentation?}
+\frametitle{Level-Set Evolution}
 \begin{itemize}
-  \item<2-> PDE Term choice
+  \item Iterative computation
+  \item Topological flexibility
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Level Sets: Challenges in Segmentation?}
+\begin{itemize}
+  \item PDE Term choice
     \begin{itemize}
       \item Advection terms ?
       \item Propagation terms ?
       \item Region terms ?
       \item Regularization terms ?
     \end{itemize}
-  \item<3-> PDE Parameters tuning
-  \item<4-> Stopping criterion
+  \item<2-> Stopping criterion
     \begin{itemize}
       \item Number of Iterations ?
       \item Variation of interface length / area ?
       \item Variation of shape area / volume ?
     \end{itemize}
+  \item<3-> PDE Parameters tuning
 \end{itemize}
 \end{frame}
 
@@ -121,61 +201,62 @@ Introduction
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\section{Overview of the Level-Sets in ITKv3}
-\centeredlargetext{white}{black}{
-Overview of the Level-Sets in ITKv3
-}
+% \section{Overview of the Level-Sets in ITKv3}
+% \centeredlargetext{white}{black}{
+% Overview of the Level-Sets in ITKv3
+% }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\begin{frame}
-\frametitle{PDE Model in ITKv3}
-\begin{equation*}
- \frac{\partial \phi}{\partial \tau} = 
-      \alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi -
-      \beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi\| +
-      \gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
-      \text{div}\ \frac{\overrightarrow{\nabla}
-      \phi}{\|\overrightarrow{\nabla} \phi\|}    
-\end{equation*}
-
-\begin{columns}
-  \column{0.3\textwidth}
-  \begin{block}<2->{Advection}
-    $\alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi$
-    \begin{itemize}
-     \item $\alpha$: coefficient
-     \item $A(p)$:\\ Advection field
-    \end{itemize}
-
-  \end{block}
-
-  \column{0.3\textwidth}
-  \begin{block}<3->{Propagation}
-    $\beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi\|$
-    \begin{itemize}
-      \item $\beta$: coefficient
-      \item $P(p)$:\\ Propagation field
-    \end{itemize}
-
-  \end{block}
-
-  \column{0.3\textwidth}
-  \begin{block}<4>{Curvature}
-    $\gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
-      \text{div}\ \frac{\overrightarrow{\nabla}
-      \phi}{\|\overrightarrow{\nabla} \phi\|}$
-    \begin{itemize}
-     \item $\gamma$: coefficient
-    \end{itemize}
-    \vspace{0.8cm}
-  \end{block}
-\end{columns}
-
-\end{frame}
+% \begin{frame}
+% \frametitle{PDE Model in ITKv3}
+% \begin{equation*}
+%  \frac{\partial \phi}{\partial \tau} = 
+%       \alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi
+-
+%       \beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi\| +
+%       \gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
+%       \text{div}\ \frac{\overrightarrow{\nabla}
+%       \phi}{\|\overrightarrow{\nabla} \phi\|}    
+% \end{equation*}
+% 
+% \begin{columns}
+%   \column{0.3\textwidth}
+%   \begin{block}<2->{Advection}
+%     $\alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi$
+%     \begin{itemize}
+%      \item $\alpha$: coefficient
+%      \item $A(p)$:\\ Advection field
+%     \end{itemize}
+% 
+%   \end{block}
+% 
+%   \column{0.3\textwidth}
+%   \begin{block}<3->{Propagation}
+%     $\beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi\|$
+%     \begin{itemize}
+%       \item $\beta$: coefficient
+%       \item $P(p)$:\\ Propagation field
+%     \end{itemize}
+% 
+%   \end{block}
+% 
+%   \column{0.3\textwidth}
+%   \begin{block}<4>{Curvature}
+%     $\gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
+%       \text{div}\ \frac{\overrightarrow{\nabla}
+%       \phi}{\|\overrightarrow{\nabla} \phi\|}$
+%     \begin{itemize}
+%      \item $\gamma$: coefficient
+%     \end{itemize}
+%     \vspace{0.8cm}
+%   \end{block}
+% \end{columns}
+% 
+% \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -256,23 +337,23 @@ Overview of the Level-Sets in ITKv4
 
 \begin{columns}
   \column{0.47\textwidth} 
-  \begin{block}<2->{Term}
+  \begin{block}{Term}
     \begin{itemize}
       \item Contribution for $\phi$ evolution
       \item Contribution for time step computation
       \item Coefficient
     \end{itemize} 
-  \alert<3->{Easy to contribute new terms!}
+  \alert<2->{Easy to contribute new terms!}
   \end{block}
 
   \column{0.47\textwidth}
-  \begin{block}<4->{TermContainer}
+  \begin{block}<3->{TermContainer}
     \begin{itemize}
       \item Represent a given PDEs
       \item Mix of any term
       \item Independant of the representation
     \end{itemize}
-  \alert<5->{Easy to contribute new PDEs!}
+  \alert<4->{Easy to contribute new PDEs!}
   \end{block}
 
 \end{columns}
@@ -294,6 +375,10 @@ Overview of the Level-Sets in ITKv4
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Example}
+\centeredlargetext{white}{black}{
+Example
+}
 
 \begin{frame}
   \frametitle{Create a level-set function from binary mask}
@@ -380,6 +465,24 @@ Overview of the Level-Sets in ITKv4
     \lstlistingwithnumber{208}{208}{SingleLevelSetWhitaker.cxx}
   \end{itemize}
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Exercice 1}
+\centeredlargetext{white}{black}{
+Add a curvature term to the example
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Exercice 2}
+\centeredlargetext{white}{black}{
+Change the represesentation from Whitaker's to Shi's
+}
 
 % \begin{frame}
 % \frametitle{Multi Level Sets}
