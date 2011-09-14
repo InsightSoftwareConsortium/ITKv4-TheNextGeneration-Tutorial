@@ -70,8 +70,8 @@ Introduction
   \item Deforms the level-set function
   \begin{itemize}
     \item Driven by given PDE
-    \begin{enumerate}
-      \item<2->[yo1]
+    \begin{itemize}
+      \item<2->[Regularized Advection]
       \begin{equation*}
       \frac{\partial \phi}{\partial \tau} = 
       \alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi +
@@ -104,7 +104,7 @@ Introduction
       \end{columns}
     }
 
-      \item<3->[yo2]
+      \item<3->[Regularized Propagation]
       \begin{equation*}
       \frac{\partial \phi}{\partial \tau} = 
       \alpha \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi \| +
@@ -166,7 +166,7 @@ Introduction
         \end{block}
       \end{columns}
       }
-    \end{enumerate}
+    \end{itemize}
   \end{itemize}
 \end{itemize}
 \end{frame}
@@ -213,104 +213,6 @@ Introduction
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-% \section{Overview of the Level-Sets in ITKv3}
-% \centeredlargetext{white}{black}{
-% Overview of the Level-Sets in ITKv3
-% }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% \begin{frame}
-% \frametitle{PDE Model in ITKv3}
-% \begin{equation*}
-%  \frac{\partial \phi}{\partial \tau} = 
-%       \alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi
--
-%       \beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi\| +
-%       \gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
-%       \text{div}\ \frac{\overrightarrow{\nabla}
-%       \phi}{\|\overrightarrow{\nabla} \phi\|}    
-% \end{equation*}
-% 
-% \begin{columns}
-%   \column{0.3\textwidth}
-%   \begin{block}<2->{Advection}
-%     $\alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi$
-%     \begin{itemize}
-%      \item $\alpha$: coefficient
-%      \item $A(p)$:\\ Advection field
-%     \end{itemize}
-% 
-%   \end{block}
-% 
-%   \column{0.3\textwidth}
-%   \begin{block}<3->{Propagation}
-%     $\beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi\|$
-%     \begin{itemize}
-%       \item $\beta$: coefficient
-%       \item $P(p)$:\\ Propagation field
-%     \end{itemize}
-% 
-%   \end{block}
-% 
-%   \column{0.3\textwidth}
-%   \begin{block}<4>{Curvature}
-%     $\gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
-%       \text{div}\ \frac{\overrightarrow{\nabla}
-%       \phi}{\|\overrightarrow{\nabla} \phi\|}$
-%     \begin{itemize}
-%      \item $\gamma$: coefficient
-%     \end{itemize}
-%     \vspace{0.8cm}
-%   \end{block}
-% \end{columns}
-% 
-% \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% \begin{frame}
-% \frametitle{PDE Model in ITKv3}
-% \begin{equation*}
-%  \frac{\partial \phi}{\partial \tau} = 
-%       \alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi
--
-%       \beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi\| +
-%       \gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
-%       \text{div}\ \frac{\overrightarrow{\nabla}
-%       \phi}{\|\overrightarrow{\nabla} \phi\|}    
-% \end{equation*}
-% 
-% \begin{columns}
-%  
-%   \column{0.4\textwidth}
-%   \begin{block}{Function}
-%     Discretization of the PDE
-%     \vspace{1.2cm}
-%   \end{block}
-% 
-%   \column{0.4\textwidth}
-%   \begin{block}{Solver}
-%     Iterative evolution of $\phi$
-%     \begin{enumerate}
-%           \item ''Dense''
-%           \item ''Sparse''
-%     \end{enumerate}
-%   \end{block}
-% \end{columns}
-% 
-% \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \section{Overview of the Level-Sets in ITKv4}
 \centeredlargetext{white}{black}{
 Overview of the Level-Sets in ITKv4
@@ -343,21 +245,21 @@ Overview of the Level-Sets in ITKv4
 \end{block}
 
 \column{0.45\textwidth}
-\only<2>{
-\begin{center}
- \includegraphics[width=0.8\textwidth]{../Art/WhitakerLayers.png}
- % WhitakerLayers.png: 483x488 pixel, 72dpi, 17.04x17.21 cm, bb=0 0 483 488
-\end{center}
-}
 \only<3>{
 \begin{center}
- \includegraphics[width=0.8\textwidth]{../Art/ShiLayers.png}
+ \includegraphics[width=0.8\textwidth]{WhitakerLayers.png}
  % WhitakerLayers.png: 483x488 pixel, 72dpi, 17.04x17.21 cm, bb=0 0 483 488
 \end{center}
 }
-\only<4->{
+\only<4>{
 \begin{center}
- \includegraphics[width=0.8\textwidth]{../Art/MalcolmLayers.png}
+ \includegraphics[width=0.8\textwidth]{ShiLayers.png}
+ % WhitakerLayers.png: 483x488 pixel, 72dpi, 17.04x17.21 cm, bb=0 0 483 488
+\end{center}
+}
+\only<5->{
+\begin{center}
+ \includegraphics[width=0.8\textwidth]{MalcolmLayers.png}
  % WhitakerLayers.png: 483x488 pixel, 72dpi, 17.04x17.21 cm, bb=0 0 483 488
 \end{center}
 }
