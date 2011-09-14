@@ -65,8 +65,8 @@ int main( int argc, char* argv[] )
   InputImageType::IndexType index;
   InputImageType::SizeType size;
 
-  index.Fill( 10 );
-  size.Fill( 30 );
+  index.Fill( 5 );
+  size.Fill( 120 );
 
   region.SetIndex( index );
   region.SetSize( size );
