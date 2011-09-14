@@ -12,4 +12,3 @@ endif()
 
 add_executable(SingleLevelSetWhitaker SingleLevelSetWhitaker.cxx)
 target_link_libraries(SingleLevelSetWhitaker ${ITK_LIBRARIES})
-

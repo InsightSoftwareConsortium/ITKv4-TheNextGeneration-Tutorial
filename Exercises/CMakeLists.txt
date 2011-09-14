@@ -9,3 +9,4 @@ include(${ITK_USE_FILE})
 add_executable(ImageReadWrite ImageReadWrite.cxx )
 target_link_libraries(ImageReadWrite ${ITK_LIBRARIES})
 
+add_subdirectory( LevelSets )
