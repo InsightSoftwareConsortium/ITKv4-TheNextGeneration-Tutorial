@@ -32,6 +32,8 @@
 #include "itkLevelSetEvolutionNumberOfIterationsStoppingCriterion.h"
 #include "itkNumericTraits.h"
 
+#include "vtkVisualize2DWhitakerLevelSetLayers.h"
+
 int main( int argc, char* argv[] )
 {
   if( argc < 4 )
@@ -229,6 +231,13 @@ int main( int argc, char* argv[] )
     oIt.Set( level_set->GetLabelMap()->GetPixel(idx) );
     ++oIt;
     }
+
+  typedef vtkVisualize2DWhitakerLevelSetLayers< InputImageType, PixelType, Dimension >
+    VisualizationType;
+  VisualizationType::Pointer viewer = VisualizationType::New();
+  viewer->SetInputImage( input );
+  viewer->SetLevelSet( level_set );
+  viewer->Update();
 
   typedef itk::ImageFileWriter< OutputImageType >     OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
