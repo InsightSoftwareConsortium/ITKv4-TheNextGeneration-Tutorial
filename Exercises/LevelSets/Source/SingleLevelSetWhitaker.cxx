@@ -237,6 +237,7 @@ int main( int argc, char* argv[] )
   VisualizationType::Pointer viewer = VisualizationType::New();
   viewer->SetInputImage( input );
   viewer->SetLevelSet( level_set );
+  viewer->SetScreenCapture( true );
   viewer->Update();
 
   typedef itk::ImageFileWriter< OutputImageType >     OutputWriterType;
