@@ -24,7 +24,6 @@
 #include "itkWhitakerSparseLevelSetImage.h"
 
 #include "itkImageToRGBVTKImageFilter.h"
-#include "itkWhitakerLevelSetTovtkImageData.h"
 
 #include "vtkImageData.h"
 #include "vtkLookupTable.h"
@@ -192,7 +191,7 @@ public:
 //    scalarbar->SetTitle( "Layers" );
 //    scalarbar->SetNumberOfLabels( 5 );
 //    scalarbar->SetLookupTable( lut );
-
+    
     vtkSmartPointer< vtkImageActor > input_Actor =
         vtkSmartPointer< vtkImageActor >::New();
     input_Actor->SetInput( VTKImage );
@@ -208,7 +207,7 @@ public:
     vtkSmartPointer< vtkRenderWindow > renWin =
         vtkSmartPointer< vtkRenderWindow >::New();
 
-    ren->AddActor ( input_Actor );
+    ren->AddActor2D( input_Actor );
 //    ren->AddActor2D( scalarbar );
 
     iren->SetRenderWindow( renWin );

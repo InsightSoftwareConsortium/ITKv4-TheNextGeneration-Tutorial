@@ -45,7 +45,7 @@ int main( int argc, char* argv[] )
   // Image Dimension
   const unsigned int Dimension = 2;
 
-  typedef unsigned short                                    InputPixelType;
+  typedef unsigned char                                     InputPixelType;
   typedef itk::Image< InputPixelType, Dimension >           InputImageType;
 
   // Read input image (to be processed).
