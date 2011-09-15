@@ -1,0 +1,199 @@
+%
+% Complete documentation on the extended LaTeX markup used for Insight
+% documentation is available in ``Documenting Insight'', which is part
+% of the standard documentation for Insight.  It may be found online
+% at:
+%
+%     http://www.itk.org/
+
+\documentclass{InsightArticle}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  hyperref should be the last package to be loaded.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvips,
+bookmarks,
+bookmarksopen,
+backref,
+colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
+]{hyperref}
+% to be able to use options in graphics
+\usepackage{graphicx}
+% for pseudo code
+\usepackage{listings}
+% subfigures
+\usepackage{subfigure}
+
+
+%  This is a template for Papers to the Insight Journal. 
+%  It is comparable to a technical report format.
+
+% The title should be descriptive enough for people to be able to find
+% the relevant document. 
+\title{Robust Automatic Threshold Selection}
+
+% Increment the release number whenever significant changes are made.
+% The author and/or editor can define 'significant' however they like.
+% \release{0.00}
+
+% At minimum, give your name and an email address.  You can include a
+% snail-mail address if you like.
+\author{Ga\"etan Lehmann}
+\authoraddress{INRA, UMR 1198; ENVA; CNRS, FRE 2857, Biologie du D\'eveloppement et
+Reproduction, Jouy en Josas, F-78350, France}
+
+\begin{document}
+\maketitle
+
+\ifhtml
+\chapter*{Front Matter\label{front}}
+\fi
+
+
+\begin{abstract}
+\noindent
+Robust Automatic Threshold Selection (RATS) \cite{Kitler1985} is a fast and noise robust
+automatic thresholding method based on gradients in the image. The basic idea is to choose
+the threshold at the intensity where the gradient are the highest.
+\end{abstract}
+
+% \tableofcontents
+
+\section{Description}
+
+RATS is a method to automatically compute a threshold without using the histogram of
+the image. It compute a weighted average of the image intensity, using the gradient
+of the image, as shown in the following equation:
+
+$$
+T = \frac{\sum\limits_{p~in~D}G(p)~.~I(p)}{\sum\limits_{p~in~D}G(p)}
+$$
+
+where $I$ is the input image, and $G$ is the gradient of $I$. Several methods may
+be used to compute $G$. Both $I$ and $G$ are defined on the domain $D$.
+
+As detailed in \cite{Wilkison98}, using the same method with a pow of the gradient
+gives better results with noisy images, by giving a higher weight to the high gradients:
+
+$$
+T = \frac{\sum\limits_{p~in~D}G(p)^m~.~I(p)}{\sum\limits_{p~in~D}G(p)^m}
+$$
+
+with $m$ greater than $1$, typically $2$.
+
+
+
+\section{Implementation}
+
+The filter provided in this article use a pow of 1 by default, to fit the historical algorithm.
+Because there is many ways to compute the gradient, the user is in charge to compute the gradient
+magnitude image, and to pass it to the filter.
+A mask can also be used to limit the computation to a given zone in the image.
+
+\section{Code example}
+
+\small \begin{verbatim}
+#include "itkImageFileReader.h"
+#include "itkImageFileWriter.h"
+#include "itkSimpleFilterWatcher.h"
+
+#include "itkRobustAutomaticThresholdImageFilter.h"
+#include "itkGradientMagnitudeRecursiveGaussianImageFilter.h"
+
+int main(int argc, char * argv[])
+{
+
+  if( argc != 4 )
+    {
+    std::cerr << "usage: " << argv[0] << " inputImage outputImage pow" << std::endl;
+    exit(1);
+    }
+
+  const int dim = 2;
+  
+  typedef unsigned short PType;
+  typedef itk::Image< PType, dim > IType;
+
+  typedef float RPType;
+  typedef itk::Image< RPType, dim > RIType;
+
+  typedef itk::ImageFileReader< IType > ReaderType;
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName( argv[1] );
+  
+  typedef itk::GradientMagnitudeRecursiveGaussianImageFilter< IType, RIType > GradientType;
+  GradientType::Pointer gradient = GradientType::New();
+  gradient->SetInput( reader->GetOutput() );
+  gradient->SetSigma( 10 );
+  gradient->Update();
+
+  typedef itk::RobustAutomaticThresholdImageFilter< IType, RIType > FilterType;
+  FilterType::Pointer filter = FilterType::New();
+  filter->SetInput( reader->GetOutput() );
+  filter->SetGradientImage( gradient->GetOutput() );
+  filter->SetPow( atof(argv[3]) );
+
+  itk::SimpleFilterWatcher watcher(filter, "filter");
+
+  typedef itk::ImageFileWriter< IType > WriterType;
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetInput( filter->GetOutput() );
+  writer->SetFileName( argv[2] );
+  writer->Update();
+
+  return 0;
+}
+\end{verbatim} \normalsize
+
+% \url{http://www.itk.org}
+% \code{Insight/Documentation/Style.pdf}
+% \section{Principles of Solar Spot Detection}
+% \cite{ITKSoftwareGuide}.
+% \doxygen{ImageToImageFilter}
+
+% \small \begin{verbatim}
+% \end{verbatim} \normalsize
+
+
+% The {itemize} environment uses a bullet for each \item.  If you want the 
+% \item's numbered, use the {enumerate} environment instead.
+% \begin{itemize}
+%   \item  Insight Toolkit 2.4.
+%   \item  CMake 2.2
+% \end{itemize}
+
+% \ref{cthead1}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{cthead1}
+\caption{The input image.\label{cthead1}}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{test}
+\caption{The thresholded image.\label{cthead1}}
+\end{figure}
+
+
+\section{Note on access to the cited articles}
+None of the two articles cited are available easily (for free), and the content of
+this contribution is based on other sources which are using those article.
+You may found some difference in the algorithm compared to the original ones.
+
+A day will come when there will be nothing else than open access...
+
+\appendix
+
+
+
+\bibliographystyle{plain}
+\bibliography{InsightJournal}
+% \nocite{ITKSoftwareGuide}
+
+\end{document}
+
