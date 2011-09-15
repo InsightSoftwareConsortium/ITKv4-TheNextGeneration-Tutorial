@@ -177,12 +177,9 @@ int main( int argc, char* argv[] )
   TermContainerType::Pointer termContainer0 = TermContainerType::New();
   termContainer0->SetInput( input );
 
-  TermContainerType::TermPointer temp;
-  temp = dynamic_cast< TermContainerType::TermType* >( cvInternalTerm0.GetPointer() );
-  termContainer0->AddTerm( 0, temp );
+  termContainer0->AddTerm( 0, cvInternalTerm0 );
+  termContainer0->AddTerm( 1, cvExternalTerm0 );
 
-  temp = dynamic_cast< TermContainerType::TermType* >( cvExternalTerm0.GetPointer() );
-  termContainer0->AddTerm( 1, temp );
   std::cout << "Term container 0 created" << std::endl;
 
   typedef itk::LevelSetEquationContainerBase< TermContainerType >
