@@ -25,7 +25,7 @@
  * as no exception occurs.
  */
 
-#include "itkMattesMutualInformationImageToImageObjectMetric.h"
+#include "itkThevenazMutualInformationImageToImageObjectMetric.h"
 #include "itkANTSNeighborhoodCorrelationImageToImageObjectMetric.h"
 #include "itkDemonsImageToImageObjectMetric.h"
 #include "itkGradientDescentObjectOptimizer.h"
@@ -77,7 +77,7 @@ public:
 };
 }
 
-int itkMattesMutualInformationImageToImageObjectRegistrationTest(int argc, char *argv[])
+int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, char *argv[])
 {
 
   if( argc < 4 || argc > 8)
@@ -171,7 +171,7 @@ int itkMattesMutualInformationImageToImageObjectRegistrationTest(int argc, char 
   field->FillBuffer( zeroVector );
   // Assign to transform
   displacementTransform->SetDisplacementField( field );
-  displacementTransform->SetGaussianSmoothingSigma( 5 );
+  displacementTransform->SetGaussianSmoothingVarianceForTheUpdateField( 5 );
 
   //identity transform for fixed image
   typedef IdentityTransform<double, Dimension> IdentityTransformType;
@@ -182,7 +182,7 @@ int itkMattesMutualInformationImageToImageObjectRegistrationTest(int argc, char 
   // The metric
   Size<Dimension> radSize;
   radSize.Fill(4);
-  typedef MattesMutualInformationImageToImageObjectMetric < FixedImageType, MovingImageType >
+  typedef ThevenazMutualInformationImageToImageObjectMetric < FixedImageType, MovingImageType >
   //typedef ANTSNeighborhoodCorrelationImageToImageObjectMetric < FixedImageType, MovingImageType >
   //typedef DemonsImageToImageObjectMetric< FixedImageType, MovingImageType >
                                                                   MetricType;
