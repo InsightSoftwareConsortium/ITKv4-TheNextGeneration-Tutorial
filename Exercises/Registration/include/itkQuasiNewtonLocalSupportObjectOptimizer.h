@@ -22,11 +22,12 @@
 #include "vnl/vnl_vector_fixed.h"
 #include "vnl/vnl_matrix_fixed.h"
 #include "vnl/algo/vnl_matrix_inverse.h"
+#include "itkArray2D.h"
 
 #include "itkIntTypes.h"
 #include "itkGradientDescentObjectOptimizer.h"
 //#include "itkImageToImageObjectMetric.h"
-#include "itkOptimizerParameterEstimatorBase.h"
+#include "itkOptimizerParameterScaleEstimator.h"
 #include <string>
 
 namespace itk
@@ -74,12 +75,12 @@ public:
   typedef itk::Array2D<double>                      HessianType;
   typedef itk::Array2D<double>                      LocalHessianType;
 
-  /** Pointer of OptimizerParameterEstimatorBase. */
-  typedef OptimizerParameterEstimatorBase::Pointer  OptimizerParameterEstimatorBasePointer;
+  /** Pointer of OptimizerParameterScaleEstimator. */
+  typedef itk::OptimizerParameterScaleEstimator::Pointer  OptimizerParameterScaleEstimatorPointer;
 
-  /** Connect the OptimizerParameterEstimator .  */
-  itkSetObjectMacro(OptimizerParameterEstimator, OptimizerParameterEstimatorBase);
-  itkGetObjectMacro(OptimizerParameterEstimator, OptimizerParameterEstimatorBase);
+  /** Connect the OptimizerParameterScaleEstimator .  */
+  itkSetObjectMacro(OptimizerParameterScaleEstimator, OptimizerParameterScaleEstimator);
+  itkGetObjectMacro(OptimizerParameterScaleEstimator, OptimizerParameterScaleEstimator);
 
   /** Set the flag for line search */
   itkSetMacro(LineSearchEnabled, bool);
@@ -101,7 +102,7 @@ public:
 protected:
 
   /** The helper object to estimate the learning rate and scales */
-  OptimizerParameterEstimatorBasePointer  m_OptimizerParameterEstimator;
+  OptimizerParameterScaleEstimatorPointer  m_OptimizerParameterScaleEstimator;
   double                                  m_MaximumVoxelShift;
   double                                  m_MinimumGradientNorm;
   double                                  m_MinimumValueChange;

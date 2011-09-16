@@ -22,10 +22,10 @@
 #include "vnl/vnl_vector_fixed.h"
 #include "vnl/vnl_matrix_fixed.h"
 #include "vnl/algo/vnl_matrix_inverse.h"
-
+#include "itkArray2D.h"
 #include "itkIntTypes.h"
 #include "itkGradientDescentObjectOptimizer.h"
-#include "itkOptimizerParameterEstimatorBase.h"
+#include "itkOptimizerParameterScaleEstimator.h"
 #include <string>
 
 namespace itk
@@ -42,7 +42,7 @@ namespace itk
  * Here BFGS method is used to calcute a Quasi-Newton step. The line search
  * is implemented using Strong Wolfe's Conditions.
  *
- * If a helper object of OptimizerParameterEstimatorBase is set, it is used
+ * If a helper object of OptimizerParameterEstimator is set, it is used
  * to estimate the maximum step size in line search.
  *
  * The line search algorithm is from "Introduction to Nonlinear Optimization"
@@ -70,12 +70,12 @@ public:
   /** Type for Hessian matrix in the Quasi-Newton method */
   typedef itk::Array2D<double>                      HessianType;
 
-  /** Pointer of OptimizerParameterEstimatorBase. */
-  typedef OptimizerParameterEstimatorBase::Pointer  OptimizerParameterEstimatorBasePointer;
+  /** Pointer of OptimizerParameterScaleEstimator. */
+  typedef itk::OptimizerParameterScaleEstimator::Pointer  OptimizerParameterScaleEstimatorPointer;
 
-  /** Connect the OptimizerParameterEstimator .  */
-  itkSetObjectMacro(OptimizerParameterEstimator, OptimizerParameterEstimatorBase);
-  itkGetObjectMacro(OptimizerParameterEstimator, OptimizerParameterEstimatorBase);
+  /** Connect the OptimizerParameterScaleEstimator .  */
+  itkSetObjectMacro(OptimizerParameterScaleEstimator, OptimizerParameterScaleEstimator);
+  itkGetObjectMacro(OptimizerParameterScaleEstimator, OptimizerParameterScaleEstimator);
 
   /** Set the flag for line search */
   itkSetMacro(LineSearchEnabled, bool);
@@ -97,7 +97,7 @@ public:
 protected:
 
   /** The helper object to estimate the learning rate and scales */
-  OptimizerParameterEstimatorBasePointer  m_OptimizerParameterEstimator;
+  OptimizerParameterScaleEstimatorPointer  m_OptimizerParameterScaleEstimator;
 
   /** m_MaximumVoxelShift is used  to estimated the largest step size */
   double                                  m_MaximumVoxelShift;

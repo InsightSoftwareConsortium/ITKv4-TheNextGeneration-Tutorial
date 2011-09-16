@@ -42,7 +42,7 @@ QuasiNewtonObjectOptimizer
   m_MinimumValueChange = 1e-15;
 
   m_LineSearchEnabled = false;
-  m_OptimizerParameterEstimator = (OptimizerParameterEstimatorBase::Pointer)NULL;
+  m_OptimizerParameterScaleEstimator = (OptimizerParameterScaleEstimator::Pointer)NULL;
 
   this->SetDebug(true);
 
@@ -68,7 +68,7 @@ QuasiNewtonObjectOptimizer
 
   if ( ! this->m_Metric->HasLocalSupport() )
     {
-    if (m_OptimizerParameterEstimator.IsNotNull())
+    if (m_OptimizerParameterScaleEstimator.IsNotNull())
       {
       // initialize scales
       m_CurrentPosition = this->m_Metric->GetParameters();
@@ -78,7 +78,7 @@ QuasiNewtonObjectOptimizer
         }
       ScalesType scales(this->m_Metric->GetNumberOfParameters());
 
-      m_OptimizerParameterEstimator->EstimateScales(scales);
+      m_OptimizerParameterScaleEstimator->EstimateScales(scales);
       //for (int s=0; s<4; s++) scales[s] = 9801;
       //for (int s=4; s<6; s++) scales[s] = 1;
 
@@ -783,7 +783,7 @@ void QuasiNewtonObjectOptimizer
 double QuasiNewtonObjectOptimizer
 ::EstimateLearningRate(ParametersType step)
 {
-  if (m_OptimizerParameterEstimator.IsNull())
+  if (m_OptimizerParameterScaleEstimator.IsNull())
     {
     return 1;
     }
@@ -794,7 +794,7 @@ double QuasiNewtonObjectOptimizer
 
   double shift, learningRate;
 
-  shift = m_OptimizerParameterEstimator->ComputeMaximumVoxelShift(step);
+  shift = 1;//m_OptimizerParameterScaleEstimator->ComputeMaximumVoxelShift(step);
 
   if (this->GetCurrentIteration() == 0)
     {

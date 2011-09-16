@@ -1,6 +1,6 @@
 set(ITKRegistrationRefactoring_SRC
 itkQuasiNewtonObjectOptimizer.cxx
-itkQuasiNewtonLocalSupportObjectOptimizer.cxx
+#itkQuasiNewtonLocalSupportObjectOptimizer.cxx
 )
 
 add_library(ITKRegistrationRefactoring ${ITKRegistrationRefactoring_SRC})

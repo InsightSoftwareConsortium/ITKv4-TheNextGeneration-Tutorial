@@ -46,7 +46,7 @@ QuasiNewtonLocalSupportObjectOptimizer
   m_LocalHessianInverse = NULL;
 
   m_LineSearchEnabled = true;
-  m_OptimizerParameterEstimator = (OptimizerParameterEstimatorBase::Pointer)NULL;
+  m_OptimizerParameterScaleEstimator = (OptimizerParameterScaleEstimator::Pointer)NULL;
 
   this->SetDebug(true);
 
@@ -72,7 +72,7 @@ QuasiNewtonLocalSupportObjectOptimizer
 
   if ( ! this->m_Metric->HasLocalSupport() )
     {
-    if (m_OptimizerParameterEstimator.IsNotNull())
+    if (m_OptimizerParameterScaleEstimator.IsNotNull())
       {
       // initialize scales
       m_CurrentPosition = this->m_Metric->GetParameters();
@@ -82,7 +82,7 @@ QuasiNewtonLocalSupportObjectOptimizer
         }
       ScalesType scales(this->m_Metric->GetNumberOfParameters());
 
-      m_OptimizerParameterEstimator->EstimateScales(scales);
+      m_OptimizerParameterScaleEstimator->EstimateScales(scales);
       //m_CurrentPosition = this->m_Metric->GetParameters();
       this->SetScales(scales);
       std::cout << " Estimated scales = " << scales << std::endl;
@@ -208,7 +208,7 @@ QuasiNewtonLocalSupportObjectOptimizer
     m_LocalHessian = new LocalHessianType[imageSize];
     m_LocalHessianInverse = new LocalHessianType[imageSize];
 
-    unsigned int imgDim = this->m_OptimizerParameterEstimator->GetImageDimension();
+    unsigned int imgDim = this->m_OptimizerParameterScaleEstimator->GetImageDimension();
     for (unsigned int i=0; i<imageSize; i++)
       {
       m_LocalHessian[i].SetSize(imgDim, imgDim);
@@ -398,7 +398,7 @@ void QuasiNewtonLocalSupportObjectOptimizer
 double QuasiNewtonLocalSupportObjectOptimizer
 ::EstimateLearningRate(ParametersType step)
 {
-  if (m_OptimizerParameterEstimator.IsNull())
+  if (m_OptimizerParameterScaleEstimator.IsNull())
     {
     return 1;
     }
@@ -409,7 +409,7 @@ double QuasiNewtonLocalSupportObjectOptimizer
 
   double shift, learningRate;
 
-  shift = m_OptimizerParameterEstimator->ComputeMaximumVoxelShift(step);
+  shift = m_OptimizerParameterScaleEstimator->ComputeMaximumVoxelShift(step);
 
   if (this->GetCurrentIteration() == 0)
     {
