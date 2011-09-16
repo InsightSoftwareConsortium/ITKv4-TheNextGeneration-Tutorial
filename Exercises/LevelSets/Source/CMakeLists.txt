@@ -18,5 +18,6 @@ endif()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(SingleLevelSetWhitaker SingleLevelSetWhitaker.cxx)
-target_link_libraries(SingleLevelSetWhitaker ${ITK_LIBRARIES} ${VTK_LIBRARIES})
+target_link_libraries(SingleLevelSetWhitaker ${ITK_LIBRARIES} vtkImaging
+  vtkRendering )
 
