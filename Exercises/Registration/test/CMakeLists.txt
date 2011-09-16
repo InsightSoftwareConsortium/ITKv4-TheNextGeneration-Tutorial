@@ -92,7 +92,7 @@ itk_add_test(NAME itkPolyAffineTransformTest
       )
 
 itk_add_test(NAME itkQuasiNewtonObjectOptimizerTest
-      COMMAND ITKHighDimensionalOptimizersTestDriver
+      COMMAND ITKRegistrationRefactoringTestDriver
       itkQuasiNewtonObjectOptimizerTest)
 
 #TODO

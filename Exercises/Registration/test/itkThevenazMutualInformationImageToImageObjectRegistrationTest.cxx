@@ -201,7 +201,7 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
   compositeTransform->SetAllTransformsToOptimizeOn(); //Set back to optimize all.
   compositeTransform->SetOnlyMostRecentTransformToOptimizeOn(); //set to optimize the displacement field
   metric->SetMovingTransform( compositeTransform );
-  bool prewarp = false;
+  bool prewarp = true;
   metric->SetPreWarpMovingImage( prewarp );
   metric->SetPreWarpFixedImage( prewarp );
   bool gaussian = false;
