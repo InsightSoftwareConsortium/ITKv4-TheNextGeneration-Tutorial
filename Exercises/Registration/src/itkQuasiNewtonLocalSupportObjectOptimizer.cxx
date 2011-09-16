@@ -208,7 +208,7 @@ QuasiNewtonLocalSupportObjectOptimizer
     m_LocalHessian = new LocalHessianType[imageSize];
     m_LocalHessianInverse = new LocalHessianType[imageSize];
 
-    unsigned int imgDim = this->m_OptimizerParameterScaleEstimator->GetImageDimension();
+    unsigned int imgDim = 2;//this->m_OptimizerParameterScaleEstimator->GetImageDimension();
     for (unsigned int i=0; i<imageSize; i++)
       {
       m_LocalHessian[i].SetSize(imgDim, imgDim);
@@ -409,7 +409,7 @@ double QuasiNewtonLocalSupportObjectOptimizer
 
   double shift, learningRate;
 
-  shift = m_OptimizerParameterScaleEstimator->ComputeMaximumVoxelShift(step);
+  shift = 1;//m_OptimizerParameterScaleEstimator->ComputeMaximumVoxelShift(step);
 
   if (this->GetCurrentIteration() == 0)
     {

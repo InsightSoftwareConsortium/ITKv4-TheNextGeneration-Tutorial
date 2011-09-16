@@ -30,7 +30,7 @@
 #include "itkDemonsImageToImageObjectMetric.h"
 #include "itkGradientDescentObjectOptimizer.h"
 #include "itkQuasiNewtonObjectOptimizer.h"
-#include "itkOptimizerParameterEstimator.h"
+#include "itkOptimizerParameterScaleEstimator.h"
 
 #include "itkIdentityTransform.h"
 #include "itkTranslationTransform.h"
