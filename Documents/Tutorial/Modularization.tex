@@ -1,54 +1,55 @@
+\section{Modularization}
+
 \begin{frame}
 \frametitle{Why Modularization}
 \begin{itemize}
 \item Growth management
-\pause
 \item Software quality improvement
-\pause
 \item Facilitating add-ons
-\pause
 \item Separate third party libraries
-\pause
 \item Optional Components
 \end{itemize}
 \end{frame}
 
-{
 \setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{background canvas}{
-  \includegraphics[width=\paperwidth,height=\paperheight]{moduleSizePlot.pdf}
-}
+\setbeamercolor{background canvas}
 \begin{frame}[plain]
+\frametitle{Module sizes}
+\center
+\begin{center}
+\includegraphics[height=0.8\textheight]{moduleSizePlot.pdf}
+\end{center}
 \end{frame}
-}
 
-
-{
 \setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{background canvas}{
-  \includegraphics[height=\paperheight]{moduleSizePlotNoThirdParty.pdf}
-}
+\setbeamercolor{background canvas}
 \begin{frame}[plain]
+\frametitle{Module sizes (no third party modules)}
+\center
+\begin{center}
+\includegraphics[height=0.8\textheight]{moduleSizePlotNoThirdParty.pdf}
+\end{center}
 \end{frame}
-}
 
-
-{
 \setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{background canvas}{
-  \includegraphics[height=\paperheight]{moduleDependency.png}
-}
+\setbeamercolor{background canvas}
 \begin{frame}[plain]
+\frametitle{Visualize dependencies among modules}
+\center
+\begin{center}
+\includegraphics[height=0.8\textheight]{moduleDependency.png}
+\end{center}
 \end{frame}
-}
 
 
 \begin{frame}
 \frametitle{ITK Module Grouping}
 \begin{itemize}
-\item  How many groups?
+\item  12 groups, 98 modules and counting
 \pause
-\item  Grouping criteria
+\item  Group by module functionalities
+\pause
+\item  Achiving modules in groups
 \pause
 \end{itemize}
 \end{frame}
@@ -61,6 +62,8 @@
 \item  Module-by-module dashboard submission
 \pause
 \item  Code coverage per module
+\pause
+\item  Modulize  maintainance efforts
 \end{itemize}
 \end{frame}
 
@@ -86,7 +89,7 @@
 \pause
 \item  Module dependency: itk-module.cmake
 \pause
-\item  Add tests, \href{http://www.vtk.org/Wiki/ITK/Git/Develop/Data\#Workflow}{\textcolor{red}{add testing data}}
+\item  Add tests, \href{http://www.vtk.org/Wiki/ITK/Git/Develop/Data\#Workflow}{\textcolor{red}{\underline{add testing data}}}
 \pause
 \item  Documentation
 \end{itemize}
@@ -102,6 +105,9 @@
 \end{itemize}
 \end{frame}
 
-\centeredlargetext{white}{black}{
-Details about ITK Modularization can be found at \href{http://www.itk.org/Wiki/ITK\_Release\_4/Modularization}{\textcolor{red}{Wiki Page}}.
-}
+
+\begin{frame}
+\begin{itemize}
+\item  Details about ITK Modularization can be found at \href{http://www.itk.org/Wiki/ITK\_Release\_4/Modularization}{\textcolor{red}{\underline{Wiki Page}}}.
+\end{itemize}
+\end{frame}
