@@ -396,7 +396,7 @@ void QuasiNewtonLocalSupportObjectOptimizer
 
 /** Compute learning late from voxel shift*/
 double QuasiNewtonLocalSupportObjectOptimizer
-::EstimateLearningRate(ParametersType step)
+::EstimateLearningRate(ParametersType itkNotUsed(step) )
 {
   if (m_OptimizerParameterScaleEstimator.IsNull())
     {

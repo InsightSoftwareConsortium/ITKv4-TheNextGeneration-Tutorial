@@ -17,6 +17,7 @@ set(ITKRegistrationRefactoringTests
   # On hold until class is updated
   #itkDemonsVectorImageToVectorImageObjectRegistrationTest.cxx
   #itkDemonsVectorImageToVectorImageObjectMetricTest.cxx
+  itkImageToImageObjectMetricTest.cxx  
 )
 
 set(INPUTDATA ${ITK_DATA_ROOT}/Input)
@@ -109,3 +110,7 @@ itk_add_test(NAME itkQuasiNewtonObjectOptimizerTest
 
 #itk_add_test(NAME itkJensenHavrdaCharvatTsallisPointSetMetricTest
 #      COMMAND ITKRegistrationRefactoringTestDriver itkPointSetToPointSetMetricTest 3)
+
+itk_add_test(NAME itkImageToImageObjectMetricTest
+      COMMAND ITKRegistrationRefactoringTestDriver
+      itkImageToImageObjectMetricTest)

@@ -529,9 +529,12 @@ ImageToImageObjectMetric<TFixedImage, TMovingImage, TVirtualImage >
      * then we otherwise get when exceptions are caught in MultiThreader. */
     try
       {
+      bool computeGradient = 
+         self->GetGradientSource() == GRADIENT_SOURCE_FIXED ||
+         self->GetGradientSource() == GRADIENT_SOURCE_BOTH;
       self->TransformAndEvaluateFixedPoint( ItV.GetIndex(),
                                         virtualPoint,
-                                        self->GetGradientSourceIncludesFixed(),
+                                        computeGradient,
                                         mappedFixedPoint,
                                         mappedFixedPixelValue,
                                         mappedFixedImageGradient,
@@ -553,9 +556,12 @@ ImageToImageObjectMetric<TFixedImage, TMovingImage, TVirtualImage >
 
     try
       {
+      bool computeGradient = 
+         self->GetGradientSource() == GRADIENT_SOURCE_MOVING ||
+         self->GetGradientSource() == GRADIENT_SOURCE_BOTH;
       self->TransformAndEvaluateMovingPoint( ItV.GetIndex(),
                                       virtualPoint,
-                                      self->GetGradientSourceIncludesMoving(),
+                                      computeGradient,
                                       mappedMovingPoint,
                                       mappedMovingPixelValue,
                                       mappedMovingImageGradient,
