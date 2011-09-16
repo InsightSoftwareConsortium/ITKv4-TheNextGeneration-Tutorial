@@ -28,7 +28,7 @@
 #include "itkDemonsImageToImageObjectMetric.h"
 #include "itkGradientDescentObjectOptimizer.h"
 #include "itkQuasiNewtonLocalSupportObjectOptimizer.h"
-#include "itkOptimizerParameterEstimator.h"
+#include "itkOptimizerParameterScaleEstimator.h"
 
 #include "itkIdentityTransform.h"
 #include "itkTranslationTransform.h"
@@ -208,13 +208,15 @@ int itkQuasiNewtonDemonsRegistrationTest(int argc, char *argv[])
   //optimizer->SetUseScalarScale(true);
 
   // Testing optimizer parameter estimator
-  typedef itk::OptimizerParameterEstimator< MetricType > OptimizerParameterEstimatorType;
+  /*
+  typedef itk::OptimizerParameterScaleEstimator OptimizerParameterEstimatorType;
   OptimizerParameterEstimatorType::Pointer parameterEstimator = OptimizerParameterEstimatorType::New();
 
   parameterEstimator->SetMetric(metric);
   parameterEstimator->SetTransformForward(true);
   parameterEstimator->SetScaleStrategy(OptimizerParameterEstimatorType::ScalesFromShift);
   optimizer->SetOptimizerParameterEstimator( parameterEstimator );
+  */
   // Estimating optimizer parameters done
 
   std::cout << "Start optimization..." << std::endl

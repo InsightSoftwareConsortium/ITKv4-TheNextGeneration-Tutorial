@@ -25,12 +25,12 @@
  * as no exception occurs.
  */
 
-#include "itkMattesMutualInformationImageToImageObjectMetric.h"
+#include "itkThevenazMutualInformationImageToImageObjectMetric.h"
 #include "itkANTSNeighborhoodCorrelationImageToImageObjectMetric.h"
 #include "itkDemonsImageToImageObjectMetric.h"
 #include "itkGradientDescentObjectOptimizer.h"
 #include "itkQuasiNewtonObjectOptimizer.h"
-#include "itkOptimizerParameterEstimator.h"
+#include "itkOptimizerParameterScaleEstimator.h"
 
 #include "itkIdentityTransform.h"
 #include "itkTranslationTransform.h"
@@ -77,7 +77,7 @@ public:
 };
 }
 
-int itkMattesMutualInformationImageToImageObjectRegistrationTest(int argc, char *argv[])
+int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, char *argv[])
 {
 
   if( argc < 4 || argc > 8)
@@ -182,7 +182,7 @@ int itkMattesMutualInformationImageToImageObjectRegistrationTest(int argc, char 
   // The metric
   Size<Dimension> radSize;
   radSize.Fill(4);
-  typedef MattesMutualInformationImageToImageObjectMetric < FixedImageType, MovingImageType >
+  typedef ThevenazMutualInformationImageToImageObjectMetric < FixedImageType, MovingImageType >
   //typedef ANTSNeighborhoodCorrelationImageToImageObjectMetric < FixedImageType, MovingImageType >
   //typedef DemonsImageToImageObjectMetric< FixedImageType, MovingImageType >
                                                                   MetricType;

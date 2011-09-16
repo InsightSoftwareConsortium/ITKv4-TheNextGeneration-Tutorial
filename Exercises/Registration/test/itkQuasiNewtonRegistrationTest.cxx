@@ -26,7 +26,7 @@
 #include "itkMeanSquaresImageToImageObjectMetric.h"
 #include "itkANTSNeighborhoodCorrelationImageToImageObjectMetric.h"
 #include "itkQuasiNewtonObjectOptimizer.h"
-#include "itkOptimizerParameterEstimator.h"
+#include "itkOptimizerParameterScaleEstimator.h"
 
 #include "itkIdentityTransform.h"
 #include "itkTranslationTransform.h"
@@ -234,13 +234,15 @@ int itkQuasiNewtonRegistrationTest(int argc, char *argv[])
   iterationCommand->SetOptimizer(  optimizer.GetPointer() );
 
   // Testing optimizer parameter estimator
-  typedef itk::OptimizerParameterEstimator< MetricType > OptimizerParameterEstimatorType;
-  OptimizerParameterEstimatorType::Pointer parameterEstimator = OptimizerParameterEstimatorType::New();
+  /*
+  typedef itk::OptimizerParameterScaleEstimator OptimizerParameterScaleEstimatorType;
+  OptimizerParameterScaleEstimatorType::Pointer parameterEstimator = OptimizerParameterScaleEstimatorType::New();
 
   parameterEstimator->SetMetric(metric);
   parameterEstimator->SetTransformForward(true);
-  parameterEstimator->SetScaleStrategy(OptimizerParameterEstimatorType::ScalesFromShift);
+  parameterEstimator->SetScaleStrategy(OptimizerParameterScaleEstimatorType::ScalesFromShift);
   optimizer->SetOptimizerParameterEstimator( parameterEstimator );
+  */
   //optimizer->SetLineSearchEnabled(true);
   // Estimating optimizer parameters done
 
