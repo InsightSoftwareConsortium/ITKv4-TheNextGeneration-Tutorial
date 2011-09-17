@@ -224,6 +224,7 @@ public:
    * its argument as a vector. */
   OutputPointType       TransformPoint(const InputPointType & point) const;
 
+  using Superclass::TransformVector;
   OutputVectorType      TransformVector(const InputVectorType & vector) const;
 
   OutputVectorType      TransformVector(const InputVectorType & vector,
@@ -243,6 +244,7 @@ public:
   //  { return TransformVector( vector ); }
 
 
+  using Superclass::TransformCovariantVector;
   OutputCovariantVectorType TransformCovariantVector(
       const InputCovariantVectorType & vector) const;
 
@@ -268,8 +270,8 @@ public:
    *  Generally, global transforms should return an indentity jacobian
    *  since there is no change with respect to position. */
   virtual void ComputeJacobianWithRespectToPosition(
-                                       const InputPointType & x,
-                                       JacobianType &j ) const
+                                       const InputPointType & itkNotUsed(x),
+                                       JacobianType & itkNotUsed(j) ) const
     {
     }
 

@@ -338,7 +338,7 @@ QuasiNewtonObjectOptimizer
 
 /** Do backtracking line search on the Newton direction */
 void QuasiNewtonObjectOptimizer
-::AdvanceWithBacktrackingLineSearch(ParametersType direction, double maxStepSize)
+::AdvanceWithBacktrackingLineSearch(ParametersType direction, double itkNotUsed(maxStepSize))
 {
   double optimalDirection = -1.0; //maximizing
 
@@ -781,7 +781,7 @@ void QuasiNewtonObjectOptimizer
 
 /** Compute the learning late from voxel shift*/
 double QuasiNewtonObjectOptimizer
-::EstimateLearningRate(ParametersType step)
+::EstimateLearningRate(ParametersType itkNotUsed(step))
 {
   if (m_OptimizerParameterScaleEstimator.IsNull())
     {

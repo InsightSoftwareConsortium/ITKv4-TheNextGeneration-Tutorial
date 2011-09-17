@@ -26,6 +26,7 @@
 //#include "itkImageToData.h"
 #include "itkIdentityTransform.h"
 #include "itkResampleImageFilter.h"
+#include "itkImageRegion.h"
 
 namespace itk
 {
@@ -33,7 +34,7 @@ namespace itk
 //Forward-declare this because of module dependency conflict.
 //ImageToData will soon be moved to a different module, at which
 // time this can be removed.
-template <unsigned int VDimension, class TDataHolder>
+template <unsigned int VDimension, class TDataHolder, typename TInputObject>
 class ImageToData;
 
 /** \class ImageToImageObjectMetric
@@ -734,12 +735,13 @@ protected:
   /** Type of the default threader used for GetValue and GetDerivative.
    * This splits an image region in per-thread sub-regions over the outermost
    * image dimension. */
-  typedef ImageToData<VirtualImageDimension, Self>
+  typedef ImageRegion<VirtualImageDimension> ImageRegionType;
+  typedef ImageToData<VirtualImageDimension, Self, ImageRegionType>
                                              ValueAndDerivativeThreaderType;
   typedef typename ValueAndDerivativeThreaderType::InputObjectType
                                              ThreaderInputObjectType;
 
-  /* Optinally set the threader type to use. This performs the splitting of the
+  /* Optionally set the threader type to use. This performs the splitting of the
    * virtual region over threads, and user may wish to provide a different
    * one that does a different split. The default is ImageToData. */
   itkSetObjectMacro(ValueAndDerivativeThreader,ValueAndDerivativeThreaderType);

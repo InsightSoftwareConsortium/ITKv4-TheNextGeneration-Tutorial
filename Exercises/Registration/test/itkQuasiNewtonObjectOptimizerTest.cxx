@@ -67,6 +67,7 @@ public:
 
   void Initialize(void) throw ( itk::ExceptionObject ) {}
 
+  using Superclass::GetValueAndDerivative;
   void GetValueAndDerivative( MeasureType & value,
                               DerivativeType & derivative )
   {
@@ -102,6 +103,7 @@ public:
       }
   }
 
+  using Superclass::GetValue;
   MeasureType  GetValue()
   {
     return 0.0;

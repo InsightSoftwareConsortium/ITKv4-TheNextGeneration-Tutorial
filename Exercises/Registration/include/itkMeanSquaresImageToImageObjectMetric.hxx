@@ -65,12 +65,12 @@ bool
 MeanSquaresImageToImageObjectMetric<TFixedImage,TMovingImage,TVirtualImage>
 ::GetValueAndDerivativeProcessPoint(
                     const VirtualPointType &           virtualPoint,
-                    const FixedImagePointType &        mappedFixedPoint,
+                    const FixedImagePointType &,
                     const FixedImagePixelType &        fixedImageValue,
-                    const FixedImageGradientType &  fixedImageDerivatives,
-                    const MovingImagePointType &       mappedMovingPoint,
+                    const FixedImageGradientType &,
+                    const MovingImagePointType &,
                     const MovingImagePixelType &       movingImageValue,
-                    const MovingImageGradientType & movingImageDerivatives,
+                    const MovingImageGradientType &    movingImageDerivatives,
                     MeasureType &                      metricValueReturn,
                     DerivativeType &                   localDerivativeReturn,
                     ThreadIdType                       threadID)

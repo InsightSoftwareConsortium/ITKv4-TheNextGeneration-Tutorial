@@ -134,7 +134,7 @@ typename PolyAffineTransform< TScalarType,
                                     NInputDimensions,
                                     NOutputDimensions >::OutputVectorType
 PolyAffineTransform< TScalarType, NInputDimensions, NOutputDimensions >
-::TransformVector(const InputVectorType & vect) const
+::TransformVector(const InputVectorType &) const
 {
   itkExceptionMacro("TransformVector not yet implemented.");
   OutputVectorType output;
