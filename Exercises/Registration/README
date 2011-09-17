@@ -1,4 +1,17 @@
-#
+# should be compiled as an external module against ITKv4 beta
+
+link the Regsistration directory into
+
+ITK/Modules/External
+
+s.t. you have
+
+ ITK/Modules/External/Registration
+
+then compile ITK again --- e.g.
+
+make -j 2 ITKRegistrationRefactoringTestDriver
+
 # should also add
 #
 # itkThevenazMutualInformationImageToImageObjectMetric
