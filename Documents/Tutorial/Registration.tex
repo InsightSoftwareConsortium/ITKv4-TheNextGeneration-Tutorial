@@ -1,25 +1,136 @@
-\section{Image Registration}
+{
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{background canvas}{bg={black}}
+\color{white}
+\begin{frame}[plain]
+\fontsize{36pt}{36pt}\selectfont
+\center
+\begin{center}
+Refactored Registration Framework
+\end{center}
+
+\fontsize{12pt}{12pt}\selectfont
+\begin{center}
+Insight Software Consortium
+\end{center}
+\begin{center}
+\newline
+ PICSL @ University of Pennsylvania 
+\newline
+ Brian Avants, Nicholas Tustison, Gang Song, \\ 
+Baohua Wu, Michael Stauffer, James C. Gee
+\end{center}
+\end{frame}
+}
+
+% \section{Image Registration}
 
 \centeredlargetext{white}{black}{
-Image Registration Refactoring
+Overview
 }
+
 
 \begin{frame}
 \frametitle{Image Registration Refactoring}
-\Huge
+ITK v3 Application
+\end{frame}
+
+\begin{frame}
+\frametitle{Image Registration Refactoring}
+ITK v4 Application
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Image Registration Refactoring}
+\Large
 \begin{itemize}
+\item Unify frameworks: local \& global 
+\pause
+\item New metrics and transform operations for vectors \&  tensors
+\pause 
 \item Composite Transform
 \pause
-\item Symmetric Registration
+\item Unbiased registration
 \pause
-\item Transforms IO
+\item Multi-threading 
+\pause 
+\item Automated parameter scaling
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Unified framework}
+\Large
+\begin{itemize}
+\item Local \& global transforms treated the same in resampler
+\item Both types available to (revised) optimizers
+\item Revised metrics optimized for these operations
+\item Tensors, vector, scalars treated transparently
 \end{itemize}
 \end{frame}
 
 
+\begin{frame}
+\frametitle{New metrics }
+\Large
+\begin{itemize}
+ sparse and dense neighborhood correlation
+mutual information thevenaz
+point sets :  euclidean, pse, Jensen-Havrda-Charvat-Tsallis (JHCT)
+tensor --- deviatoric 
+vector --- rbg / arbitrary length
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Transform models}
+\Large
+\begin{itemize}
+\item As v3 $+$ some new ones + thread safety 
+\item displacement
+\item bspline
+\item polyaffine
+\item diffeomorphism
+\item velocityfield --- needs optimizer
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Multi-threading}
+\Large
+\begin{itemize}
+\item code example
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Example registration}
+\Large
+\begin{itemize}
+\item run the whole thing
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Parameter estimation }
+\Large
+\begin{itemize}
+\item show parameter estimator 
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Thevenaz metric}
+\Large
+\begin{itemize}
+\item X
+\end{itemize}
+\end{frame}
+
 \centeredlargetext{black}{white}{
 Registration\\
-Parameter Tunning
+Parameter Tuning
 }
 
 \begin{frame}
