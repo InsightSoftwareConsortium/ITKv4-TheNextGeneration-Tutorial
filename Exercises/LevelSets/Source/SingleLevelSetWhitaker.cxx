@@ -46,20 +46,20 @@ public:
   typedef SmartPointer< Self >        Pointer;
   typedef SmartPointer< const Self >  ConstPointer;
 
-  typedef TLevelSetFilter             LevelSetFilterType;
-  typedef typename LevelSetFilter     LevelSetFilterPointer;
+  typedef TLevelSetFilter                       LevelSetFilterType;
+  typedef typename LevelSetFilterType::Pointer  LevelSetFilterPointer;
 
   typedef typename LevelSetFilterType::LevelSetType     LevelSetType;
   typedef typename LevelSetFilterType::LevelSetPointer  LevelSetPointer;
 
-  typedef typename TInputImage              InputImageType;
+  typedef TInputImage                       InputImageType;
   typedef typename InputImageType::Pointer  InputImagePointer;
 
   itkNewMacro( CommandIterationUpdate );
 
   void Execute( Object* caller, const EventObject& event )
     {
-    this->Execute( const Object* caller, const EventObject& event ); 
+    this->Execute( ( const Object* ) caller, event );
     }
 
   void Execute( const Object* object, const EventObject& event )
@@ -76,7 +76,7 @@ public:
         InputImageType* input = filter->GetInput();
 
         m_Viewer->SetInputImage( input );
-        m_Viewer->SetLevelSet( level_set );
+        m_Viewer->SetLevelSet( levelSet );
         m_Viewer->SetScreenCapture( true );
         m_Viewer->Update();
         }
@@ -86,7 +86,7 @@ public:
 protected:
   CommandIterationUpdate()
   {
-    m_Viewer = VisualizatinType::New();
+    m_Viewer = VisualizationType::New();
   }
 
   ~CommandIterationUpdate() {}
@@ -94,8 +94,8 @@ protected:
 private:
   typedef typename LevelSetType::OutputType OutputType;
 
-  typedef vtkVisualize2DWhitakerLevelSetLayers< InputImageType, 
-    PixelType, InputImageType::ImageDimension > VisualizationType;
+  typedef vtkVisualize2DWhitakerLevelSetLayers< InputImageType,
+    OutputType, InputImageType::ImageDimension > VisualizationType;
   typedef typename VisualizationType::Pointer   VisualizationPointer;
 
   VisualizationPointer m_Viewer;
