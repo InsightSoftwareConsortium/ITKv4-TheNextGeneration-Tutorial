@@ -71,9 +71,9 @@ public:
       {
       if( IterationEvent().CheckEvent( &event ) )
         {
-        LevelSetType* levelSet = filter->GetLevelSet();
+        LevelSetPointer levelSet = filter->GetLevelSetContainer()->GetLevelSet( 0 );
 
-        InputImageType* input = filter->GetInput();
+        InputImageType* input = filter->GetEquationContainer()->GetInput();
 
         m_Viewer->SetInputImage( input );
         m_Viewer->SetLevelSet( levelSet );
