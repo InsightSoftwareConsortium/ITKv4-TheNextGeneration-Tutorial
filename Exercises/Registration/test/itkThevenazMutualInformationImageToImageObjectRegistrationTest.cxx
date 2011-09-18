@@ -37,7 +37,8 @@
 #include "itkAffineTransform.h"
 #include "itkEuler2DTransform.h"
 #include "itkCompositeTransform.h"
-#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform.h"
+#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform2.h"
+//#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform.h"
 
 #include "itkCastImageFilter.h"
 #include "itkLinearInterpolateImageFunction.h"
@@ -146,7 +147,7 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
   AffineTransformType::Pointer affineTransform = AffineTransformType::New();
   affineTransform->SetIdentity();
   std::cout <<" affineTransform params " << affineTransform->GetParameters() << std::endl;
-  typedef GaussianSmoothingOnUpdateDisplacementFieldTransform<
+  typedef GaussianSmoothingOnUpdateDisplacementFieldTransform2<
                                                     double, Dimension>
                                                      DisplacementTransformType;
   DisplacementTransformType::Pointer displacementTransform =
@@ -171,12 +172,13 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
   field->FillBuffer( zeroVector );
   // Assign to transform
   displacementTransform->SetDisplacementField( field );
-  displacementTransform->SetGaussianSmoothingVarianceForTheUpdateField( 5 );
+  //  displacementTransform->SetGaussianSmoothingSigma( 5 );
+    displacementTransform->SetGaussianSmoothingVarianceForTheUpdateField( 1 );
+    displacementTransform->SetGaussianSmoothingVarianceForTheTotalField( 5 );
 
   //identity transform for fixed image
   typedef IdentityTransform<double, Dimension> IdentityTransformType;
-  IdentityTransformType::Pointer identityTransform =
-                                                  IdentityTransformType::New();
+  IdentityTransformType::Pointer identityTransform = IdentityTransformType::New();
   identityTransform->SetIdentity();
 
   // The metric
@@ -197,10 +199,7 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
   metric->SetFixedImage( fixedImage );
   metric->SetMovingImage( movingImage );
   metric->SetFixedTransform( identityTransform );
-  compositeTransform->AddTransform( affineTransform );
-  compositeTransform->SetAllTransformsToOptimizeOn(); //Set back to optimize all.
-  compositeTransform->SetOnlyMostRecentTransformToOptimizeOn(); //set to optimize the displacement field
-  metric->SetMovingTransform( compositeTransform );
+  metric->SetMovingTransform( affineTransform );
   bool prewarp = true;
   metric->SetPreWarpMovingImage( prewarp );
   metric->SetPreWarpFixedImage( prewarp );
@@ -209,6 +208,7 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
   metric->SetUseFixedGradientRecursiveGaussianImageFilter( gaussian );
   metric->Initialize();
 
+  std::cout << "First do an affine registration " << std::endl;
   typedef GradientDescentObjectOptimizer  OptimizerType;
   OptimizerType::Pointer  optimizer = OptimizerType::New();
   optimizer->SetMetric( metric );
@@ -253,29 +253,20 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
   std::cout <<  compositeTransform->GetParameters() << std::endl;
 */
 
+  std::cout << "Follow affine with deformable registration " << std::endl;
   // now add the displacement field to the composite transform
+  compositeTransform->AddTransform( affineTransform );
   compositeTransform->AddTransform( displacementTransform );
+  compositeTransform->SetAllTransformsToOptimizeOn(); //Set back to optimize all.
   compositeTransform->SetOnlyMostRecentTransformToOptimizeOn(); //set to optimize the displacement field
+  metric->SetMovingTransform( compositeTransform );
+  metric->Initialize();
   // Optimizer
   typedef GradientDescentObjectOptimizer  OptimizerType;
   OptimizerType::Pointer  defoptimizer = OptimizerType::New();
   defoptimizer->SetMetric( metric );
   defoptimizer->SetLearningRate( deformationLearningRate );
   defoptimizer->SetNumberOfIterations( numberOfIterations );
-
-  metric->Initialize();
-
-  std::cout << "Start optimization..." << std::endl
-            << "Number of iterations: " << numberOfIterations << std::endl
-            << "Deformation learning rate: " << deformationLearningRate << std::endl
-            << "PreWarpMovingImage: " << metric->GetPreWarpMovingImage() << std::endl
-            << "PreWarpFixedImage: " << metric->GetPreWarpFixedImage() << std::endl
-            << "Use_Moving_GradientRecursiveGaussianImageFilter: "
-            << metric->GetUseMovingGradientRecursiveGaussianImageFilter()
-            << std::endl
-            << "Use_Fixed_GradientRecursiveGaussianImageFilter: "
-            << metric->GetUseFixedGradientRecursiveGaussianImageFilter()
-            << std::endl;
   try
     {
     defoptimizer->StartOptimization();
