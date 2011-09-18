@@ -267,6 +267,11 @@ int main( int argc, char* argv[] )
                                                             LevelSetEvolutionType;
 
   LevelSetEvolutionType::Pointer evolution = LevelSetEvolutionType::New();
+
+  itk::CommandIterationUpdate::Pointer observer =
+    itk::CommandIterationUpdate::New();
+  evolution->AddObserver( itk::IterationEvent(), observer );
+
   evolution->SetEquationContainer( equationContainer );
   evolution->SetStoppingCriterion( criterion );
   evolution->SetLevelSetContainer( lscontainer );
@@ -301,6 +306,7 @@ int main( int argc, char* argv[] )
     ++oIt;
     }
 
+/* 
   typedef vtkVisualize2DWhitakerLevelSetLayers< InputImageType, PixelType, Dimension >
     VisualizationType;
   VisualizationType::Pointer viewer = VisualizationType::New();
@@ -308,6 +314,7 @@ int main( int argc, char* argv[] )
   viewer->SetLevelSet( level_set );
   viewer->SetScreenCapture( true );
   viewer->Update();
+*/
 
   typedef itk::ImageFileWriter< OutputImageType >     OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
