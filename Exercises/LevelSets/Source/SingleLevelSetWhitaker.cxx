@@ -34,6 +34,75 @@
 
 #include "vtkVisualize2DWhitakerLevelSetLayers.h"
 
+namespace itk
+{
+template< class TLevelSetFilter,
+          class TInputImage >
+class CommandIterationUpdate : public Command
+{
+public:
+  typedef CommandIterationUpdate      Self;
+  typedef Command                     Superclass;
+  typedef SmartPointer< Self >        Pointer;
+  typedef SmartPointer< const Self >  ConstPointer;
+
+  typedef TLevelSetFilter             LevelSetFilterType;
+  typedef typename LevelSetFilter     LevelSetFilterPointer;
+
+  typedef typename LevelSetFilterType::LevelSetType     LevelSetType;
+  typedef typename LevelSetFilterType::LevelSetPointer  LevelSetPointer;
+
+  typedef typename TInputImage              InputImageType;
+  typedef typename InputImageType::Pointer  InputImagePointer;
+
+  itkNewMacro( CommandIterationUpdate );
+
+  void Execute( Object* caller, const EventObject& event )
+    {
+    this->Execute( const Object* caller, const EventObject& event ); 
+    }
+
+  void Execute( const Object* object, const EventObject& event )
+    {
+    const LevelSetFilterType* filter = 
+      dynamic_cast< const LevelSetFilterType* >( object );
+
+    if( object )
+      {
+      if( IterationEvent().CheckEvent( &event ) )
+        {
+        LevelSetType* levelSet = filter->GetLevelSet();
+
+        InputImageType* input = filter->GetInput();
+
+        m_Viewer->SetInputImage( input );
+        m_Viewer->SetLevelSet( level_set );
+        m_Viewer->SetScreenCapture( true );
+        m_Viewer->Update();
+        }
+      }
+    }
+
+protected:
+  CommandIterationUpdate()
+  {
+    m_Viewer = VisualizatinType::New();
+  }
+
+  ~CommandIterationUpdate() {}
+
+private:
+  typedef typename LevelSetType::OutputType OutputType;
+
+  typedef vtkVisualize2DWhitakerLevelSetLayers< InputImageType, 
+    PixelType, InputImageType::ImageDimension > VisualizationType;
+  typedef typename VisualizationType::Pointer   VisualizationPointer;
+
+  VisualizationPointer m_Viewer;
+  
+};
+}
+
 int main( int argc, char* argv[] )
 {
   if( argc < 4 )
