@@ -172,9 +172,8 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
   field->FillBuffer( zeroVector );
   // Assign to transform
   displacementTransform->SetDisplacementField( field );
-  //  displacementTransform->SetGaussianSmoothingSigma( 5 );
-    displacementTransform->SetGaussianSmoothingVarianceForTheUpdateField( 1 );
-    displacementTransform->SetGaussianSmoothingVarianceForTheTotalField( 5 );
+  displacementTransform->SetGaussianSmoothingVarianceForTheUpdateField( 1 );
+  displacementTransform->SetGaussianSmoothingVarianceForTheTotalField( 5 );
 
   //identity transform for fixed image
   typedef IdentityTransform<double, Dimension> IdentityTransformType;

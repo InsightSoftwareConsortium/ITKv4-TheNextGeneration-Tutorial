@@ -34,6 +34,75 @@
 
 #include "vtkVisualize2DWhitakerLevelSetLayers.h"
 
+namespace itk
+{
+template< class TLevelSetFilter,
+          class TInputImage >
+class CommandIterationUpdate : public Command
+{
+public:
+  typedef CommandIterationUpdate      Self;
+  typedef Command                     Superclass;
+  typedef SmartPointer< Self >        Pointer;
+  typedef SmartPointer< const Self >  ConstPointer;
+
+  typedef TLevelSetFilter                       LevelSetFilterType;
+  typedef typename LevelSetFilterType::Pointer  LevelSetFilterPointer;
+
+  typedef typename LevelSetFilterType::LevelSetType     LevelSetType;
+  typedef typename LevelSetFilterType::LevelSetPointer  LevelSetPointer;
+
+  typedef TInputImage                       InputImageType;
+  typedef typename InputImageType::Pointer  InputImagePointer;
+
+  itkNewMacro( CommandIterationUpdate );
+
+  void Execute( Object* caller, const EventObject& event )
+    {
+    this->Execute( ( const Object* ) caller, event );
+    }
+
+  void Execute( const Object* object, const EventObject& event )
+    {
+    const LevelSetFilterType* filter = 
+      dynamic_cast< const LevelSetFilterType* >( object );
+
+    if( object )
+      {
+      if( IterationEvent().CheckEvent( &event ) )
+        {
+        LevelSetType* levelSet = filter->GetLevelSet();
+
+        InputImageType* input = filter->GetInput();
+
+        m_Viewer->SetInputImage( input );
+        m_Viewer->SetLevelSet( levelSet );
+        m_Viewer->SetScreenCapture( true );
+        m_Viewer->Update();
+        }
+      }
+    }
+
+protected:
+  CommandIterationUpdate()
+  {
+    m_Viewer = VisualizationType::New();
+  }
+
+  ~CommandIterationUpdate() {}
+
+private:
+  typedef typename LevelSetType::OutputType OutputType;
+
+  typedef vtkVisualize2DWhitakerLevelSetLayers< InputImageType,
+    OutputType, InputImageType::ImageDimension > VisualizationType;
+  typedef typename VisualizationType::Pointer   VisualizationPointer;
+
+  VisualizationPointer m_Viewer;
+  
+};
+}
+
 int main( int argc, char* argv[] )
 {
   if( argc < 4 )
@@ -198,6 +267,11 @@ int main( int argc, char* argv[] )
                                                             LevelSetEvolutionType;
 
   LevelSetEvolutionType::Pointer evolution = LevelSetEvolutionType::New();
+
+  itk::CommandIterationUpdate::Pointer observer =
+    itk::CommandIterationUpdate::New();
+  evolution->AddObserver( itk::IterationEvent(), observer );
+
   evolution->SetEquationContainer( equationContainer );
   evolution->SetStoppingCriterion( criterion );
   evolution->SetLevelSetContainer( lscontainer );
@@ -232,6 +306,7 @@ int main( int argc, char* argv[] )
     ++oIt;
     }
 
+/* 
   typedef vtkVisualize2DWhitakerLevelSetLayers< InputImageType, PixelType, Dimension >
     VisualizationType;
   VisualizationType::Pointer viewer = VisualizationType::New();
@@ -239,6 +314,7 @@ int main( int argc, char* argv[] )
   viewer->SetLevelSet( level_set );
   viewer->SetScreenCapture( true );
   viewer->Update();
+*/
 
   typedef itk::ImageFileWriter< OutputImageType >     OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
