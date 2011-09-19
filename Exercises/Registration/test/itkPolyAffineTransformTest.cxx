@@ -30,7 +30,7 @@
 
 #include "itkIdentityTransform.h"
 #include "itkTranslationTransform.h"
-#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform.h"
+#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform2.h"
 #include "itkPolyAffineTransform.h"
 #include "itkPolyAffineWeightFunctor.h"
 
@@ -311,7 +311,7 @@ int itkPolyAffineTransformTest(int argc, char *argv[])
     }
 
   //Output the polyaffine transform to a deformation field
-  typedef GaussianSmoothingOnUpdateDisplacementFieldTransform<
+  typedef GaussianSmoothingOnUpdateDisplacementFieldTransform2<
                                                     double, Dimension>
                                                     DeformationTransformType;
   DeformationTransformType::Pointer deformationTransform =

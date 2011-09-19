@@ -30,7 +30,7 @@
 
 #include "itkIdentityTransform.h"
 #include "itkTranslationTransform.h"
-#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform.h"
+#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform2.h"
 
 #include "itkHistogramMatchingImageFilter.h"
 #include "itkCastImageFilter.h"
@@ -111,7 +111,7 @@ int itkDemonsImageToImageObjectRegistrationTest(int argc, char *argv[])
                                                   TranslationTransformType::New();
   translationTransform->SetIdentity();
 
-  typedef itk::GaussianSmoothingOnUpdateDisplacementFieldTransform<
+  typedef itk::GaussianSmoothingOnUpdateDisplacementFieldTransform2<
                                                     double, Dimension>
                                                      DisplacementTransformType;
   DisplacementTransformType::Pointer displacementTransform =
@@ -138,7 +138,7 @@ int itkDemonsImageToImageObjectRegistrationTest(int argc, char *argv[])
   // Assign to transform
   displacementTransform->SetDisplacementField( field );
   displacementTransform->SetGaussianSmoothingVarianceForTheTotalField( 3 );
-  // displacementTransform->SetGaussianSmoothingVarianceForTheUpdateField( 1 );
+  displacementTransform->SetGaussianSmoothingVarianceForTheUpdateField( 0 );
 
   //identity transform for fixed image
   typedef itk::IdentityTransform<double, Dimension> IdentityTransformType;
@@ -158,10 +158,11 @@ int itkDemonsImageToImageObjectRegistrationTest(int argc, char *argv[])
   metric->SetFixedImage( fixedImage );
   metric->SetMovingImage( movingImage );
   metric->SetFixedTransform( identityTransform );
+  
   metric->SetMovingTransform( displacementTransform );
-  //metric->SetMovingTransform( translationTransform );
+//  metric->SetMovingTransform( translationTransform );
 
-  bool prewarp = false;
+  bool prewarp = true;
   metric->SetPreWarpMovingImage( prewarp );
   metric->SetPreWarpFixedImage( prewarp );
   bool gaussian = false;
@@ -237,7 +238,8 @@ int itkDemonsImageToImageObjectRegistrationTest(int argc, char *argv[])
   //
   // results
   //
-  //  std::cout << " result " << translationTransform->GetParameters() << std::endl;
+  
+//  std::cout << "Translation params: " << translationTransform->GetParameters() << std::endl;
   //warp the image with the displacement field
   typedef itk::WarpImageFilter<
                           MovingImageType,

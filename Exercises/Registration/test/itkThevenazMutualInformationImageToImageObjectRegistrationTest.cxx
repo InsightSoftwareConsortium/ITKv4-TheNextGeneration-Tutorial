@@ -175,7 +175,7 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
   // Assign to transform
   displacementTransform->SetDisplacementField( field );
   displacementTransform->SetGaussianSmoothingVarianceForTheUpdateField( 3 );
-  displacementTransform->SetGaussianSmoothingVarianceForTheTotalField( 3 );
+  displacementTransform->SetGaussianSmoothingVarianceForTheTotalField( 5 );
 
   //identity transform for fixed image
   typedef IdentityTransform<double, Dimension> IdentityTransformType;
@@ -183,15 +183,10 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
   identityTransform->SetIdentity();
 
   // The metric
-  Size<Dimension> radSize;
-  radSize.Fill(5);
-  typedef ThevenazMutualInformationImageToImageObjectMetric < FixedImageType, MovingImageType >
-    //typedef ANTSNeighborhoodCorrelationImageToImageObjectMetric < FixedImageType, MovingImageType >
-  //typedef DemonsImageToImageObjectMetric< FixedImageType, MovingImageType >
-                                                                  MetricType;
+  typedef ThevenazMutualInformationImageToImageObjectMetric 
+    < FixedImageType, MovingImageType > MetricType;
   MetricType::Pointer metric = MetricType::New();
   metric->SetNumberOfHistogramBins(20);
-  //metric->SetRadius(radSize);//antscc
 
   // Assign images and transforms.
   // By not setting a virtual domain image or virtual domain settings,
@@ -209,7 +204,6 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
   metric->SetUseFixedGradientRecursiveGaussianImageFilter( gaussian );
   metric->Initialize();
 
-  // Testing RegistrationParameterScalesFromShift
   typedef itk::RegistrationParameterScalesFromShift< MetricType >
     RegistrationParameterScalesFromShiftType;
   RegistrationParameterScalesFromShiftType::Pointer shiftScaleEstimator
@@ -218,8 +212,6 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
   shiftScaleEstimator->SetTransformForward(true); //by default, scales for the moving transform
   shiftScaleEstimator->SetSamplingStrategy(
     RegistrationParameterScalesFromShiftType::SamplingWithRandom);
-  shiftScaleEstimator->Print( std::cout );
-
   RegistrationParameterScalesFromShiftType::ScalesType movingScales(
     affineTransform->GetNumberOfParameters());
   shiftScaleEstimator->EstimateScales(movingScales);

@@ -25,6 +25,7 @@ Baohua Wu, Michael Stauffer, James C. Gee
 \end{frame}
 }
 
+\setbeamertemplate{background}{\includegraphics[width=\paperwidth]{../Art/ITKv4_transparent}}
 \begin{frame}
 \frametitle{What is registration?}
 \includegraphics[height=2in]{../Art/RegistrationBasquiatWarp.pdf}
@@ -33,9 +34,12 @@ Baohua Wu, Michael Stauffer, James C. Gee
 \begin{frame}
 \frametitle{What is registration?}
 \includegraphics[height=1.8in]{../Art/RegistrationBasquiatDeWarp.pdf}
+\newline
+\newline
+\newline
+\| I ( x ) - J(\phi(x)) \|^2  + R(\phi( x)) 
+\newline
 \end{frame}
-
-\setbeamertemplate{background}{\includegraphics[width=\paperwidth]{../Art/ITKv4_transparent}}
 
  \centeredlargetext{white}{black}{
 \centering Enhanced user experience
@@ -48,6 +52,7 @@ Baohua Wu, Michael Stauffer, James C. Gee
 %\newline
 % \includegraphics[height=1.8in]{../Art/ITKv4}
  }
+
 
 \begin{comment}
 {
@@ -97,8 +102,13 @@ ITK v4 framework
 \includegraphics[height=2.2in]{../Art/itkv4reg}
  }
 
+\begin{frame}
+\frametitle{Composite transformations}
+\includegraphics[height=2.5in]{../Art/composite}
+\end{frame}
+
  \centeredlargetext{white}{black}{
-\centering Compile external registration module
+\centering Example Registration
 }
 
 \begin{frame}
@@ -108,93 +118,146 @@ ITK v4 framework
 \lstlistingwithnumber{4}{5}{install_registration_code.cxx}
 \item We recompile
 \lstlistingwithnumber{6}{9}{install_registration_code.cxx}
+\item Be sure to compile in Release mode for real applications!
 \end{itemize}
 \end{frame}
 
 
 \begin{frame}
-\frametitle{Image Registration Refactoring Example}
+\frametitle{Image Registration Refactoring: Brain + N-hood CC}
+\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest}\\
+\textcolor{blue}{r16slice.jpg r64slice.jpg out.nii.gz  50 500 }\\
+\includegraphics[height=2.2in]{../Art/r16slice.jpg}
+\includegraphics[height=2.2in]{../Art/r64slice.jpg}
+\end{frame}
+
+\begin{frame}
+\frametitle{Image Registration Code: Brain + N-hood CC}
+\begin{itemize}
+\item Define the metric
+\lstlistingwithnumber{171}{175}{itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest.cxx}
+\item Define the transforms
+\lstlistingwithnumber{165}{168}{itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest.cxx}
+\lstlistingwithnumber{138}{141}{itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest.cxx}
+\item Resample the image
+\lstlistingwithnumber{201}{202}{itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest.cxx}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Image Registration Refactoring: Composite Tx + MI}
+\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkThevenazMutualInformationImageToImageObjectRegistrationTest }\\
+\textcolor{blue}{face\_avg.jpg face\_c.jpg out.nii.gz  50 0.001 0.75 }\\
+\includegraphics[height=2.2in]{../Art/face_avg.jpg}
+\includegraphics[height=2.2in]{../Art/face_c.jpg}
+\end{frame}
+
+\begin{frame}
+\frametitle{Image Registration Result: Composite Tx + MI}
+\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkThevenazMutualInformationImageToImageObjectRegistrationTest }\\
+\textcolor{blue}{face\_avg.jpg face\_c.jpg out.nii.gz  50 0.001 0.75 }\\
+\includegraphics[height=2.2in]{../Art/face_avg.jpg}
+\includegraphics[height=2.2in]{../Art/face_c_to_face_avg.jpg}
+\end{frame}
+
+\begin{frame}
+\frametitle{Image Registration Code: Composite Tx + MI}
+\begin{itemize}
+\item Define the metric
+\lstlistingwithnumber{186}{189}{itkThevenazMutualInformationImageToImageObjectRegistrationTest.cxx}
+\item Estimate scaling parameters for the affine transform
+\lstlistingwithnumber{207}{210}{itkThevenazMutualInformationImageToImageObjectRegistrationTest.cxx}
+\item Run the affine then add it to composite along with a new
+  deformation transform
+\lstlistingwithnumber{233}{238}{itkThevenazMutualInformationImageToImageObjectRegistrationTest.cxx}
+\end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Image Registration Refactoring Example}
-ITK v4 Application
+\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkThevenazMutualInformationImageToImageObjectRegistrationTest }\\
+\textcolor{blue}{face\_avg.jpg face\_b.jpg out.nii.gz  50 0.001 0.75 }\\
+\includegraphics[height=2.2in]{../Art/face_avg.jpg}
+\includegraphics[height=2.2in]{../Art/face_b.jpg}
 \end{frame}
 
+\begin{frame}
+\frametitle{Image Registration Refactoring Example}
+\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkThevenazMutualInformationImageToImageObjectRegistrationTest }\\
+\textcolor{blue}{face\_avg.jpg face\_b.jpg out.nii.gz  50 0.001 0.75 }\\
+\includegraphics[height=2.2in]{../Art/face_avg.jpg}
+\includegraphics[height=2.2in]{../Art/face_b_to_face_avg_aff.jpg}
+\end{frame}
+\begin{frame}
+\frametitle{Image Registration Refactoring Example}
+\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkThevenazMutualInformationImageToImageObjectRegistrationTest }\\
+\textcolor{blue}{face\_avg.jpg face\_b.jpg out.nii.gz  50 0.001 0.75 }\\
+\includegraphics[height=2.2in]{../Art/face_avg.jpg}
+\includegraphics[height=2.2in]{../Art/face_b_to_face_avg.jpg}
+\newline
+25 seconds (1 thread) vs 16 seconds (2 threads) on Macbook Air.
+\end{frame}
 
+\begin{frame}
+\frametitle{Image Registration Refactoring Example}
+\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkThevenazMutualInformationImageToImageObjectRegistrationTest }\\
+\textcolor{blue}{r16slice.jpg r64slice\_neg.jpg out.nii.gz  50 0.001 0.75 }\\
+\includegraphics[height=2.2in]{../Art/r16slice.jpg}
+\includegraphics[height=2.2in]{../Art/r64slice_neg.jpg}
+\end{frame}
+
+\begin{frame}
+\frametitle{Image Registration Refactoring Example}
+\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkThevenazMutualInformationImageToImageObjectRegistrationTest }\\
+\textcolor{blue}{r16slice.jpg r64slice\_neg.jpg out.nii.gz  50 0.001 0.75 }\\
+\includegraphics[height=2.2in]{../Art/r16slice.jpg}
+\includegraphics[height=2.2in]{../Art/r64slice_neg_to_16.jpg}
+\end{frame}
 
 \begin{frame}
 \frametitle{New metrics}
 \Large
 \begin{itemize}
- sparse and dense neighborhood correlation
-mutual information thevenaz
-point sets ---  euclidean, pse, Jensen-Havrda-Charvat-Tsallis (JHCT)
-tensor --- deviatoric 
-vector --- arbitrary length
+\item Metrics produce consistent results across threads.
+\item Sparse and dense neighborhood correlation.
+\item New mutual information implementation.
+\item Point sets ---  euclidean, pse, Jensen-Havrda-Charvat-Tsallis (JHCT).
+\item Tensor --- deviatoric and Euclidean.
+\item Vector --- arbitrary length (non-geometric) and covariant.
 \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Transform models}
+\frametitle{New transform models}
 \Large
 \begin{itemize}
-\item As v3 $+$ some new ones + thread safety 
-\item displacement
-\item bspline
-\item polyaffine
-\item diffeomorphism
-\item velocityfield --- needs optimizer
+\item As in ITKv3 $+$ some new ones + thread safety 
+\item Displacement transforms
+\item Updated bspline transforms
+\item Poly-affine
+\item Diffeomorphic (TBD)
+\item Velocityfield --- needs optimizer
 \end{itemize}
 \end{frame}
 
 \begin{frame}
+\Large
 \frametitle{Multi-threading}
-\Large
-\begin{itemize}
-\item code example
-\end{itemize}
+\textcolor{red}{ ITK\_GLOBAL\_DEFAULT\_NUMBER\_OF\_THREADS=NT}\\
+\textcolor{red}{export ITK\_GLOBAL\_DEFAULT\_NUMBER\_OF\_THREADS}
+\newline
+\newline
+\textcolor{blue}{metric-$>$SetNumberOfThreads(2)}
 \end{frame}
 
 \begin{frame}
-\frametitle{Example registration}
 \Large
-\begin{itemize}
-\item run the whole thing
-\end{itemize}
+\frametitle{References}
+\includegraphics[height=3.2in]{../Art/registration_references}
 \end{frame}
 
 \begin{frame}
-\frametitle{Parameter estimation }
 \Large
-\begin{itemize}
-\item show parameter estimator 
-\end{itemize}
+\frametitle{Conclusion}
 \end{frame}
-
-\begin{frame}
-\frametitle{Thevenaz metric}
-\Large
-\begin{itemize}
-\item X
-\end{itemize}
-\end{frame}
-
-\centeredlargetext{black}{white}{
-Registration\\
-Parameter Tuning
-}
-
-\begin{frame}
-\frametitle{Include Header Files}
-\framesubtitle{itkThevenazMutualInformationImageToImageObjectRegistrationTest.cxx}
-\begin{itemize}
-\item We include ITK headers:
-\lstlistingwithnumber{28}{33}{itkThevenazMutualInformationImageToImageObjectRegistrationTest.cxx}
-\item We declare the components:
-\lstlistingwithnumber{149}{155}{itkThevenazMutualInformationImageToImageObjectRegistrationTest.cxx}
-\end{itemize}
-\end{frame}
-
-
-

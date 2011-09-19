@@ -146,7 +146,7 @@ GaussianSmoothingOnUpdateDisplacementFieldTransform2<TScalar, NDimensions>
   /* Allocate temp field if new displacement field has been set.
    * We only want to allocate this field if this method is used */
   if( this->GetDisplacementFieldSetTime() >
-      this->m_GaussianSmoothingTempFieldModifiedTime )
+      this->m_GaussianSmoothingTempFieldModifiedTime ||  m_GaussianSmoothingTempField.IsNull()  )
     {
     this->m_GaussianSmoothingTempFieldModifiedTime = this->GetMTime();
     m_GaussianSmoothingTempField = DisplacementFieldType::New();
