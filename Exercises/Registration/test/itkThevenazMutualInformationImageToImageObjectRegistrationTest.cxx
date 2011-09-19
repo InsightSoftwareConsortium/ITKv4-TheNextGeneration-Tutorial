@@ -31,6 +31,7 @@
 #include "itkGradientDescentObjectOptimizer.h"
 #include "itkQuasiNewtonObjectOptimizer.h"
 #include "itkOptimizerParameterScaleEstimator.h"
+#include "itkRegistrationParameterScalesFromShift.h"
 
 #include "itkIdentityTransform.h"
 #include "itkTranslationTransform.h"
@@ -39,6 +40,7 @@
 #include "itkCompositeTransform.h"
 #include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform2.h"
 //#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform.h"
+#include "itkRegistrationParameterScalesFromJacobian.h"
 
 #include "itkCastImageFilter.h"
 #include "itkLinearInterpolateImageFunction.h"
@@ -172,8 +174,8 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
   field->FillBuffer( zeroVector );
   // Assign to transform
   displacementTransform->SetDisplacementField( field );
-  displacementTransform->SetGaussianSmoothingVarianceForTheUpdateField( 1 );
-  displacementTransform->SetGaussianSmoothingVarianceForTheTotalField( 5 );
+  displacementTransform->SetGaussianSmoothingVarianceForTheUpdateField( 3 );
+  displacementTransform->SetGaussianSmoothingVarianceForTheTotalField( 3 );
 
   //identity transform for fixed image
   typedef IdentityTransform<double, Dimension> IdentityTransformType;
@@ -182,9 +184,9 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
 
   // The metric
   Size<Dimension> radSize;
-  radSize.Fill(4);
+  radSize.Fill(5);
   typedef ThevenazMutualInformationImageToImageObjectMetric < FixedImageType, MovingImageType >
-  //typedef ANTSNeighborhoodCorrelationImageToImageObjectMetric < FixedImageType, MovingImageType >
+    //typedef ANTSNeighborhoodCorrelationImageToImageObjectMetric < FixedImageType, MovingImageType >
   //typedef DemonsImageToImageObjectMetric< FixedImageType, MovingImageType >
                                                                   MetricType;
   MetricType::Pointer metric = MetricType::New();
@@ -207,50 +209,33 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
   metric->SetUseFixedGradientRecursiveGaussianImageFilter( gaussian );
   metric->Initialize();
 
+  // Testing RegistrationParameterScalesFromShift
+  typedef itk::RegistrationParameterScalesFromShift< MetricType >
+    RegistrationParameterScalesFromShiftType;
+  RegistrationParameterScalesFromShiftType::Pointer shiftScaleEstimator
+    = RegistrationParameterScalesFromShiftType::New();
+  shiftScaleEstimator->SetMetric(metric);
+  shiftScaleEstimator->SetTransformForward(true); //by default, scales for the moving transform
+  shiftScaleEstimator->SetSamplingStrategy(
+    RegistrationParameterScalesFromShiftType::SamplingWithRandom);
+  shiftScaleEstimator->Print( std::cout );
+
+  RegistrationParameterScalesFromShiftType::ScalesType movingScales(
+    affineTransform->GetNumberOfParameters());
+  shiftScaleEstimator->EstimateScales(movingScales);
+  std::cout << "Shift scales for the affine transform = " << movingScales << std::endl;
+
+
   std::cout << "First do an affine registration " << std::endl;
   typedef GradientDescentObjectOptimizer  OptimizerType;
   OptimizerType::Pointer  optimizer = OptimizerType::New();
   optimizer->SetMetric( metric );
   optimizer->SetLearningRate( learningRate );
   optimizer->SetNumberOfIterations( numberOfIterations );
+  optimizer->SetScales( movingScales );
   optimizer->StartOptimization();
-  /*
-  // Optimizer with parameter estimator
-  typedef QuasiNewtonObjectOptimizer  QOptimizerType;
-  QOptimizerType::Pointer  qoptimizer = QOptimizerType::New();
-  qoptimizer->SetMetric( metric );
-  qoptimizer->SetNumberOfIterations( numberOfIterations );
-  qoptimizer->SetLineSearchEnabled(false);
-  typedef itk::OptimizerParameterEstimator< MetricType > OptimizerParameterEstimatorType;
-  OptimizerParameterEstimatorType::Pointer parameterEstimator = OptimizerParameterEstimatorType::New();
-  parameterEstimator->SetMetric(metric);
-  parameterEstimator->SetTransformForward(true);
-  parameterEstimator->SetScaleStrategy(OptimizerParameterEstimatorType::ScalesFromShift);
-  qoptimizer->SetOptimizerParameterEstimator( parameterEstimator );
-
-
-  std::cout << "Start optimization..." << std::endl
-            << "Number of threads: " << metric->GetNumberOfThreads() << std::endl
-            << "Number of iterations: " << numberOfIterations << std::endl
-            << "Learning rate: " << learningRate << std::endl
-            << "PreWarpImages: " << metric->GetPreWarpMovingImage() << std::endl;
-  try
-    {
-    qoptimizer->StartOptimization();
-    }
-  catch( ExceptionObject & e )
-    {
-    std::cout << "Exception thrown ! " << std::endl;
-    std::cout << "An error ocurred during Optimization:" << std::endl;
-    std::cout << e.GetLocation() << std::endl;
-    std::cout << e.GetDescription() << std::endl;
-    std::cout << e.what()    << std::endl;
-    std::cout << "Test FAILED." << std::endl;
-    return EXIT_FAILURE;
-    }
-  std::cout << " parameters "  << std::endl;
-  std::cout <<  compositeTransform->GetParameters() << std::endl;
-*/
+  std::cout << "Shift scales for the affine transform = " << movingScales << " old scales " << optimizer->GetScales() << std::endl;
+ 
 
   std::cout << "Follow affine with deformable registration " << std::endl;
   // now add the displacement field to the composite transform

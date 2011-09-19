@@ -13,33 +13,44 @@ Refactored Registration Framework
 \begin{center}
 Insight Software Consortium
 \end{center}
+\newline
 \begin{center}
-\newline
  PICSL @ University of Pennsylvania 
+\end{center}
 \newline
+\begin{center}
  Brian Avants, Nicholas Tustison, Gang Song, \\ 
 Baohua Wu, Michael Stauffer, James C. Gee
 \end{center}
 \end{frame}
 }
 
-% \section{Image Registration}
-
-\centeredlargetext{white}{black}{
-Overview
-}
-
-
 \begin{frame}
-\frametitle{Image Registration Refactoring}
-ITK v3 Application
+\frametitle{What is registration?}
+\includegraphics[height=2in]{../Art/RegistrationBasquiatWarp.pdf}
 \end{frame}
 
 \begin{frame}
-\frametitle{Image Registration Refactoring}
-ITK v4 Application
+\frametitle{What is registration?}
+\includegraphics[height=1.8in]{../Art/RegistrationBasquiatDeWarp.pdf}
 \end{frame}
 
+\setbeamertemplate{background}{\includegraphics[width=\paperwidth]{../Art/ITKv4_transparent}}
+
+ \centeredlargetext{white}{black}{
+\centering Enhanced user experience
+%\newline
+%\includegraphics[height=1.8in]{../Art/ITKv4}
+ }
+
+ \centeredlargetext{white}{black}{
+\centering Unified multi-core framework + parameter-estimation
+%\newline
+% \includegraphics[height=1.8in]{../Art/ITKv4}
+ }
+
+\begin{comment}
+{
 
 \begin{frame}
 \frametitle{Image Registration Refactoring}
@@ -69,17 +80,58 @@ ITK v4 Application
 \item Tensors, vector, scalars treated transparently
 \end{itemize}
 \end{frame}
+}
+\end{comment}
+
+ \centeredlargetext{white}{black}{
+ITK v3 framework
+\newline
+\newline
+\includegraphics[height=2.2in]{../Art/itkv3reg}
+ }
+
+ \centeredlargetext{white}{black}{
+ITK v4 framework
+\newline
+\newline
+\includegraphics[height=2.2in]{../Art/itkv4reg}
+ }
+
+ \centeredlargetext{white}{black}{
+\centering Compile external registration module
+}
+
+\begin{frame}
+\frametitle{Compile external module}
+\begin{itemize}
+\item We link the external module
+\lstlistingwithnumber{4}{5}{install_registration_code.cxx}
+\item We recompile
+\lstlistingwithnumber{6}{9}{install_registration_code.cxx}
+\end{itemize}
+\end{frame}
 
 
 \begin{frame}
-\frametitle{New metrics }
+\frametitle{Image Registration Refactoring Example}
+\end{frame}
+
+\begin{frame}
+\frametitle{Image Registration Refactoring Example}
+ITK v4 Application
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{New metrics}
 \Large
 \begin{itemize}
  sparse and dense neighborhood correlation
 mutual information thevenaz
-point sets :  euclidean, pse, Jensen-Havrda-Charvat-Tsallis (JHCT)
+point sets ---  euclidean, pse, Jensen-Havrda-Charvat-Tsallis (JHCT)
 tensor --- deviatoric 
-vector --- rbg / arbitrary length
+vector --- arbitrary length
 \end{itemize}
 \end{frame}
 

@@ -275,13 +275,6 @@ int main( int argc, char* argv[] )
 
   LevelSetEvolutionType::Pointer evolution = LevelSetEvolutionType::New();
 
-  if( atoi( argv[3] ) == 1 )
-    {
-    itk::CommandIterationUpdate< LevelSetEvolutionType, InputImageType >::Pointer observer =
-      itk::CommandIterationUpdate< LevelSetEvolutionType, InputImageType >::New();
-    evolution->AddObserver( itk::IterationEvent(), observer );
-    }
-
   evolution->SetEquationContainer( equationContainer );
   evolution->SetStoppingCriterion( criterion );
   evolution->SetLevelSetContainer( lscontainer );

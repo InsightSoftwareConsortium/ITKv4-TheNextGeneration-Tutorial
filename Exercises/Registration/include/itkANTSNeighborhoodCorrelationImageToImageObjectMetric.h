@@ -105,6 +105,7 @@ public:
     typedef typename Superclass::FixedImagePixelType FixedImagePixelType;
     typedef typename Superclass::FixedImageGradientType
                                                 FixedImageGradientType;
+    typedef typename Superclass::FixedTransformType  FixedTransformType;
 
     typedef typename Superclass::MovingImagePointType MovingImagePointType;
     typedef typename Superclass::MovingImagePixelType MovingImagePixelType;
@@ -114,7 +115,11 @@ public:
 //    typedef typename MovingTransformType::JacobianType MovingImageJacobianType;
     typedef typename Superclass::JacobianType
                                                     JacobianType;
+    /** Jacobian typedefs */
+    typedef typename FixedTransformType::JacobianType   FixedTransformJacobianType;
+    typedef typename MovingTransformType::JacobianType  MovingTransformJacobianType;
 
+ 
     typedef typename Superclass::VirtualImageGradientType
                                                     VirtualImageGradientType;
 
