@@ -92,134 +92,142 @@ public:
     m_ScreenCapture = iCapture;
     }
 
+  void SetPeriod( const itk::IdentifierType& iPeriod )
+    {
+    m_Period = iPeriod;
+    }
+
   void Update()
     {
-    vtkSmartPointer< vtkImageData > VTKImage = m_ImageConverter->GetOutput();
-
-    typedef typename LevelSetType::LayerType          LayerType;
-    typedef typename LevelSetType::LayerConstIterator LayerConstIterator;
-
-    LayerType layer = m_LevelSet->GetLayer( LevelSetType::MinusTwoLayer() );
-
-    LayerConstIterator it = layer.begin();
-
-    while( it != layer.end() )
+    if( m_Count % m_Period == 0 )
       {
-      typename InputImageType::IndexType idx = it->first;
-      InputPixelType* vtkpixel =
-          static_cast< InputPixelType* >( VTKImage->GetScalarPointer( idx[0], idx[1], 0 ) );
-      vtkpixel[0] = 0;
-      vtkpixel[1] = 255;
-      vtkpixel[2] = 0;
-      ++it;
-      }
+      vtkSmartPointer< vtkImageData > VTKImage = m_ImageConverter->GetOutput();
 
-    layer = m_LevelSet->GetLayer( LevelSetType::MinusOneLayer() );
+      typedef typename LevelSetType::LayerType          LayerType;
+      typedef typename LevelSetType::LayerConstIterator LayerConstIterator;
 
-    it = layer.begin();
+      LayerType layer = m_LevelSet->GetLayer( LevelSetType::MinusTwoLayer() );
 
-    while( it != layer.end() )
-      {
-      typename InputImageType::IndexType idx = it->first;
-      InputPixelType* vtkpixel =
-          static_cast< InputPixelType* >( VTKImage->GetScalarPointer( idx[0], idx[1], 0 ) );
-      vtkpixel[0] = 255;
-      vtkpixel[1] = 255;
-      vtkpixel[2] = 0;
-      ++it;
-      }
+      LayerConstIterator it = layer.begin();
 
-    layer = m_LevelSet->GetLayer( LevelSetType::ZeroLayer() );
+      while( it != layer.end() )
+        {
+        typename InputImageType::IndexType idx = it->first;
+        InputPixelType* vtkpixel =
+            static_cast< InputPixelType* >( VTKImage->GetScalarPointer( idx[0], idx[1], 0 ) );
+        vtkpixel[0] = 0;
+        vtkpixel[1] = 255;
+        vtkpixel[2] = 0;
+        ++it;
+        }
 
-    it = layer.begin();
+      layer = m_LevelSet->GetLayer( LevelSetType::MinusOneLayer() );
 
-    while( it != layer.end() )
-      {
-      typename InputImageType::IndexType idx = it->first;
-      InputPixelType* vtkpixel =
-          static_cast< InputPixelType* >( VTKImage->GetScalarPointer( idx[0], idx[1], 0 ) );
-      vtkpixel[0] = 255;
-      vtkpixel[1] = 0;
-      vtkpixel[2] = 0;
-      ++it;
-      }
+      it = layer.begin();
 
-    layer = m_LevelSet->GetLayer( LevelSetType::PlusOneLayer() );
+      while( it != layer.end() )
+        {
+        typename InputImageType::IndexType idx = it->first;
+        InputPixelType* vtkpixel =
+            static_cast< InputPixelType* >( VTKImage->GetScalarPointer( idx[0], idx[1], 0 ) );
+        vtkpixel[0] = 255;
+        vtkpixel[1] = 255;
+        vtkpixel[2] = 0;
+        ++it;
+        }
 
-    it = layer.begin();
+      layer = m_LevelSet->GetLayer( LevelSetType::ZeroLayer() );
 
-    while( it != layer.end() )
-      {
-      typename InputImageType::IndexType idx = it->first;
-      InputPixelType* vtkpixel =
-          static_cast< InputPixelType* >( VTKImage->GetScalarPointer( idx[0], idx[1], 0 ) );
-      vtkpixel[0] = 0;
-      vtkpixel[1] = 255;
-      vtkpixel[2] = 255;
-      ++it;
-      }
+      it = layer.begin();
 
-    layer = m_LevelSet->GetLayer( LevelSetType::PlusTwoLayer() );
+      while( it != layer.end() )
+        {
+        typename InputImageType::IndexType idx = it->first;
+        InputPixelType* vtkpixel =
+            static_cast< InputPixelType* >( VTKImage->GetScalarPointer( idx[0], idx[1], 0 ) );
+        vtkpixel[0] = 255;
+        vtkpixel[1] = 0;
+        vtkpixel[2] = 0;
+        ++it;
+        }
 
-    it = layer.begin();
+      layer = m_LevelSet->GetLayer( LevelSetType::PlusOneLayer() );
 
-    while( it != layer.end() )
-      {
-      typename InputImageType::IndexType idx = it->first;
-      InputPixelType* vtkpixel =
-          static_cast< InputPixelType* >( VTKImage->GetScalarPointer( idx[0], idx[1], 0 ) );
-      vtkpixel[0] = 0;
-      vtkpixel[1] = 0;
-      vtkpixel[2] = 255;
-      ++it;
-      }
+      it = layer.begin();
 
-//    vtkSmartPointer< vtkLookupTable > lut =
-//        vtkSmartPointer< vtkLookupTable >::New();
-//    lut->SetNumberOfTableValues( 5 );
-//    lut->SetRange( -2., 2. );
-//    lut->SetTableValue( 0, 0., 1., 0. );
-//    lut->SetTableValue( 1, 1., 1., 0. );
-//    lut->SetTableValue( 2, 1., 0., 0. );
-//    lut->SetTableValue( 3, 1., 0., 1. );
-//    lut->SetTableValue( 4, 0., 0., 1. );
-//    lut->Build();
+      while( it != layer.end() )
+        {
+        typename InputImageType::IndexType idx = it->first;
+        InputPixelType* vtkpixel =
+            static_cast< InputPixelType* >( VTKImage->GetScalarPointer( idx[0], idx[1], 0 ) );
+        vtkpixel[0] = 0;
+        vtkpixel[1] = 255;
+        vtkpixel[2] = 255;
+        ++it;
+        }
+
+      layer = m_LevelSet->GetLayer( LevelSetType::PlusTwoLayer() );
+
+      it = layer.begin();
+
+      while( it != layer.end() )
+        {
+        typename InputImageType::IndexType idx = it->first;
+        InputPixelType* vtkpixel =
+            static_cast< InputPixelType* >( VTKImage->GetScalarPointer( idx[0], idx[1], 0 ) );
+        vtkpixel[0] = 0;
+        vtkpixel[1] = 0;
+        vtkpixel[2] = 255;
+        ++it;
+        }
+
+//      vtkSmartPointer< vtkLookupTable > lut =
+//          vtkSmartPointer< vtkLookupTable >::New();
+//      lut->SetNumberOfTableValues( 5 );
+//      lut->SetRange( -2., 2. );
+//      lut->SetTableValue( 0, 0., 1., 0. );
+//      lut->SetTableValue( 1, 1., 1., 0. );
+//      lut->SetTableValue( 2, 1., 0., 0. );
+//      lut->SetTableValue( 3, 1., 0., 1. );
+//      lut->SetTableValue( 4, 0., 0., 1. );
+//      lut->Build();
 
 
-//    vtkSmartPointer< vtkScalarBarActor > scalarbar =
-//        vtkSmartPointer< vtkScalarBarActor >::New();
-//    scalarbar->SetTitle( "Layers" );
-//    scalarbar->SetNumberOfLabels( 5 );
-//    scalarbar->SetLookupTable( lut );
+//      vtkSmartPointer< vtkScalarBarActor > scalarbar =
+//          vtkSmartPointer< vtkScalarBarActor >::New();
+//      scalarbar->SetTitle( "Layers" );
+//      scalarbar->SetNumberOfLabels( 5 );
+//      scalarbar->SetLookupTable( lut );
     
-    vtkSmartPointer< vtkImageActor > input_Actor =
-        vtkSmartPointer< vtkImageActor >::New();
-    input_Actor->SetInput( VTKImage );
-    input_Actor->InterpolateOff();
+      vtkSmartPointer< vtkImageActor > input_Actor =
+          vtkSmartPointer< vtkImageActor >::New();
+      input_Actor->SetInput( VTKImage );
+      input_Actor->InterpolateOff();
 
-    m_Renderer->AddActor2D( input_Actor );
-//    m_Ren->AddActor2D( scalarbar );
+      m_Renderer->AddActor2D( input_Actor );
+//      m_Ren->AddActor2D( scalarbar );
 
-    m_RenWin->Render();
+      m_RenWin->Render();
 
-    if( m_ScreenCapture )
-      {
-      std::string filename;
-      std::stringstream yo;
-      yo << "snapshot_" << std::setfill( '0' ) << std::setw( 5 ) << m_Count;
-      filename = yo.str();
-      filename.append ( ".png" );
+      if( m_ScreenCapture )
+        {
+        std::string filename;
+        std::stringstream yo;
+        yo << "snapshot_" << std::setfill( '0' ) << std::setw( 5 ) << m_Count;
+        filename = yo.str();
+        filename.append ( ".png" );
 
-      vtkCaptureScreen< vtkPNGWriter > capture ( m_RenWin );
-      // begin mouse interaction
-//      m_Iren->Start();
-      capture( filename );
-      ++m_Count;
+        vtkCaptureScreen< vtkPNGWriter > capture ( m_RenWin );
+        // begin mouse interaction
+  //      m_Iren->Start();
+        capture( filename );
+        }
+      else
+        {
+        m_Iren->Start();
+        }
       }
-    else
-      {
-      m_Iren->Start();
-      }
+    ++m_Count;
     }
 
 protected:
@@ -227,7 +235,8 @@ protected:
     m_Count( 0 ),
     m_NumberOfLevels( 1 ),
     m_LevelLimit( 0 ),
-    m_ScreenCapture( false )
+    m_ScreenCapture( false ),
+    m_Period( 1 )
     {
     m_ImageConverter = ConverterType::New();
     m_Renderer = vtkSmartPointer< vtkRenderer >::New();
@@ -259,6 +268,7 @@ private:
   unsigned int        m_NumberOfLevels;
   double              m_LevelLimit;
   bool                m_ScreenCapture;
+  itk::IdentifierType m_Period;
 
 };
 #endif
