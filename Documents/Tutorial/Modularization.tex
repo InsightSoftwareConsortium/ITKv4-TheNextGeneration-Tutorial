@@ -25,7 +25,7 @@
 \frametitle{Module sizes}
 \center
 \begin{center}
-\includegraphics[height=0.8\textheight]{../Art/moduleSizePlot.png}
+\includegraphics[height=0.8\textheight]{../Art/moduleSizePlot.pdf}
 \end{center}
 \end{frame}
 
@@ -33,7 +33,7 @@
 \frametitle{Module sizes (no third party modules)}
 \center
 \begin{center}
-\includegraphics[height=0.8\textheight]{../Art/moduleSizePlotNoThirdParty.png}
+\includegraphics[height=0.8\textheight]{../Art/moduleSizePlotNoThirdParty.pdf}
 \end{center}
 \end{frame}
 
@@ -48,13 +48,18 @@
 \begin{frame}
 \frametitle{ITK Module Grouping}
 \begin{itemize}
-\item  12 groups, 98 modules and counting
+\item  12 groups, 110 modules and counting
 \pause
 \item  Group by module functionalities
 \pause
-\item  Archiving modules in groups
-\pause
 \end{itemize}
+%\begin{block}
+\begin{tabular}{llll}
+Bridge     &    \alert{External}   & IO        & Registration \\
+Compatibility  & Filtering  & Nonunit   & Segmentation \\
+Core           & GPU        & Numerics  & ThirdParty \\
+\end{tabular}
+%\end{block}
 \end{frame}
 
 % -----------------------------------
@@ -75,13 +80,11 @@
 \begin{itemize}
 \item  Module categorization: module group, module name
 \pause
-\item  Directory hierarchy: include, test, src
+\item  Directory hierarchy: \alert{include}, \alert{test}, \alert{src}
 \pause
-\item  CMake configuration: CMakeLists.txt
+\item  CMake configuration: \texttt{CMakeLists.txt}
 \pause
-\item  Module dependency: itk-module.cmake
-\pause
-\item  Add tests, \href{http://www.vtk.org/Wiki/ITK/Git/Develop/Data\#Workflow}{\textcolor{red}{\underline{add testing data}}}
+\item  Module dependency: \texttt{itk-module.cmake}
 \pause
 \item  Documentation
 \end{itemize}
@@ -89,17 +92,17 @@
 
 
 \begin{frame}
-\frametitle{A toy example: ITKRAT}
+\frametitle{An example: ITKRAT}
 \begin{itemize}
-\item  itkRobustAutomaticThresholdImageFilter(RAT)
+\item  Insight Journal article on itkRobustAutomaticThresholdImageFilter(RAT)
 \pause
-\item  An external module: ITKRAT
+\item  Make into an External module: ITKRAT
 \end{itemize}
 \end{frame}
 
 
 \begin{frame}
-\frametitle{More information on Modularization}
+\frametitle{More information on modularization}
 \begin{itemize}
 \item  Details about ITK Modularization can be found at \href{http://www.itk.org/Wiki/ITK\_Release\_4/Modularization}{\textcolor{red}{\underline{Wiki Page}}}.
 \end{itemize}

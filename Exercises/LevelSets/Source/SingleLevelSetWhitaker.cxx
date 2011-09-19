@@ -57,23 +57,23 @@ public:
 
   itkNewMacro( CommandIterationUpdate );
 
-  void Execute( Object* caller, const EventObject& event )
+  void Execute( const Object* caller, const EventObject& event )
     {
-    this->Execute( ( const Object* ) caller, event );
+    this->Execute( const_cast< Object* >( caller ), event );
     }
 
-  void Execute( const Object* object, const EventObject& event )
+  void Execute( Object* caller, const EventObject& event )
     {
-    const LevelSetFilterType* filter = 
-      dynamic_cast< const LevelSetFilterType* >( object );
+    LevelSetFilterType* filter = 
+      dynamic_cast< LevelSetFilterType* >( caller );
 
-    if( object )
+    if( filter )
       {
       if( IterationEvent().CheckEvent( &event ) )
         {
         LevelSetPointer levelSet = filter->GetLevelSetContainer()->GetLevelSet( 0 );
 
-        InputImageType* input = filter->GetEquationContainer()->GetInput();
+        const InputImageType* input = filter->GetEquationContainer()->GetInput();
 
         m_Viewer->SetInputImage( input );
         m_Viewer->SetLevelSet( levelSet );
@@ -87,6 +87,7 @@ protected:
   CommandIterationUpdate()
   {
     m_Viewer = VisualizationType::New();
+    m_Viewer->SetPeriod( 1 );
   }
 
   ~CommandIterationUpdate() {}
@@ -105,9 +106,15 @@ private:
 
 int main( int argc, char* argv[] )
 {
-  if( argc < 4 )
+  if( argc < 5 )
     {
     std::cerr << "Missing Arguments" << std::endl;
+    std::cerr << "./SingleLevelSetWhitaker " <<std::endl;
+    std::cerr << "1- Input Image" <<std::endl;
+    std::cerr << "2- Number of Iterations" <<std::endl;
+    std::cerr << "3- Visualization (0 or 1)" <<std::endl;
+    std::cerr << "4- Output" <<std::endl;
+
     return EXIT_FAILURE;
     }
 
@@ -268,9 +275,12 @@ int main( int argc, char* argv[] )
 
   LevelSetEvolutionType::Pointer evolution = LevelSetEvolutionType::New();
 
-  itk::CommandIterationUpdate::Pointer observer =
-    itk::CommandIterationUpdate::New();
-  evolution->AddObserver( itk::IterationEvent(), observer );
+  if( atoi( argv[3] ) == 1 )
+    {
+    itk::CommandIterationUpdate< LevelSetEvolutionType, InputImageType >::Pointer observer =
+      itk::CommandIterationUpdate< LevelSetEvolutionType, InputImageType >::New();
+    evolution->AddObserver( itk::IterationEvent(), observer );
+    }
 
   evolution->SetEquationContainer( equationContainer );
   evolution->SetStoppingCriterion( criterion );
@@ -318,7 +328,7 @@ int main( int argc, char* argv[] )
 
   typedef itk::ImageFileWriter< OutputImageType >     OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
-  writer->SetFileName( argv[3] );
+  writer->SetFileName( argv[4] );
   writer->SetInput( outputImage );
 
   try
