@@ -32,7 +32,7 @@
 
 #include "itkIdentityTransform.h"
 #include "itkTranslationTransform.h"
-#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform.h"
+#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform2.h"
 
 #include "itkHistogramMatchingImageFilter.h"
 #include "itkCastImageFilter.h"
@@ -144,7 +144,7 @@ int itkQuasiNewtonDemonsRegistrationTest(int argc, char *argv[])
                                                   TranslationTransformType::New();
   translationTransform->SetIdentity();
 
-  typedef GaussianSmoothingOnUpdateDisplacementFieldTransform<
+  typedef GaussianSmoothingOnUpdateDisplacementFieldTransform2<
                                                     double, Dimension>
                                                      DisplacementTransformType;
   DisplacementTransformType::Pointer displacementTransform =

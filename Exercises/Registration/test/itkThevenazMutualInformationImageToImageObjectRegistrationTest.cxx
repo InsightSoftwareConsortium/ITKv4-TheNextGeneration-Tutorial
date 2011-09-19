@@ -37,7 +37,7 @@
 #include "itkAffineTransform.h"
 #include "itkEuler2DTransform.h"
 #include "itkCompositeTransform.h"
-#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform.h"
+#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform2.h"
 
 #include "itkCastImageFilter.h"
 #include "itkLinearInterpolateImageFunction.h"
@@ -146,7 +146,7 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
   AffineTransformType::Pointer affineTransform = AffineTransformType::New();
   affineTransform->SetIdentity();
   std::cout <<" affineTransform params " << affineTransform->GetParameters() << std::endl;
-  typedef GaussianSmoothingOnUpdateDisplacementFieldTransform<
+  typedef GaussianSmoothingOnUpdateDisplacementFieldTransform2<
                                                     double, Dimension>
                                                      DisplacementTransformType;
   DisplacementTransformType::Pointer displacementTransform =
@@ -171,7 +171,8 @@ int itkThevenazMutualInformationImageToImageObjectRegistrationTest(int argc, cha
   field->FillBuffer( zeroVector );
   // Assign to transform
   displacementTransform->SetDisplacementField( field );
-  displacementTransform->SetGaussianSmoothingVarianceForTheUpdateField( 5 );
+  displacementTransform->SetGaussianSmoothingVarianceForTheUpdateField( 0 );
+  displacementTransform->SetGaussianSmoothingVarianceForTheTotalField( 5 );
 
   //identity transform for fixed image
   typedef IdentityTransform<double, Dimension> IdentityTransformType;

@@ -27,7 +27,7 @@
 
 #include "itkIdentityTransform.h"
 #include "itkTranslationTransform.h"
-#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform.h"
+#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform2.h"
 
 #include "itkHistogramMatchingImageFilter.h"
 #include "itkCastImageFilter.h"
@@ -142,7 +142,7 @@ int itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest2(int argc,
             TranslationTransformType::New();
     translationTransform->SetIdentity();
 
-    typedef GaussianSmoothingOnUpdateDisplacementFieldTransform<double, Dimension> DisplacementTransformType;
+    typedef GaussianSmoothingOnUpdateDisplacementFieldTransform2<double, Dimension> DisplacementTransformType;
     DisplacementTransformType::Pointer displacementTransform =
             DisplacementTransformType::New();
     typedef DisplacementTransformType::DisplacementFieldType DisplacementFieldType;

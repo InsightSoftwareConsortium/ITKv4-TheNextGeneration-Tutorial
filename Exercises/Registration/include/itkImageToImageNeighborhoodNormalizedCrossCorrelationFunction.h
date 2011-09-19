@@ -44,14 +44,14 @@ namespace itk
  */
 template< class TFixedImage,  class TMovingImage >
 class ITK_EXPORT ImageToImageNeighborhoodNormalizedCrossCorrelationFunction:
-public ObjectToObjectMetric<TFixedImage, TMovingImage>
+public ObjectToObjectMetric
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageToImageNeighborhoodNormalizedCrossCorrelationFunction       Self;
-  typedef ObjectToObjectMetric<TFixedImage, TMovingImage>   Superclass;
-  typedef SmartPointer< Self >       Pointer;
-  typedef SmartPointer< const Self > ConstPointer;
+  typedef ImageToImageNeighborhoodNormalizedCrossCorrelationFunction Self;
+  typedef ObjectToObjectMetric                                       Superclass;
+  typedef SmartPointer< Self >                                       Pointer;
+  typedef SmartPointer< const Self >                                 ConstPointer;
 
   itkNewMacro(Self);
 

@@ -20,7 +20,7 @@
 #endif
 #include "itkDemonsImageToImageObjectMetric.h"
 #include "itkGradientDescentObjectOptimizer.h"
-#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform.h"
+#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform2.h"
 #include "itkIdentityTransform.h"
 
 #include "itkIndex.h"
@@ -157,7 +157,7 @@ int itkDemonsImageToImageObjectRegistrationTest2(int argc, char* argv[] )
   FillWithCircle<ImageType>( fixedImage, center, radius, fgnd, bgnd );
 
   //create a displacement field transform
-  typedef itk::GaussianSmoothingOnUpdateDisplacementFieldTransform<double, ImageDimension>
+  typedef itk::GaussianSmoothingOnUpdateDisplacementFieldTransform2<double, ImageDimension>
                                                     DisplacementTransformType;
   DisplacementTransformType::Pointer displacementTransform =
                                               DisplacementTransformType::New();
