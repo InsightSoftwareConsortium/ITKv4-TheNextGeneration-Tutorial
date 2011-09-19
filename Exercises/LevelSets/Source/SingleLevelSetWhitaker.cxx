@@ -108,6 +108,11 @@ int main( int argc, char* argv[] )
   if( argc < 4 )
     {
     std::cerr << "Missing Arguments" << std::endl;
+    std::cerr << "./SingleLevelSetWhitaker " <<std::endl;
+    std::cerr << "1- Input Image" <<std::endl;
+    std::cerr << "2- Number of Iterations" <<std::endl;
+    std::cerr << "3- Output" <<std::endl;
+
     return EXIT_FAILURE;
     }
 
