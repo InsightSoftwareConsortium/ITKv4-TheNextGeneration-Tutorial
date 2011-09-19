@@ -5,7 +5,7 @@ set( CMAKE_RUNTIME_OUTPUT_DIRECTORY
   ${ITKv4-TheNextGeneration_BINARY_DIR}/bin
 )
 
-file(GLOB_RECURSE CXX_FILES "*.cxx")
+file(GLOB_RECURSE CXX_FILES "Exercises/*.cxx")
 
 add_subdirectory(Exercises)
 

@@ -35,16 +35,27 @@
 #include "itkWhitakerCommandIterationUpdate.h"
 #include "itkShiCommandIterationUpdate.h"
 
+// ------------------------------------------------------------------------
+//
+// Exercise: Add a curvature term for regularization.
+//
+// The coefficient for the new term will be provided as an argument to the
+// executable.
+//
+// ------------------------------------------------------------------------
+
+
 int main( int argc, char* argv[] )
 {
-  if( argc < 5 )
+  if( argc < 6 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << "./SingleLevelSetWhitaker " <<std::endl;
+    std::cerr << "./LevelSetExercise1 " <<std::endl;
     std::cerr << "1- Input Image" <<std::endl;
     std::cerr << "2- Number of Iterations" <<std::endl;
-    std::cerr << "3- Visualization (0 or 1)" <<std::endl;
-    std::cerr << "4- Output" <<std::endl;
+    std::cerr << "3- Curvature Term coefficient" <<std::endl;
+    std::cerr << "4- Visualization (0 or 1)" <<std::endl;
+    std::cerr << "5- Output" <<std::endl;
 
     return EXIT_FAILURE;
     }
@@ -178,6 +189,12 @@ int main( int argc, char* argv[] )
   cvExternalTerm0->SetLevelSetContainer( lscontainer );
   std::cout << "Chan and Vese external term created" << std::endl;
 
+  double CurvatureTermCoefficient = atof( argv[3] );
+  std::cout <<"CurvatureTermCoefficient : " 
+            << CurvatureTermCoefficient <<std::endl;
+
+  // here are the curvature term!
+
   // **************** CREATE ALL EQUATIONS ****************
 
   // Create Term Container which corresponds to the combination of terms in the PDE.
@@ -210,7 +227,7 @@ int main( int argc, char* argv[] )
 
   CommandType::Pointer observer = CommandType::New();
 
-  if( atoi( argv[3] ) == 1 )
+  if( atoi( argv[4] ) == 1 )
     {
     evolution->AddObserver( itk::IterationEvent(), observer );
     }
@@ -251,7 +268,7 @@ int main( int argc, char* argv[] )
 
   typedef itk::ImageFileWriter< OutputImageType >     OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
-  writer->SetFileName( argv[4] );
+  writer->SetFileName( argv[5] );
   writer->SetInput( outputImage );
 
   try

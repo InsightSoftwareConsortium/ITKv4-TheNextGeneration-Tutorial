@@ -35,12 +35,19 @@
 #include "itkWhitakerCommandIterationUpdate.h"
 #include "itkShiCommandIterationUpdate.h"
 
+// ------------------------------------------------------------------------
+//
+// Exercise: change the representation to a Shi's level set representation 
+//
+// ------------------------------------------------------------------------
+
+
 int main( int argc, char* argv[] )
 {
   if( argc < 5 )
     {
     std::cerr << "Missing Arguments" << std::endl;
-    std::cerr << "./SingleLevelSetWhitaker " <<std::endl;
+    std::cerr << "./LevelSetExercise2 " <<std::endl;
     std::cerr << "1- Input Image" <<std::endl;
     std::cerr << "2- Number of Iterations" <<std::endl;
     std::cerr << "3- Visualization (0 or 1)" <<std::endl;

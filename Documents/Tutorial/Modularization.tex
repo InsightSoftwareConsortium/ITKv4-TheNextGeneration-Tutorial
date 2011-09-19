@@ -50,9 +50,10 @@
 \begin{itemize}
 \item  12 groups, 110 modules and counting
 \pause
-\item  Group by module functionalities
+\item  Grouped by module functionality
 \pause
 \end{itemize}
+\vskip14pt
 %\begin{block}
 \begin{tabular}{llll}
 Bridge     &    \alert{External}   & IO        & Registration \\
@@ -67,35 +68,54 @@ Core           & GPU        & Numerics  & ThirdParty \\
 
 \begin{frame}
 \frametitle{How to add a module into ITK}
-\begin{itemize}
-\item Where to put a module (categorization)
+\begin{enumerate}
+\item Decide where to put the module
 \pause
-\item How to construct a module (CMake magic)
-\end{itemize}
+\item Create the CMake setup
+\pause
+\item Add its content
+\end{enumerate}
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{Modularization checklist}
 \begin{itemize}
-\item  Module categorization: module group, module name
-\pause
-\item  Directory hierarchy: \alert{include}, \alert{test}, \alert{src}
-\pause
-\item  CMake configuration: \texttt{CMakeLists.txt}
-\pause
-\item  Module dependency: \texttt{itk-module.cmake}
-\pause
-\item  Documentation
+\item<1->\textbf{Module categorization}: \alt<1,4->{module group, module name}{
+\begin{itemize}
+\item<2-> Group is specified by the directory
+\item<3-> Module name is specified by directory, \texttt{itk-module.cmake}
+\end{itemize}
+}
+\item<4->\textbf{Directory hierarchy}: \alt<4,8->{\texttt{include}, \texttt{test}, \texttt{src}}{
+\begin{itemize}
+\item<5-> \textbf{include}: Headers defining the API
+\item<6-> \textbf{src}: Optional, \texttt{*.cxx}  implementations
+\item<7-> \textbf{test}: Module unit tests
+\end{itemize}
+}
+\item<8->\textbf{CMakeLists.txt} \alt<8,12->{top of module, \texttt{src}, \texttt{test}}{
+\begin{itemize}
+\item<9-> \textbf{top of module}: \texttt{project()}, \texttt{itk\_module\_impl()}
+\item<10-> \textbf{src}: \texttt{add\_library()}, \texttt{itk\_module\_target()}
+\item<11-> \textbf{test}: \texttt{itk\_module\_test()}, \texttt{itk\_add\_test()}
+\end{itemize}
+}
+\item<12->\textbf{Module dependencies and documentation} \texttt{itk-module.cmake}
 \end{itemize}
 \end{frame}
 
 
+% -----------------------------------
+\subsection{Exercise}
 \begin{frame}
-\frametitle{An example: ITKRAT}
+\frametitle{Exercise: ITKRAT}
+\small
 \begin{itemize}
 \item  Insight Journal article on itkRobustAutomaticThresholdImageFilter(RAT)
-\pause
+\item
+\texttt{~/src/ITKv4-TheNextGenerationTutorial/}\\
+\texttt{Exercises/Modularization/IJ-submission-rat}
 \item  Make into an External module: ITKRAT
 \end{itemize}
 \end{frame}
