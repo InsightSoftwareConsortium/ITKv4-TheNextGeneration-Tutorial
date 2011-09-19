@@ -105,13 +105,14 @@ private:
 
 int main( int argc, char* argv[] )
 {
-  if( argc < 4 )
+  if( argc < 5 )
     {
     std::cerr << "Missing Arguments" << std::endl;
     std::cerr << "./SingleLevelSetWhitaker " <<std::endl;
     std::cerr << "1- Input Image" <<std::endl;
     std::cerr << "2- Number of Iterations" <<std::endl;
-    std::cerr << "3- Output" <<std::endl;
+    std::cerr << "3- Visualization (0 or 1)" <<std::endl;
+    std::cerr << "4- Output" <<std::endl;
 
     return EXIT_FAILURE;
     }
@@ -273,9 +274,12 @@ int main( int argc, char* argv[] )
 
   LevelSetEvolutionType::Pointer evolution = LevelSetEvolutionType::New();
 
-  itk::CommandIterationUpdate< LevelSetEvolutionType, InputImageType >::Pointer observer =
-    itk::CommandIterationUpdate< LevelSetEvolutionType, InputImageType >::New();
-  evolution->AddObserver( itk::IterationEvent(), observer );
+  if( atoi( argv[3] ) == 1 )
+    {
+    itk::CommandIterationUpdate< LevelSetEvolutionType, InputImageType >::Pointer observer =
+      itk::CommandIterationUpdate< LevelSetEvolutionType, InputImageType >::New();
+    evolution->AddObserver( itk::IterationEvent(), observer );
+    }
 
   evolution->SetEquationContainer( equationContainer );
   evolution->SetStoppingCriterion( criterion );
@@ -323,7 +327,7 @@ int main( int argc, char* argv[] )
 
   typedef itk::ImageFileWriter< OutputImageType >     OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();
-  writer->SetFileName( argv[3] );
+  writer->SetFileName( argv[4] );
   writer->SetInput( outputImage );
 
   try
