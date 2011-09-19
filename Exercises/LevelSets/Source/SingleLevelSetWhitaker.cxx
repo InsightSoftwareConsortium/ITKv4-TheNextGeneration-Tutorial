@@ -57,23 +57,23 @@ public:
 
   itkNewMacro( CommandIterationUpdate );
 
-  void Execute( Object* caller, const EventObject& event )
+  void Execute( const Object* caller, const EventObject& event )
     {
-    this->Execute( ( const Object* ) caller, event );
+    this->Execute( const_cast< Object* >( caller ), event );
     }
 
-  void Execute( const Object* object, const EventObject& event )
+  void Execute( Object* caller, const EventObject& event )
     {
-    const LevelSetFilterType* filter = 
-      dynamic_cast< const LevelSetFilterType* >( object );
+    LevelSetFilterType* filter = 
+      dynamic_cast< LevelSetFilterType* >( caller );
 
-    if( object )
+    if( filter )
       {
       if( IterationEvent().CheckEvent( &event ) )
         {
         LevelSetPointer levelSet = filter->GetLevelSetContainer()->GetLevelSet( 0 );
 
-        InputImageType* input = filter->GetEquationContainer()->GetInput();
+        const InputImageType* input = filter->GetEquationContainer()->GetInput();
 
         m_Viewer->SetInputImage( input );
         m_Viewer->SetLevelSet( levelSet );
@@ -268,8 +268,8 @@ int main( int argc, char* argv[] )
 
   LevelSetEvolutionType::Pointer evolution = LevelSetEvolutionType::New();
 
-  itk::CommandIterationUpdate::Pointer observer =
-    itk::CommandIterationUpdate::New();
+  itk::CommandIterationUpdate< LevelSetEvolutionType, InputImageType >::Pointer observer =
+    itk::CommandIterationUpdate< LevelSetEvolutionType, InputImageType >::New();
   evolution->AddObserver( itk::IterationEvent(), observer );
 
   evolution->SetEquationContainer( equationContainer );
