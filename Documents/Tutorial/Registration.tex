@@ -238,6 +238,17 @@ ITK v4 framework
 \item Poly-affine
 \item Diffeomorphic (TBD)
 \item Velocityfield --- needs optimizer
+\item GPU Demons!!
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{New optimizers}
+\Large
+\begin{itemize}
+\item Multi-threaded update functions
+\item Efficient use of parameters for high-dimensional transformations
+\item Automated parameter adjustment via Quasi-Newton $+$ moving parameter estimation.
 \end{itemize}
 \end{frame}
 
@@ -253,11 +264,22 @@ ITK v4 framework
 
 \begin{frame}
 \Large
-\frametitle{References}
+\frametitle{References relevant to ITKv4 development}
 \includegraphics[height=3.2in]{../Art/registration_references}
 \end{frame}
 
 \begin{frame}
 \Large
-\frametitle{Conclusion}
+\frametitle{Recap \& Conclusion}
+\begin{itemize}
+\item Local \& global support transforms in same framework
+\pause
+\item Speed-up on multi-core machines for all high-dimensional metrics ($~N$-cores)
+\pause
+\item Multivariate and multi-component metrics coming!
+\pause
+\item Tensors, vector, scalars, landmarks, diffeomorphisms ... 
+\pause
+\item Looking forward to getting feedback on insight-users! 
+\end{itemize}
 \end{frame}
