@@ -87,6 +87,7 @@ protected:
   CommandIterationUpdate()
   {
     m_Viewer = VisualizationType::New();
+    m_Viewer->SetPeriod( 1 );
   }
 
   ~CommandIterationUpdate() {}
