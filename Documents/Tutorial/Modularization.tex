@@ -25,7 +25,7 @@
 \frametitle{Module sizes}
 \center
 \begin{center}
-\includegraphics[height=0.8\textheight]{../Art/moduleSizePlot.eps}
+\includegraphics[height=0.8\textheight]{../Art/moduleSizePlot.pdf}
 \end{center}
 \end{frame}
 
@@ -33,7 +33,7 @@
 \frametitle{Module sizes (no third party modules)}
 \center
 \begin{center}
-\includegraphics[height=0.8\textheight]{../Art/moduleSizePlotNoThirdParty.png}
+\includegraphics[height=0.8\textheight]{../Art/moduleSizePlotNoThirdParty.pdf}
 \end{center}
 \end{frame}
 
@@ -48,13 +48,18 @@
 \begin{frame}
 \frametitle{ITK Module Grouping}
 \begin{itemize}
-\item  12 groups, 98 modules and counting
+\item  12 groups, 110 modules and counting
 \pause
 \item  Group by module functionalities
 \pause
-\item  Archiving modules in groups
-\pause
 \end{itemize}
+%\begin{block}
+\begin{tabular}{cccc}
+Bridge     &    External   & IO        & Registration \\
+Compatibility  & Filtering  & Nonunit   & Segmentation \\
+Core           & GPU        & Numerics  & ThirdParty \\
+\end{tabular}
+%\end{block}
 \end{frame}
 
 % -----------------------------------
