@@ -28,6 +28,7 @@ foreach( var ${LevelSetsSourceList} )
   target_link_libraries(${var} ${ITK_LIBRARIES}
     vtkImaging
     vtkRendering
+    vtkHybrid
   )
 endforeach()
 

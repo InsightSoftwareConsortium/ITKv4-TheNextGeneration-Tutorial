@@ -25,6 +25,7 @@
 
 #include "itkImageToRGBVTKImageFilter.h"
 
+#include "vtkCornerAnnotation.h"
 #include "vtkImageData.h"
 #include "vtkLookupTable.h"
 #include "vtkMarchingSquares.h"
@@ -204,6 +205,11 @@ public:
       input_Actor->SetInput( VTKImage );
       input_Actor->InterpolateOff();
 
+      std::stringstream counter;
+      counter << m_Count;
+      
+      m_Annotation->SetText( 0, counter.str().c_str() );
+
       m_Renderer->AddActor2D( input_Actor );
 //      m_Ren->AddActor2D( scalarbar );
 
@@ -240,6 +246,9 @@ protected:
     m_Renderer = vtkSmartPointer< vtkRenderer >::New();
     m_Renderer->SetBackground( 0.5, 0.5, 0.5 );
 
+    m_Annotation = vtkSmartPointer< vtkCornerAnnotation >::New();
+    m_Renderer->AddActor2D( m_Annotation );
+
     m_Iren = vtkSmartPointer< vtkRenderWindowInteractor >::New();
 
     m_RenWin = vtkSmartPointer< vtkRenderWindow >::New();
@@ -258,6 +267,7 @@ private:
   ConverterPointer  m_ImageConverter;
   LevelSetPointer   m_LevelSet;
 
+  vtkSmartPointer< vtkCornerAnnotation >        m_Annotation;
   vtkSmartPointer< vtkRenderer >                m_Renderer;
   vtkSmartPointer< vtkRenderWindow >            m_RenWin;
   vtkSmartPointer< vtkRenderWindowInteractor >  m_Iren;

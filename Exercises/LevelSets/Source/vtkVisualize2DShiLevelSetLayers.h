@@ -25,6 +25,7 @@
 
 #include "itkImageToRGBVTKImageFilter.h"
 
+#include "vtkCornerAnnotation.h"
 #include "vtkImageData.h"
 #include "vtkLookupTable.h"
 #include "vtkMarchingSquares.h"
@@ -156,23 +157,18 @@ public:
       input_Actor->SetInput( VTKImage );
       input_Actor->InterpolateOff();
 
-      vtkSmartPointer< vtkRenderer > ren =
-          vtkSmartPointer< vtkRenderer >::New();
-      ren->SetBackground( 0.5, 0.5, 0.5 );
+      std::stringstream counter;
+      counter << m_Count;
 
-      vtkSmartPointer< vtkRenderWindowInteractor > iren =
-          vtkSmartPointer< vtkRenderWindowInteractor >::New();
+      m_Annotation->SetText( 0, counter.str().c_str() );
 
-      vtkSmartPointer< vtkRenderWindow > renWin =
-          vtkSmartPointer< vtkRenderWindow >::New();
+      m_Renderer->AddActor ( input_Actor );
+  //    m_Renderer->AddActor2D( scalarbar );
 
-      ren->AddActor ( input_Actor );
-  //    ren->AddActor2D( scalarbar );
+      m_Iren->SetRenderWindow( m_RenWin );
 
-      iren->SetRenderWindow( renWin );
-
-      renWin->AddRenderer( ren );
-      renWin->Render();
+      m_RenWin->AddRenderer( m_Renderer );
+      m_RenWin->Render();
 
       if( m_ScreenCapture )
         {
@@ -182,14 +178,14 @@ public:
         filename = yo.str();
         filename.append ( ".png" );
 
-        vtkCaptureScreen< vtkPNGWriter > capture ( renWin );
+        vtkCaptureScreen< vtkPNGWriter > capture ( m_RenWin );
         // begin mouse interaction
-  //      iren->Start();
+  //      m_Iren->Start();
         capture( filename );
         }
       else
         {
-        iren->Start();
+        m_Iren->Start();
         }
       }
     ++m_Count;
@@ -204,6 +200,9 @@ protected:
     m_ImageConverter = ConverterType::New();
     m_Renderer = vtkSmartPointer< vtkRenderer >::New();
     m_Renderer->SetBackground( 0.5, 0.5, 0.5 );
+
+    m_Annotation = vtkSmartPointer< vtkCornerAnnotation >::New();
+    m_Renderer->AddActor2D( m_Annotation );
 
     m_Iren = vtkSmartPointer< vtkRenderWindowInteractor >::New();
 
@@ -223,6 +222,7 @@ private:
   ConverterPointer  m_ImageConverter;
   LevelSetPointer   m_LevelSet;
 
+  vtkSmartPointer< vtkCornerAnnotation >        m_Annotation;
   vtkSmartPointer< vtkRenderer >                m_Renderer;
   vtkSmartPointer< vtkRenderWindow >            m_RenWin;
   vtkSmartPointer< vtkRenderWindowInteractor >  m_Iren;
