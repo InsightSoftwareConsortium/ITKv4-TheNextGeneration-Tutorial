@@ -32,77 +32,8 @@
 #include "itkLevelSetEvolutionNumberOfIterationsStoppingCriterion.h"
 #include "itkNumericTraits.h"
 
-#include "vtkVisualize2DWhitakerLevelSetLayers.h"
-
-namespace itk
-{
-template< class TLevelSetFilter,
-          class TInputImage >
-class CommandIterationUpdate : public Command
-{
-public:
-  typedef CommandIterationUpdate      Self;
-  typedef Command                     Superclass;
-  typedef SmartPointer< Self >        Pointer;
-  typedef SmartPointer< const Self >  ConstPointer;
-
-  typedef TLevelSetFilter                       LevelSetFilterType;
-  typedef typename LevelSetFilterType::Pointer  LevelSetFilterPointer;
-
-  typedef typename LevelSetFilterType::LevelSetType     LevelSetType;
-  typedef typename LevelSetFilterType::LevelSetPointer  LevelSetPointer;
-
-  typedef TInputImage                       InputImageType;
-  typedef typename InputImageType::Pointer  InputImagePointer;
-
-  itkNewMacro( CommandIterationUpdate );
-
-  void Execute( const Object* caller, const EventObject& event )
-    {
-    this->Execute( const_cast< Object* >( caller ), event );
-    }
-
-  void Execute( Object* caller, const EventObject& event )
-    {
-    LevelSetFilterType* filter = 
-      dynamic_cast< LevelSetFilterType* >( caller );
-
-    if( filter )
-      {
-      if( IterationEvent().CheckEvent( &event ) )
-        {
-        LevelSetPointer levelSet = filter->GetLevelSetContainer()->GetLevelSet( 0 );
-
-        const InputImageType* input = filter->GetEquationContainer()->GetInput();
-
-        m_Viewer->SetInputImage( input );
-        m_Viewer->SetLevelSet( levelSet );
-        m_Viewer->SetScreenCapture( true );
-        m_Viewer->Update();
-        }
-      }
-    }
-
-protected:
-  CommandIterationUpdate()
-  {
-    m_Viewer = VisualizationType::New();
-    m_Viewer->SetPeriod( 1 );
-  }
-
-  ~CommandIterationUpdate() {}
-
-private:
-  typedef typename LevelSetType::OutputType OutputType;
-
-  typedef vtkVisualize2DWhitakerLevelSetLayers< InputImageType,
-    OutputType, InputImageType::ImageDimension > VisualizationType;
-  typedef typename VisualizationType::Pointer   VisualizationPointer;
-
-  VisualizationPointer m_Viewer;
-  
-};
-}
+#include "itkWhitakerCommandIterationUpdate.h"
+#include "itkShiCommandIterationUpdate.h"
 
 int main( int argc, char* argv[] )
 {
@@ -275,10 +206,12 @@ int main( int argc, char* argv[] )
 
   LevelSetEvolutionType::Pointer evolution = LevelSetEvolutionType::New();
 
+  typedef itk::WhitakerCommandIterationUpdate< LevelSetEvolutionType > CommandType;
+
+  CommandType::Pointer observer = CommandType::New();
+
   if( atoi( argv[3] ) == 1 )
     {
-    itk::CommandIterationUpdate< LevelSetEvolutionType, InputImageType >::Pointer observer =
-      itk::CommandIterationUpdate< LevelSetEvolutionType, InputImageType >::New();
     evolution->AddObserver( itk::IterationEvent(), observer );
     }
 
@@ -315,16 +248,6 @@ int main( int argc, char* argv[] )
     oIt.Set( level_set->GetLabelMap()->GetPixel(idx) );
     ++oIt;
     }
-
-/* 
-  typedef vtkVisualize2DWhitakerLevelSetLayers< InputImageType, PixelType, Dimension >
-    VisualizationType;
-  VisualizationType::Pointer viewer = VisualizationType::New();
-  viewer->SetInputImage( input );
-  viewer->SetLevelSet( level_set );
-  viewer->SetScreenCapture( true );
-  viewer->Update();
-*/
 
   typedef itk::ImageFileWriter< OutputImageType >     OutputWriterType;
   OutputWriterType::Pointer writer = OutputWriterType::New();

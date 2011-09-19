@@ -16,12 +16,12 @@
  *
  *=========================================================================*/
 
-#ifndef __vtkVisualize2DWhitakerLevelSetLayers_h
-#define __vtkVisualize2DWhitakerLevelSetLayers_h
+#ifndef __vtkVisualize2DShiLevelSetLayers_h
+#define __vtkVisualize2DShiLevelSetLayers_h
 
 #include "itkLightObject.h"
 
-#include "itkWhitakerSparseLevelSetImage.h"
+#include "itkShiSparseLevelSetImage.h"
 
 #include "itkImageToRGBVTKImageFilter.h"
 
@@ -42,19 +42,19 @@
 #include "vtkPNGWriter.h"
 
 template< class TInputImage, class TLevelSet >
-class vtkVisualize2DWhitakerLevelSetLayers : public itk::LightObject
+class vtkVisualize2DShiLevelSetLayers : public itk::LightObject
 {
 public:
-  typedef vtkVisualize2DWhitakerLevelSetLayers  Self;
-  typedef LightObject                           Superclass;
-  typedef itk::SmartPointer< Self >             Pointer;
-  typedef itk::SmartPointer< const Self >       ConstPointer;
+  typedef vtkVisualize2DShiLevelSetLayers   Self;
+  typedef itk::LightObject                  Superclass;
+  typedef itk::SmartPointer< Self >         Pointer;
+  typedef itk::SmartPointer< const Self >   ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(vtkVisualize2DWhitakerLevelSetLayers, LightObject);
+  itkTypeMacro(vtkVisualize2DShiLevelSetLayers, LightObject);
 
   typedef TInputImage                         InputImageType;
   typedef typename InputImageType::PixelType  InputPixelType;
@@ -78,13 +78,13 @@ public:
       return;
       }
 
-    //m_Count = 0;
+//    m_Count = 0;
     }
 
   void SetLevelSet( LevelSetType *f )
     {
     m_LevelSet = f;
-    // m_Count = 0;
+//    m_Count = 0;
     }
 
   void SetScreenCapture( const bool& iCapture )
@@ -106,7 +106,7 @@ public:
       typedef typename LevelSetType::LayerType          LayerType;
       typedef typename LevelSetType::LayerConstIterator LayerConstIterator;
 
-      LayerType layer = m_LevelSet->GetLayer( LevelSetType::MinusTwoLayer() );
+      LayerType layer = m_LevelSet->GetLayer( LevelSetType::MinusOneLayer() );
 
       LayerConstIterator it = layer.begin();
 
@@ -121,36 +121,6 @@ public:
         ++it;
         }
 
-      layer = m_LevelSet->GetLayer( LevelSetType::MinusOneLayer() );
-
-      it = layer.begin();
-
-      while( it != layer.end() )
-        {
-        typename InputImageType::IndexType idx = it->first;
-        InputPixelType* vtkpixel =
-            static_cast< InputPixelType* >( VTKImage->GetScalarPointer( idx[0], idx[1], 0 ) );
-        vtkpixel[0] = 255;
-        vtkpixel[1] = 255;
-        vtkpixel[2] = 0;
-        ++it;
-        }
-
-      layer = m_LevelSet->GetLayer( LevelSetType::ZeroLayer() );
-
-      it = layer.begin();
-
-      while( it != layer.end() )
-        {
-        typename InputImageType::IndexType idx = it->first;
-        InputPixelType* vtkpixel =
-            static_cast< InputPixelType* >( VTKImage->GetScalarPointer( idx[0], idx[1], 0 ) );
-        vtkpixel[0] = 255;
-        vtkpixel[1] = 0;
-        vtkpixel[2] = 0;
-        ++it;
-        }
-
       layer = m_LevelSet->GetLayer( LevelSetType::PlusOneLayer() );
 
       it = layer.begin();
@@ -160,78 +130,73 @@ public:
         typename InputImageType::IndexType idx = it->first;
         InputPixelType* vtkpixel =
             static_cast< InputPixelType* >( VTKImage->GetScalarPointer( idx[0], idx[1], 0 ) );
-        vtkpixel[0] = 0;
-        vtkpixel[1] = 255;
-        vtkpixel[2] = 255;
-        ++it;
-        }
-
-      layer = m_LevelSet->GetLayer( LevelSetType::PlusTwoLayer() );
-
-      it = layer.begin();
-
-      while( it != layer.end() )
-        {
-        typename InputImageType::IndexType idx = it->first;
-        InputPixelType* vtkpixel =
-            static_cast< InputPixelType* >( VTKImage->GetScalarPointer( idx[0], idx[1], 0 ) );
-        vtkpixel[0] = 0;
+        vtkpixel[0] = 255;
         vtkpixel[1] = 0;
-        vtkpixel[2] = 255;
+        vtkpixel[2] = 0;
         ++it;
         }
 
-//      vtkSmartPointer< vtkLookupTable > lut =
-//          vtkSmartPointer< vtkLookupTable >::New();
-//      lut->SetNumberOfTableValues( 5 );
-//      lut->SetRange( -2., 2. );
-//      lut->SetTableValue( 0, 0., 1., 0. );
-//      lut->SetTableValue( 1, 1., 1., 0. );
-//      lut->SetTableValue( 2, 1., 0., 0. );
-//      lut->SetTableValue( 3, 1., 0., 1. );
-//      lut->SetTableValue( 4, 0., 0., 1. );
-//      lut->Build();
+  //    vtkSmartPointer< vtkLookupTable > lut =
+  //        vtkSmartPointer< vtkLookupTable >::New();
+  //    lut->SetNumberOfTableValues( 2 );
+  //    lut->SetRange( -1., 1. );
+  //    lut->SetTableValue( 0, 1., 0., 0. );
+  //    lut->SetTableValue( 1, 0., 0., 1. );
+  //    lut->Build();
 
 
-//      vtkSmartPointer< vtkScalarBarActor > scalarbar =
-//          vtkSmartPointer< vtkScalarBarActor >::New();
-//      scalarbar->SetTitle( "Layers" );
-//      scalarbar->SetNumberOfLabels( 5 );
-//      scalarbar->SetLookupTable( lut );
-    
+  //    vtkSmartPointer< vtkScalarBarActor > scalarbar =
+  //        vtkSmartPointer< vtkScalarBarActor >::New();
+  //    scalarbar->SetTitle( "Layers" );
+  //    scalarbar->SetNumberOfLabels( 2 );
+  //    scalarbar->SetLookupTable( lut );
+
       vtkSmartPointer< vtkImageActor > input_Actor =
           vtkSmartPointer< vtkImageActor >::New();
       input_Actor->SetInput( VTKImage );
       input_Actor->InterpolateOff();
 
-      m_Renderer->AddActor2D( input_Actor );
-//      m_Ren->AddActor2D( scalarbar );
+      vtkSmartPointer< vtkRenderer > ren =
+          vtkSmartPointer< vtkRenderer >::New();
+      ren->SetBackground( 0.5, 0.5, 0.5 );
 
-      m_RenWin->Render();
+      vtkSmartPointer< vtkRenderWindowInteractor > iren =
+          vtkSmartPointer< vtkRenderWindowInteractor >::New();
+
+      vtkSmartPointer< vtkRenderWindow > renWin =
+          vtkSmartPointer< vtkRenderWindow >::New();
+
+      ren->AddActor ( input_Actor );
+  //    ren->AddActor2D( scalarbar );
+
+      iren->SetRenderWindow( renWin );
+
+      renWin->AddRenderer( ren );
+      renWin->Render();
 
       if( m_ScreenCapture )
         {
         std::string filename;
         std::stringstream yo;
-        yo << "snapshot_whitaker_" << std::setfill( '0' ) << std::setw( 5 ) << m_Count;
+        yo << "snapshot_shi_" << std::setfill( '0' ) << std::setw( 5 ) << m_Count;
         filename = yo.str();
         filename.append ( ".png" );
 
-        vtkCaptureScreen< vtkPNGWriter > capture ( m_RenWin );
+        vtkCaptureScreen< vtkPNGWriter > capture ( renWin );
         // begin mouse interaction
-  //      m_Iren->Start();
+  //      iren->Start();
         capture( filename );
         }
       else
         {
-        m_Iren->Start();
+        iren->Start();
         }
       }
     ++m_Count;
     }
 
 protected:
-  vtkVisualize2DWhitakerLevelSetLayers() : Superclass(),
+  vtkVisualize2DShiLevelSetLayers() : Superclass(),
     m_Count( 0 ),
     m_Period( 1 ),
     m_ScreenCapture( false )
@@ -248,11 +213,11 @@ protected:
     m_Iren->SetRenderWindow( m_RenWin );
     }
 
-  ~vtkVisualize2DWhitakerLevelSetLayers()
+  ~vtkVisualize2DShiLevelSetLayers()
     {}
 
 private:
-  vtkVisualize2DWhitakerLevelSetLayers ( const Self& );
+  vtkVisualize2DShiLevelSetLayers ( const Self& );
   void operator = ( const Self& );
 
   ConverterPointer  m_ImageConverter;
