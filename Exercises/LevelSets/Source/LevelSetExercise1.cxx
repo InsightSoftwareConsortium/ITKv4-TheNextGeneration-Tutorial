@@ -37,9 +37,10 @@
 
 // ------------------------------------------------------------------------
 //
-// Exercise: Add a curvature term for regularization
-// coefficient for the new term will be provided as argument to the 
-// executable
+// Exercise: Add a curvature term for regularization.
+//
+// The coefficient for the new term will be provided as an argument to the
+// executable.
 //
 // ------------------------------------------------------------------------
 

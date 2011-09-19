@@ -317,6 +317,22 @@ Overview of the Level-Sets in ITKv4
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{How to run the example?}
+  \fontsize{8pt}{8pt}\selectfont
+\begin{verbatim}
+cd ~/bin/ITKv4-TheNextGeneration-Tutorial/bin/
+./SingleLevelSetWhitaker <InputImage> <NumberOfIterations> \
+  <Visualization (0 or 1)> <OutputImage>
+./SingleLevelSetWhitaker ~/src/ITKv4-TheNextGeneration-Tutortial/Exercises/LevelSets/Input/cells.png \
+  800 1 cells_segmented.mha
+\end{verbatim}
+\end{frame}
 \centeredlargetext{white}{black}{
 Example
 }
@@ -400,30 +416,19 @@ Example
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]
-  \frametitle{How to run the example?}
-  \fontsize{8pt}{8pt}\selectfont
-\begin{verbatim}
-./SingleLevelSetWhitaker <InputImage> <NumberOfIterations> <OutputImage>
-\end{verbatim}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsubsection{Exercice 1}
+\subsection{Exercise 1}
 \centeredlargetext{white}{black}{
-Add a curvature term to the example
+Exercise 1: Add a curvature term to LevelSetExercise1.cxx
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsubsection{Exercice 2}
+\subsection{Exercise 2}
 \centeredlargetext{white}{black}{
-Change the represesentation from Whitaker's to Shi's
+Exercise 2: Change represesentation from Whitaker's to Shi's in
+LevelSetExercise2.cxx
 }
 
 % \begin{frame}
