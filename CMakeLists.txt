@@ -9,7 +9,7 @@ file(GLOB_RECURSE CXX_FILES "*.cxx")
 
 add_subdirectory(Exercises)
 
-option(BUILD_PRESENTATION "Build the PDF Presentation." ON)
+option(BUILD_PRESENTATION "Build the PDF Presentation." OFF)
 
 if(BUILD_PRESENTATION)
   add_subdirectory(Documents)
