@@ -78,13 +78,13 @@ public:
       return;
       }
 
-    m_Count = 0;
+    //m_Count = 0;
     }
 
   void SetLevelSet( LevelSetType *f )
     {
     m_LevelSet = f;
-    m_Count = 0;
+    // m_Count = 0;
     }
 
   void SetScreenCapture( const bool& iCapture )
@@ -197,41 +197,28 @@ public:
     input_Actor->SetInput( VTKImage );
     input_Actor->InterpolateOff();
 
-    vtkSmartPointer< vtkRenderer > ren =
-        vtkSmartPointer< vtkRenderer >::New();
-    ren->SetBackground( 0.5, 0.5, 0.5 );
+    m_Renderer->AddActor2D( input_Actor );
+//    m_Ren->AddActor2D( scalarbar );
 
-    vtkSmartPointer< vtkRenderWindowInteractor > iren =
-        vtkSmartPointer< vtkRenderWindowInteractor >::New();
-
-    vtkSmartPointer< vtkRenderWindow > renWin =
-        vtkSmartPointer< vtkRenderWindow >::New();
-
-    ren->AddActor2D( input_Actor );
-//    ren->AddActor2D( scalarbar );
-
-    iren->SetRenderWindow( renWin );
-
-    renWin->AddRenderer( ren );
-    renWin->Render();
+    m_RenWin->Render();
 
     if( m_ScreenCapture )
       {
       std::string filename;
       std::stringstream yo;
-      yo << "snapshot_" << m_Count;
+      yo << "snapshot_" << std::setfill( '0' ) << std::setw( 5 ) << m_Count;
       filename = yo.str();
       filename.append ( ".png" );
 
-      vtkCaptureScreen< vtkPNGWriter > capture ( renWin );
+      vtkCaptureScreen< vtkPNGWriter > capture ( m_RenWin );
       // begin mouse interaction
-//      iren->Start();
+//      m_Iren->Start();
       capture( filename );
       ++m_Count;
       }
     else
       {
-      iren->Start();
+      m_Iren->Start();
       }
     }
 
@@ -243,6 +230,15 @@ protected:
     m_ScreenCapture( false )
     {
     m_ImageConverter = ConverterType::New();
+    m_Renderer = vtkSmartPointer< vtkRenderer >::New();
+    m_Renderer->SetBackground( 0.5, 0.5, 0.5 );
+
+    m_Iren = vtkSmartPointer< vtkRenderWindowInteractor >::New();
+
+    m_RenWin = vtkSmartPointer< vtkRenderWindow >::New();
+
+    m_RenWin->AddRenderer( m_Renderer );
+    m_Iren->SetRenderWindow( m_RenWin );
     }
 
   ~vtkVisualize2DWhitakerLevelSetLayers()
@@ -254,6 +250,10 @@ private:
 
   ConverterPointer  m_ImageConverter;
   LevelSetPointer   m_LevelSet;
+
+  vtkSmartPointer< vtkRenderer >                m_Renderer;
+  vtkSmartPointer< vtkRenderWindow >            m_RenWin;
+  vtkSmartPointer< vtkRenderWindowInteractor >  m_Iren;
 
   itk::IdentifierType m_Count;
   unsigned int        m_NumberOfLevels;

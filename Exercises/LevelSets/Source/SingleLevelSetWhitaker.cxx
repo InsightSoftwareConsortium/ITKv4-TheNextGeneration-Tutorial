@@ -57,23 +57,23 @@ public:
 
   itkNewMacro( CommandIterationUpdate );
 
-  void Execute( Object* caller, const EventObject& event )
+  void Execute( const Object* caller, const EventObject& event )
     {
-    this->Execute( ( const Object* ) caller, event );
+    this->Execute( const_cast< Object* >( caller ), event );
     }
 
-  void Execute( const Object* object, const EventObject& event )
+  void Execute( Object* caller, const EventObject& event )
     {
-    const LevelSetFilterType* filter = 
-      dynamic_cast< const LevelSetFilterType* >( object );
+    LevelSetFilterType* filter = 
+      dynamic_cast< LevelSetFilterType* >( caller );
 
-    if( object )
+    if( filter )
       {
       if( IterationEvent().CheckEvent( &event ) )
         {
-        LevelSetType* levelSet = filter->GetLevelSet();
+        LevelSetPointer levelSet = filter->GetLevelSetContainer()->GetLevelSet( 0 );
 
-        InputImageType* input = filter->GetInput();
+        const InputImageType* input = filter->GetEquationContainer()->GetInput();
 
         m_Viewer->SetInputImage( input );
         m_Viewer->SetLevelSet( levelSet );
@@ -108,6 +108,11 @@ int main( int argc, char* argv[] )
   if( argc < 4 )
     {
     std::cerr << "Missing Arguments" << std::endl;
+    std::cerr << "./SingleLevelSetWhitaker " <<std::endl;
+    std::cerr << "1- Input Image" <<std::endl;
+    std::cerr << "2- Number of Iterations" <<std::endl;
+    std::cerr << "3- Output" <<std::endl;
+
     return EXIT_FAILURE;
     }
 
@@ -268,8 +273,8 @@ int main( int argc, char* argv[] )
 
   LevelSetEvolutionType::Pointer evolution = LevelSetEvolutionType::New();
 
-  itk::CommandIterationUpdate::Pointer observer =
-    itk::CommandIterationUpdate::New();
+  itk::CommandIterationUpdate< LevelSetEvolutionType, InputImageType >::Pointer observer =
+    itk::CommandIterationUpdate< LevelSetEvolutionType, InputImageType >::New();
   evolution->AddObserver( itk::IterationEvent(), observer );
 
   evolution->SetEquationContainer( equationContainer );
