@@ -20,7 +20,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 set(LevelSetsSourceList
   SingleLevelSetWhitaker
   LevelSetExercise1
-  LevelSetExercise2
 )
 
 foreach( var ${LevelSetsSourceList} )
