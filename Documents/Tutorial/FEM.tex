@@ -6,6 +6,8 @@ FEM Framework
 }
 
 
+{
+\setbeamertemplate{background}{}
 \begin{frame}
 \frametitle{FEM Refactoring Team}
 \large
@@ -18,24 +20,106 @@ FEM Framework
 \item University of Iowa
 \end{itemize}
 \end{frame}
+}
 
 
+{
+\setbeamertemplate{background}{}
 \begin{frame}
 \frametitle{FEM Refactoring}
-\Huge
+\large
 \begin{itemize}
 \item Code Clean up
 \pause
 \item Removed subversive pointers
 \pause
-\item FEM IO
+\item Improved encapsulation (protected/private)
 \end{itemize}
 \end{frame}
+}
 
 
+{
+\setbeamertemplate{background}{}
+\begin{frame}
+\frametitle{FEM Refactoring - IO}
+\large
+\begin{itemize}
+\item Removed IO from fem::Solver
+\pause
+\item Adopted SpatialObjects for IO - fem::ObjectSpatialObject
+\pause
+\item File Format : MetaIO
+\pause
+\item Extended MetaIO to support FEM elements
+\end{itemize}
+\end{frame}
+}
+
+
+
+{
+\setbeamertemplate{background}{}
+\begin{frame}
+\frametitle{FEM Refactoring - Object}
+\large
+\begin{itemize}
+\item fem::Object replaced fem::Solver as coordinator class
+\pause
+\begin{itemize}
+\item Loaded from a Spatial Object
+\item Maually assembled
+\item Created from an Image
+\end{itemize}
+\end{itemize}
+\end{frame}
+}
+
+
+{
+\setbeamertemplate{background}{}
+\begin{frame}
+\frametitle{FEM Refactoring - Solvers}
+\large
+\begin{itemize}
+\item itk::fem::Solver
+\pause
+\item LinearSystemWrapper
+\begin{itemize}
+\item Itpack
+\item DenseVNL
+\item VNL
+\end{itemize}
+\end{itemize}
+\end{frame}
+}
+
+
+{
+\setbeamertemplate{background}{}
+\begin{frame}
+\frametitle{FEM Image Registration Filter}
+\large
+\begin{itemize}
+\item Removed Configuration file IO
+\pause
+\item Removed Image IO
+\pause
+\item Removed Landmarks IO
+\pause
+\item Removed Displacement Field IO
+\end{itemize}
+\end{frame}
+}
+
+
+
+{
+\setbeamertemplate{background}{}
 \begin{frame}
 \frametitle{FEM Refactoring}
 \begin{itemize}
 \item \url{http://www.itk.org/Wiki/Refactoring_itk::FEM_framework_-_V4}
 \end{itemize}
 \end{frame}
+}
