@@ -6,10 +6,7 @@ set(ITKRegistrationRefactoringTests
   itkANTSSparseNeighborhoodCorrelationImageToImageObjectRegistrationTest.cxx
   itkANTSSparseNeighborhoodCorrelationImageToImageObjectMetricTest.cxx
   itkThevenazMutualInformationImageToImageObjectRegistrationTest.cxx
-  itkQuasiNewtonRegistrationTest.cxx
-  itkQuasiNewtonDemonsRegistrationTest.cxx
   itkQuasiNewtonObjectOptimizerTest.cxx
-  itkPolyAffineTransformTest.cxx
   itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest2.cxx
   itkImageToImageObjectMetricTest.cxx  
 )
@@ -63,27 +60,6 @@ itk_add_test(NAME itkANTSSparseNeighborhoodCorrelationImageToImageObjectRegistra
 itk_add_test(NAME itkANTSSparseNeighborhoodCorrelationImageToImageObjectMetricTest
       COMMAND ITKRegistrationRefactoringTestDriver
       itkANTSSparseNeighborhoodCorrelationImageToImageObjectMetricTest)
-
-itk_add_test(NAME itkQuasiNewtonDemonsRegistrationTest
-      COMMAND ITKRegistrationRefactoringTestDriver
-      itkQuasiNewtonDemonsRegistrationTest
-      ${ITK_SOURCE_DIR}/Examples/Data/r62slice.nii
-      ${ITK_SOURCE_DIR}/Examples/Data/r85slice.nii
-      ${TEMP}/QNDemonsOutput.nii
-      )
-
-itk_add_test(NAME itkQuasiNewtonRegistrationTest
-      COMMAND ITKRegistrationRefactoringTestDriver
-      itkQuasiNewtonRegistrationTest
-      #${ITK_SOURCE_DIR}/Examples/Data/r62slice.nii
-      #${ITK_SOURCE_DIR}/Examples/Data/r85slice.nii
-      #${TEMP}/QNOptOutput.nii
-      )
-
-itk_add_test(NAME itkPolyAffineTransformTest
-      COMMAND ITKRegistrationRefactoringTestDriver
-      itkPolyAffineTransformTest
-      )
 
 itk_add_test(NAME itkQuasiNewtonObjectOptimizerTest
       COMMAND ITKRegistrationRefactoringTestDriver
