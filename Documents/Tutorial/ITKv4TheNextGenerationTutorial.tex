@@ -1,5 +1,5 @@
 \documentclass[18pt]{beamer}
-\usetheme{Madrid}
+\usetheme{Warsaw}
 
 \usepackage{graphics}
 \usepackage{listings}
@@ -17,6 +17,7 @@
 
 \newcommand{\centeredlargetext}[3]{
 {
+\setbeamertemplate{background}{}
 \setbeamertemplate{navigation symbols}{}
 \setbeamercolor{background canvas}{bg={#1}}
 \color{#2}
@@ -73,9 +74,10 @@ distributed under the\\
 
 
 \begin{frame}
-  \tableofcontents
+  \tableofcontents[hideallsubsections]
 \end{frame}
 
+\setbeamertemplate{background}{\includegraphics[width=\paperwidth]{../Art/ITKv4_transparent}}
 
 \include{SoftwarePreparation1}
 
@@ -123,6 +125,8 @@ DICOM
 \include{ITKv4LevelSets}
 
 \include{Registration}
+
+\section{Brief overview of other improvements}
 
 \centeredlargetext{white}{black}{
 SimpleITK

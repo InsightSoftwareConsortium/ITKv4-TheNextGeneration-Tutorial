@@ -87,17 +87,17 @@ Core           & GPU        & Numerics  & ThirdParty \\
 \item<3-> Module name is specified by directory, \texttt{itk-module.cmake}
 \end{itemize}
 }
-\item<4->\textbf{Directory hierarchy}: \alt<4,8->{\texttt{include}, \texttt{test}, \texttt{src}}{
+\item<4->\textbf{Directory hierarchy}: \alt<4,8->{\texttt{include},\textcolor{gray}{\texttt{src}}, \texttt{test}}{
 \begin{itemize}
-\item<5-> \textbf{include}: Headers defining the API
-\item<6-> \textbf{src}: Optional, \texttt{*.cxx}  implementations
+\item<5-> \textbf{include}: Headers defining the API, \texttt{*.hxx} template implementations
+\item<6-> \textcolor{gray}{\textbf{src}:  \texttt{*.cxx}  implementations, create a library}
 \item<7-> \textbf{test}: Module unit tests
 \end{itemize}
 }
-\item<8->\textbf{CMakeLists.txt} \alt<8,12->{top of module, \texttt{src}, \texttt{test}}{
+\item<8->\textbf{CMakeLists.txt} \alt<8,12->{top of module, \textcolor{gray}{\texttt{src}}, \texttt{test}}{
 \begin{itemize}
-\item<9-> \textbf{top of module}: \texttt{project()}, \texttt{itk\_module\_impl()}
-\item<10-> \textbf{src}: \texttt{add\_library()}, \texttt{itk\_module\_target()}
+\item<9-> \textbf{top of module}: \texttt{project()}, \texttt{itk\_module\_impl()}, \textcolor{gray}{\texttt{set(ITKFoo\_LIBRARIES ITKFoo)}}
+\item<10-> \textcolor{gray}{\textbf{src}: \texttt{add\_library()}, \texttt{target\_link\_library()},\texttt{itk\_module\_target()}}
 \item<11-> \textbf{test}: \texttt{itk\_module\_test()}, \texttt{itk\_add\_test()}
 \end{itemize}
 }
