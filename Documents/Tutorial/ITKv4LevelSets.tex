@@ -1,3 +1,4 @@
+\section{Level-Sets Refactoring}
 {
 \setbeamertemplate{navigation symbols}{}
 \setbeamercolor{background canvas}{bg={black}}
@@ -29,8 +30,8 @@ Megason Lab, Department of Systems Biology, Harvard Medical School
 \end{frame}
 }
 
-%\section{Introduction}
-\centeredlargetext{black}{white}{
+\subsection{Introduction}
+\centeredlargetext{white}{black}{
 Introduction
 }
 
@@ -71,7 +72,7 @@ Introduction
   \begin{itemize}
     \item Driven by given PDE
     \begin{itemize}
-      \item<2->[Regularized Advection]
+      \item<2->Regularized Advection
       \begin{equation*}
       \frac{\partial \phi}{\partial \tau} = 
       \alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi +
@@ -104,7 +105,7 @@ Introduction
       \end{columns}
     }
 
-      \item<3->[Regularized Propagation]
+      \item<3->Regularized Propagation
       \begin{equation*}
       \frac{\partial \phi}{\partial \tau} = 
       \beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi \| +
@@ -208,16 +209,6 @@ Introduction
 \end{itemize}
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-\section{Overview of the Level-Sets in ITKv4}
-\centeredlargetext{white}{black}{
-Overview of the Level-Sets in ITKv4
-}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -241,7 +232,7 @@ Overview of the Level-Sets in ITKv4
 
 \begin{block}<6->{Parametric}
   \begin{itemize}
-    \item \alert{Easy integration of new representation}
+    \item<6-> \alert<6>{Easy integration of new representation}
   \end{itemize}
 \end{block}
 
@@ -284,7 +275,7 @@ Overview of the Level-Sets in ITKv4
       \item Contribution for time step computation
       \item Coefficient
     \end{itemize} 
-  \alert<2->{Easy to contribute new terms!}
+  \alert<2>{Easy to contribute new terms!}
   \end{block}
 
   \column{0.47\textwidth}
@@ -294,7 +285,7 @@ Overview of the Level-Sets in ITKv4
       \item Mix of any term
       \item Independant of the representation
     \end{itemize}
-  \alert<4->{Easy to contribute new PDEs!}
+  \alert<4>{Easy to contribute new PDEs!}
   \end{block}
 
 \end{columns}
@@ -416,20 +407,14 @@ Example
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Exercise 1}
+\subsection{Exercise}
 \centeredlargetext{white}{black}{
-Exercise 1: Add a curvature term to LevelSetExercise1.cxx
+Exercise: Add a curvature term to LevelSetExercise1.cxx
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Exercise 2}
-\centeredlargetext{white}{black}{
-Exercise 2: Change represesentation from Whitaker's to Shi's in
-LevelSetExercise2.cxx
-}
 
 % \begin{frame}
 % \frametitle{Multi Level Sets}
