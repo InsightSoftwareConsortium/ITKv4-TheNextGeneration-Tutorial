@@ -62,9 +62,17 @@ public:
   /** Type used internally for computations */
   typedef typename Superclass::InternalComputationValueType
                                                   InternalComputationValueType;
+
+  typedef typename Superclass::FixedTransformType       FixedTransformType;
+  typedef typename Superclass::MovingTransformType       MovingTransformType;
+
   /**  Type of the parameters. */
   typedef typename Superclass::ParametersType       ParametersType;
   typedef typename Superclass::ParametersValueType  ParametersValueType;
+
+  /** Jacobian typedefs */
+  typedef typename FixedTransformType::JacobianType   FixedTransformJacobianType;
+  typedef typename MovingTransformType::JacobianType  MovingTransformJacobianType;
 
   /** Superclass typedefs */
   typedef typename Superclass::MeasureType              MeasureType;

@@ -64,6 +64,7 @@ void ANTSNeighborhoodCorrelationImageToImageObjectMetric<TFixedImage,
   this->GetValueAndDerivativeMultiThreadedPostProcess(true /*doAverage*/);
 
   value = this->GetValueResult();
+  std::cout<<" correlation "<<value<<std::endl;
 }
 
 template<class TFixedImage, class TMovingImage, class TVirtualImage>

@@ -38,7 +38,7 @@ RegistrationParameterScalesFromShift< TMetric >
 {
   this->CheckAndSetInputs();
   this->SampleImageDomain();
-
+  parameterScales.Fill(0);
   SizeValueType numPara = this->GetTransform()->GetNumberOfParameters();
   parameterScales.SetSize(numPara);
 
@@ -62,6 +62,7 @@ RegistrationParameterScalesFromShift< TMetric >
       {
       minNonZeroShift = maxShift;
       }
+    std::cout << " i " << i << " shift " << maxShift << " param " << deltaParameters << " scales " << parameterScales << std::endl;
     }
 
   if (minNonZeroShift == NumericTraits<FloatType>::max())
@@ -134,9 +135,9 @@ RegistrationParameterScalesFromShift< TMetric >
   ParametersType newParameters(oldParameters.size());
   for (SizeValueType p=0; p<oldParameters.size(); p++)
     {
-    newParameters[p] = oldParameters[p] + deltaParameters[p];
+    newParameters[p] = oldParameters[p] + deltaParameters[p]*1.e-2;
     }
-
+  std::cout << " newParams " << newParameters << std::endl;
   FloatType distance;
   SizeValueType numSamples = this->m_ImageSamples.size();
 

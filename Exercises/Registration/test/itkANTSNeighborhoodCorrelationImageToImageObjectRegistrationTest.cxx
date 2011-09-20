@@ -17,28 +17,38 @@
 *=========================================================================*/
 
 /**
- * Test program for ANTSNeighborhoodCorrelationImageToImageObjectMetric and
- * GradientDescentObjectOptimizer classes, using a pair of input images.
+ * Test program for DemonImageToImageObjectMetric and
+ * GradientDescentObjectOptimizer classes.
  *
+ * Perform a registration using user-supplied images.
+ * No numerical verification is performed. Test passes as long
+ * as no exception occurs.
  */
 
-//#include "itkDemonsImageToImageObjectMetric.h"
 #include "itkANTSNeighborhoodCorrelationImageToImageObjectMetric.h"
+#include "itkDemonsImageToImageObjectMetric.h"
 #include "itkGradientDescentObjectOptimizer.h"
+#include "itkQuasiNewtonObjectOptimizer.h"
+#include "itkOptimizerParameterScaleEstimator.h"
+#include "itkRegistrationParameterScalesFromShift.h"
 
 #include "itkIdentityTransform.h"
 #include "itkTranslationTransform.h"
+#include "itkAffineTransform.h"
+#include "itkEuler2DTransform.h"
+#include "itkCompositeTransform.h"
 #include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform2.h"
+//#include "itkGaussianSmoothingOnUpdateDisplacementFieldTransform.h"
+#include "itkRegistrationParameterScalesFromJacobian.h"
 
-#include "itkHistogramMatchingImageFilter.h"
 #include "itkCastImageFilter.h"
-#include "itkWarpImageFilter.h"
 #include "itkLinearInterpolateImageFunction.h"
 
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkCommand.h"
 #include "itksys/SystemTools.hxx"
+#include "itkResampleImageFilter.h"
 
 //We need this as long as we have to define ImageToData as a fwd-declare
 // in itkImageToImageObjectMetric.h
@@ -72,29 +82,30 @@ public:
 int itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest(int argc, char *argv[])
 {
 
-  if( argc < 4 )
+  if( argc < 4 || argc > 8)
     {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " fixedImageFile movingImageFile ";
     std::cerr << " outputImageFile ";
-    std::cerr << " [numberOfIterations=100] ";
-    std::cerr << " [learningRate=100] " << std::endl;
-    std::cerr << " [usePreWarp=1 | 0]" << std::endl;
+    std::cerr << " [numberOfIterations] ";
+    std::cerr << " [learningRate] [deformationLearningRate] " << std::endl;
     std::cerr << "For test purpose, return PASSED here." << std::endl;
     std::cout << "Test PASSED." << std::endl;
     return EXIT_SUCCESS;
     }
-//  std::cout << argc << std::endl;
-  unsigned int numberOfIterations = 100;
-  double learningRate = 100;
-  bool preWarp = true;
+
+  std::cout << argc << std::endl;
+  unsigned int numberOfIterations = 10;
+  double learningRate = 0.1;
+  double deformationLearningRate = 1;
   if( argc >= 5 )
     numberOfIterations = atoi( argv[4] );
   if( argc >= 6 )
     learningRate = atof( argv[5] );
-  if ( argc >= 7 )
-    preWarp = (atoi(argv[6]) != 0);
+  if( argc == 7 )
+    deformationLearningRate = atof( argv[6] );
+  std::cout << " iterations "<< numberOfIterations << " learningRate "<<learningRate << std::endl;
 
   const unsigned int Dimension = 2;
   typedef double PixelType; //I assume png is unsigned short
@@ -111,50 +122,36 @@ int itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest(int argc, c
   fixedImageReader->SetFileName( argv[1] );
   movingImageReader->SetFileName( argv[2] );
 
-  //matching intensity histogram
-  typedef HistogramMatchingImageFilter<
-                                    MovingImageType,
-                                    MovingImageType >   MatchingFilterType;
-  MatchingFilterType::Pointer matcher = MatchingFilterType::New();
-
-  matcher->SetInput( movingImageReader->GetOutput() );
-  matcher->SetReferenceImage( fixedImageReader->GetOutput() );
-
-  matcher->SetNumberOfHistogramLevels( 256 );
-  matcher->SetNumberOfMatchPoints( 10 );
-  matcher->ThresholdAtMeanIntensityOn();
   //get the images
   fixedImageReader->Update();
   FixedImageType::Pointer  fixedImage = fixedImageReader->GetOutput();
   movingImageReader->Update();
-  matcher->Update();
-  MovingImageType::Pointer movingImage = matcher->GetOutput();
-  // MovingImageType::Pointer movingImage = movingImageReader->GetOutput();
+  MovingImageType::Pointer movingImage = movingImageReader->GetOutput();
 
+  /** define a resample filter that will ultimately be used to deform the image */
+  typedef itk::ResampleImageFilter<
+                            MovingImageType,
+                            FixedImageType >    ResampleFilterType;
+  ResampleFilterType::Pointer resample = ResampleFilterType::New();
 
-  //create a displacement field transform
-  typedef TranslationTransform<double, Dimension>
-                                                    TranslationTransformType;
-  TranslationTransformType::Pointer translationTransform =
-                                                  TranslationTransformType::New();
-//  translationTransform->SetIdentity();
-  TranslationTransformType::ParametersType initial_translation;
-  initial_translation.SetSize(translationTransform->GetNumberOfParameters());
-  initial_translation[0] = 3;
-  initial_translation[1] = -5;
-
-  translationTransform->SetParameters(initial_translation);
 
   typedef GaussianSmoothingOnUpdateDisplacementFieldTransform2<double, Dimension>
-                                                    DisplacementTransformType;
+                                                     DisplacementTransformType;
   DisplacementTransformType::Pointer displacementTransform =
                                               DisplacementTransformType::New();
-  typedef DisplacementTransformType::DisplacementFieldType DisplacementFieldType;
+  typedef DisplacementTransformType::DisplacementFieldType
+                                                         DisplacementFieldType;
   DisplacementFieldType::Pointer field = DisplacementFieldType::New();
 
   //set the field to be the same as the fixed image region, which will
   // act by default as the virtual domain in this example.
   field->SetRegions( fixedImage->GetLargestPossibleRegion() );
+  //make sure the field has the same spatial information as the image
+  field->CopyInformation( fixedImage );
+  std::cout << "fixedImage->GetLargestPossibleRegion(): "
+            << fixedImage->GetLargestPossibleRegion() << std::endl
+            << "fixedImage->GetBufferedRegion(): "
+            << fixedImage->GetBufferedRegion() << std::endl;
   field->Allocate();
   // Fill it with 0's
   DisplacementTransformType::OutputVectorType zeroVector;
@@ -162,19 +159,20 @@ int itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest(int argc, c
   field->FillBuffer( zeroVector );
   // Assign to transform
   displacementTransform->SetDisplacementField( field );
-  displacementTransform->SetGaussianSmoothingVarianceForTheUpdateField( 6 );
+  displacementTransform->SetGaussianSmoothingVarianceForTheUpdateField( 3 );
+  displacementTransform->SetGaussianSmoothingVarianceForTheTotalField( 5 );
 
   //identity transform for fixed image
   typedef IdentityTransform<double, Dimension> IdentityTransformType;
-  IdentityTransformType::Pointer identityTransform =
-                                                  IdentityTransformType::New();
+  IdentityTransformType::Pointer identityTransform = IdentityTransformType::New();
   identityTransform->SetIdentity();
 
-
-  typedef ANTSNeighborhoodCorrelationImageToImageObjectMetric< FixedImageType, MovingImageType>
-      MetricType;
-
+  // The metric
+  Size<Dimension> radSize;  radSize.Fill(5);
+  typedef ANTSNeighborhoodCorrelationImageToImageObjectMetric 
+    < FixedImageType, MovingImageType > MetricType;
   MetricType::Pointer metric = MetricType::New();
+  metric->SetRadius(radSize);//antscc
 
   // Assign images and transforms.
   // By not setting a virtual domain image or virtual domain settings,
@@ -184,91 +182,38 @@ int itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest(int argc, c
   metric->SetMovingImage( movingImage );
   metric->SetFixedTransform( identityTransform );
   metric->SetMovingTransform( displacementTransform );
-  // metric->SetMovingTransform( translationTransform );
-
-  Size<Dimension> radSize;
-  radSize.Fill(2);
-  metric->SetRadius(radSize);
-
-
-  metric->SetPreWarpMovingImage( preWarp );
-  metric->SetUseMovingGradientRecursiveGaussianImageFilter( false );
-
-
-  //Initialize the metric to prepare for use
+  bool prewarp = true;
+  metric->SetPreWarpMovingImage( prewarp );
+  metric->SetPreWarpFixedImage( prewarp );
+  bool gaussian = false;
+  metric->SetUseMovingGradientRecursiveGaussianImageFilter( gaussian );
+  metric->SetUseFixedGradientRecursiveGaussianImageFilter( gaussian );
   metric->Initialize();
 
-  // Optimizer
   typedef GradientDescentObjectOptimizer  OptimizerType;
   OptimizerType::Pointer  optimizer = OptimizerType::New();
   optimizer->SetMetric( metric );
   optimizer->SetLearningRate( learningRate );
   optimizer->SetNumberOfIterations( numberOfIterations );
-
-  std::cout << "Start optimization..." << std::endl
-            << "Number of iterations: " << numberOfIterations << std::endl
-            << "Learning rate: " << learningRate << std::endl
-            << "CC radius: " << metric->GetRadius() << std::endl
-            << "CC prewarp: " << metric->GetPreWarpMovingImage() << std::endl
-            << "CC number of threads: " << metric->GetNumberOfThreads() << std::endl;
-
-
-//  std::cout << "initial para: " << translationTransform->GetParameters() << std::endl;
-
-
-  try
-    {
-    optimizer->StartOptimization();
-    }
-  catch( ExceptionObject & e )
-    {
-    std::cout << "Exception thrown ! " << std::endl;
-    std::cout << "An error ocurred during Optimization:" << std::endl;
-    std::cout << e.GetLocation() << std::endl;
-    std::cout << e.GetDescription() << std::endl;
-    std::cout << e.what()    << std::endl;
-    std::cout << "Test FAILED." << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  std::cout << "...finished. " << std::endl
-            << "StopCondition: " << optimizer->GetStopConditionDescription()
-            << std::endl
-            << "Metric: NumberOfValidPoints: "
-            << metric->GetNumberOfValidPoints()
-            << std::endl;
-
-//  std::cout << "final para: " << translationTransform->GetParameters() << std::endl;
-
-  field = displacementTransform->GetDisplacementField();
-  std::cout << "LargestPossibleRegion: " << field->GetLargestPossibleRegion()
-            << std::endl;
-  ImageRegionIteratorWithIndex< DisplacementFieldType > it( field, field->GetLargestPossibleRegion() );
+  //  optimizer->SetScales( movingScales );
+  optimizer->StartOptimization();
 
   //warp the image with the displacement field
-  typedef WarpImageFilter<
-                          MovingImageType,
-                          MovingImageType,
-                          DisplacementFieldType  >     WarperType;
-  typedef LinearInterpolateImageFunction<
-                                   MovingImageType,
-                                   double          >  InterpolatorType;
-  InterpolatorType::Pointer interpolator = InterpolatorType::New();
-  WarperType::Pointer warper = WarperType::New();
-  warper->SetInput( movingImage );
-  warper->SetInterpolator( interpolator );
-  warper->SetOutputSpacing( fixedImage->GetSpacing() );
-  warper->SetOutputOrigin( fixedImage->GetOrigin() );
-  warper->SetOutputDirection( fixedImage->GetDirection() );
-
-  warper->SetDisplacementField( displacementTransform->GetDisplacementField() );
-
+  resample->SetTransform( displacementTransform );
+  resample->SetInput( movingImageReader->GetOutput() );
+  resample->SetSize(    fixedImage->GetLargestPossibleRegion().GetSize() );
+  resample->SetOutputOrigin(  fixedImage->GetOrigin() );
+  resample->SetOutputSpacing( fixedImage->GetSpacing() );
+  resample->SetOutputDirection( fixedImage->GetDirection() );
+  resample->SetDefaultPixelValue( 0 );
+  resample->Update();
   //write out the displacement field
   typedef ImageFileWriter< DisplacementFieldType >  DisplacementWriterType;
   DisplacementWriterType::Pointer      displacementwriter =  DisplacementWriterType::New();
   std::string outfilename( argv[3] );
   std::string ext = itksys::SystemTools::GetFilenameExtension( outfilename );
-  std::string defout=outfilename + std::string("_def") + ext;
+  std::string name = itksys::SystemTools::GetFilenameWithoutExtension( outfilename );
+  std::string defout = name + std::string("_def") + ext;
   displacementwriter->SetFileName( defout.c_str() );
   displacementwriter->SetInput( displacementTransform->GetDisplacementField() );
   displacementwriter->Update();
@@ -280,16 +225,13 @@ int itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest(int argc, c
                         MovingImageType,
                         OutputImageType >     CastFilterType;
   typedef ImageFileWriter< OutputImageType >  WriterType;
-
   WriterType::Pointer      writer =  WriterType::New();
   CastFilterType::Pointer  caster =  CastFilterType::New();
-
   writer->SetFileName( argv[3] );
-
-  caster->SetInput( warper->GetOutput() );
+  caster->SetInput( resample->GetOutput() );
   writer->SetInput( caster->GetOutput() );
   writer->Update();
 
-  std::cout << "Test PASSED." << std::endl;
   return EXIT_SUCCESS;
+
 }
