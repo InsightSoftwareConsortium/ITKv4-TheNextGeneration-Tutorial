@@ -189,11 +189,12 @@ int main( int argc, char* argv[] )
   cvExternalTerm0->SetLevelSetContainer( lscontainer );
   std::cout << "Chan and Vese external term created" << std::endl;
 
+  // A good value to try; 4000.0
   double CurvatureTermCoefficient = atof( argv[3] );
-  std::cout <<"CurvatureTermCoefficient : " 
+  std::cout <<"CurvatureTermCoefficient : "
             << CurvatureTermCoefficient <<std::endl;
 
-  // here are the curvature term!
+  // put the curvature term here!
 
   // **************** CREATE ALL EQUATIONS ****************
 
