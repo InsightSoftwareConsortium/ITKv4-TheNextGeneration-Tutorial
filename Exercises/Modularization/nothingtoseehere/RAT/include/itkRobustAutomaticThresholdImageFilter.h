@@ -38,6 +38,7 @@ namespace itk {
  * \sa MaximumEntropyThresholdCalculator
  * \sa ThresholdLabelerImageFilter
  * \ingroup IntensityImageFilters  Multithreaded
+ * \ingroup ITKRAT
  */
 
 template<class TInputImage, class TGradientImage=TInputImage, class TMaskImage=Image<unsigned char, TInputImage::ImageDimension>, class TOutputImage=TInputImage>
