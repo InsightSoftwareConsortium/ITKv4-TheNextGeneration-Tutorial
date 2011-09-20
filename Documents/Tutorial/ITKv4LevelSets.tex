@@ -137,7 +137,7 @@ Introduction
         \end{block}
       \end{columns}
       }
-      \item<4->[Chan and Vese]
+      \item<4->Chan and Vese
       \begin{equation*}
       \frac{\partial \phi}{\partial \tau} = \delta_{\epsilon}(\phi) 
       \left(
@@ -147,7 +147,7 @@ Introduction
       \end{equation*}
       \only<4>{
       \begin{columns}
-        \column{0.3\textwidth}
+        \column{0.4\textwidth}
         \begin{block}{Chan And Vese Internal}
           \begin{center}
           $\delta_{\epsilon}(\phi) \left( \lambda_{in} \left( I - \mu_{in}
@@ -157,7 +157,7 @@ Introduction
           $\mu_{in}$: Internal Mean
         \end{block}
 
-        \column{0.3\textwidth}
+        \column{0.4\textwidth}
         \begin{block}{Chan And Vese External}
           \begin{center}
           $\delta_{\epsilon}(\phi) \left( \lambda_{out} \left( I - \mu_{out}
@@ -319,10 +319,22 @@ Introduction
   \fontsize{8pt}{8pt}\selectfont
 \begin{verbatim}
 cd ~/bin/ITKv4-TheNextGeneration-Tutorial/bin/
-./SingleLevelSetWhitaker <InputImage> <NumberOfIterations> \
-  <Visualization (0 or 1)> <OutputImage>
-./SingleLevelSetWhitaker ~/src/ITKv4-TheNextGeneration-Tutortial/Exercises/LevelSets/Input/cells.png \
-  800 1 cells_segmented.mha
+\end{verbatim}
+\newline
+\begin{verbatim}
+./SingleLevelSetWhitaker
+    <InputImage>
+    <NumberOfIterations>
+    <Visualization (0 or 1)>
+    <OutputImage>
+\end{verbatim}
+\newline
+\begin{verbatim}
+./SingleLevelSetWhitaker 
+    ~/src/ITKv4-TheNextGeneration-Tutortial/Exercises/LevelSets/Input/cells.png 
+    800 
+    1 
+    cells_segmented.mha
 \end{verbatim}
 \end{frame}
 \centeredlargetext{white}{black}{
