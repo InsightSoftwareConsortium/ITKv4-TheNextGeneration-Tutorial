@@ -13,11 +13,11 @@ Refactored Registration Framework
 \begin{center}
 Insight Software Consortium
 \end{center}
-\newline
+\vskip12pt
 \begin{center}
  PICSL @ University of Pennsylvania 
 \end{center}
-\newline
+\vskip12pt
 \begin{center}
  Brian Avants, Nicholas Tustison, Gang Song, \\ 
 Baohua Wu, Michael Stauffer, James C. Gee
@@ -34,22 +34,19 @@ Baohua Wu, Michael Stauffer, James C. Gee
 \begin{frame}
 \frametitle{What is registration?}
 \includegraphics[height=1.8in]{../Art/RegistrationBasquiatDeWarp.pdf}
-\newline
-\newline
-\newline
-\| I ( x ) - J(\phi(x)) \|^2  + R(\phi( x)) 
-\newline
+\vskip20pt
+\begin{displaymath}
+\| I ( x ) - J(\phi(x)) \|^2  + R(\phi( x))
+\end{displaymath}
 \end{frame}
 
  \centeredlargetext{white}{black}{
 \centering Enhanced user experience
-%\newline
 %\includegraphics[height=1.8in]{../Art/ITKv4}
  }
 
  \centeredlargetext{white}{black}{
 \centering Unified multi-core framework + parameter-estimation
-%\newline
 % \includegraphics[height=1.8in]{../Art/ITKv4}
  }
 
@@ -90,15 +87,13 @@ Baohua Wu, Michael Stauffer, James C. Gee
 
  \centeredlargetext{white}{black}{
 ITK v3 framework
-\newline
-\newline
+\vskip20pt
 \includegraphics[height=2.2in]{../Art/itkv3reg}
  }
 
  \centeredlargetext{white}{black}{
 ITK v4 framework
-\newline
-\newline
+\vskip20pt
 \includegraphics[height=2.2in]{../Art/itkv4reg}
  }
 
@@ -195,7 +190,7 @@ ITK v4 framework
 \textcolor{blue}{face\_avg.jpg face\_b.jpg out.nii.gz  50 0.001 0.75 }\\
 \includegraphics[height=2.2in]{../Art/face_avg.jpg}
 \includegraphics[height=2.2in]{../Art/face_b_to_face_avg.jpg}
-\newline
+\vskip12pt
 25 seconds (1 thread) vs 16 seconds (2 threads) on Macbook Air.
 \end{frame}
 
@@ -257,8 +252,7 @@ ITK v4 framework
 \frametitle{Multi-threading}
 \textcolor{red}{ ITK\_GLOBAL\_DEFAULT\_NUMBER\_OF\_THREADS=NT}\\
 \textcolor{red}{export ITK\_GLOBAL\_DEFAULT\_NUMBER\_OF\_THREADS}
-\newline
-\newline
+\vskip20pt
 \textcolor{blue}{metric-$>$SetNumberOfThreads(2)}
 \includegraphics[height=1.5in]{../Art/cctran}~~\includegraphics[height=1.5in]{../Art/ccfield}
 \end{frame}

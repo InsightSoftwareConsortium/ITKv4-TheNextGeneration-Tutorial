@@ -239,7 +239,7 @@ public:
 protected:
   vtkVisualize2DWhitakerLevelSetLayers() : Superclass(),
     m_Count( 0 ),
-    m_Period( 1 ),
+    m_Period( 20 ),
     m_ScreenCapture( false )
     {
     m_ImageConverter = ConverterType::New();
