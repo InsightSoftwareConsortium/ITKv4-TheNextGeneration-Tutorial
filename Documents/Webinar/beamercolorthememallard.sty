@@ -1,0 +1,55 @@
+% Copyright 2007 by Till Tantau
+%
+% This file may be distributed and/or modified
+%
+% 1. under the LaTeX Project Public License and/or
+% 2. under the GNU Public License.
+%
+% See the file doc/licenses/LICENSE for more details.
+
+
+\DeclareOption{overlystylish}
+{
+  \def\beamer@cta@do{
+    \setbeamertemplate{background canvas}[vertical shading][bottom=black,top=black,middle=red!20!black]
+  }
+}
+\ProcessOptions
+
+\@ifundefined{beamer@cta@do}{}{\beamer@cta@do}
+
+\mode<presentation>
+
+\setbeamercolor*{example text}{fg=green!65!white}
+
+\definecolor{kitware@bluish}{rgb}{0.18,0.56,0.75}
+\setbeamercolor*{structure}{fg=kitware@bluish}
+
+
+\setbeamercolor{palette primary}{use={structure,normal text},fg=structure.fg,bg=normal text.fg!5!white}
+\setbeamercolor{palette secondary}{use={structure,normal text},fg=structure.fg,bg=normal text.fg!15!white}
+\setbeamercolor{palette tertiary}{use={structure,normal text},fg=structure.fg,bg=normal text.fg!20!white}
+\setbeamercolor{palette quaternary}{use={structure,normal text},fg=structure.fg,bg=normal text.fg!30!white}
+
+\setbeamercolor*{block body}{bg=normal text.fg!10!white}
+\setbeamercolor*{block body alerted}{bg=normal text.fg!10!white}
+\setbeamercolor*{block body example}{bg=normal text.fg!10!white}
+\setbeamercolor*{block title}{parent=structure,bg=normal text.fg!20!white}
+\setbeamercolor*{block title alerted}{use={normal text,alerted text},fg=alerted text.fg!75!normal text.fg,bg=normal text.bg!75!white}
+\setbeamercolor*{block title example}{use={normal text,example text},fg=example text.fg!75!normal text.fg,bg=normal text.bg!75!white}
+
+\setbeamercolor{item projected}{fg=white}
+
+\setbeamercolor*{sidebar}{parent=palette primary}
+
+\setbeamercolor{palette sidebar primary}{use=normal text,fg=normal text.fg}
+\setbeamercolor{palette sidebar secondary}{use=structure,fg=structure.fg}
+\setbeamercolor{palette sidebar tertiary}{use=normal text,fg=normal text.fg}
+\setbeamercolor{palette sidebar quaternary}{use=structure,fg=structure.fg}
+
+\setbeamercolor*{separation line}{}
+\setbeamercolor*{fine separation line}{}
+
+
+\mode
+<all>
