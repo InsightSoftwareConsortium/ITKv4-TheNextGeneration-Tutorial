@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
-project(ITKv4-TheNextGeneration)
+project( ITKv4-TheNextGeneration )
 
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY
   ${ITKv4-TheNextGeneration_BINARY_DIR}/bin
@@ -7,7 +7,10 @@ set( CMAKE_RUNTIME_OUTPUT_DIRECTORY
 
 file(GLOB_RECURSE CXX_FILES "Exercises/*.cxx")
 
-add_subdirectory(Exercises)
+option(BUILD_EXERCISES "Build the exercises.")
+if(BUILD_EXERCISES)
+  add_subdirectory(Exercises)
+endif()
 
 option(BUILD_PRESENTATION "Build the PDF Presentation." OFF)
 

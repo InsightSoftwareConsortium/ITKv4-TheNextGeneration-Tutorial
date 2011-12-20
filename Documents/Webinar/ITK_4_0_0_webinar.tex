@@ -1,0 +1,240 @@
+\documentclass[18pt]{beamer}
+\usetheme{Madrid}
+
+\usepackage{graphics}
+\usepackage{listings}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{xcolor}
+
+\lstset{language=C++,numbersep=1pt,identifierstyle=\color{blue!50!black},commentstyle=\color{yellow!50!black},xleftmargin=7pt,numberblanklines=false,numberstyle=\color{red!60!black},numbers=left,basicstyle=\tiny\ttfamily,keywordstyle=\color{green!60!black}\bfseries,stringstyle=\color{red!80!black}}
+
+\newcommand{\lstlistingwithnumber}[3]{
+\begin{center}
+\lstinputlisting[linerange={#1-#2},firstnumber=#1]{#3}
+\end{center}
+}
+
+\newcommand{\centeredlargetext}[3]{
+{
+\setbeamertemplate{background}{}
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{background canvas}{bg={#1}}
+\color{#2}
+\begin{frame}[plain]
+\fontsize{36pt}{36pt}\selectfont
+\center
+\begin{center}
+{#3}
+\end{center}
+\end{frame}
+}}
+
+\newcommand{\centeredhugetext}[3]{
+{
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{background canvas}{bg={#1}}
+\fontsize{72pt}{72pt}\selectfont
+\color{#2}
+\begin{frame}[plain]
+\center
+\begin{center}
+{#3}
+\end{center}
+\end{frame}
+}}
+
+
+\begin{document}
+
+\title[ITKv4]{ITKv4 - The Next Generation}
+\subtitle[ITKv4]{What is new in the Insight Toolkit v4.0.0}
+\institute[Insight Software Consortium]{Insight Software Consortium}
+\date[December 2011]{December 2011}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+%{
+%\setbeamertemplate{navigation symbols}{}
+%\begin{frame}[plain]
+%\center
+%\begin{center}
+%This presentation is copyrighted by\\
+%The \textbf{Insight Software Consortium}\\
+%\bigskip
+%distributed under the\\
+%\textbf{Creative Commons by Attribution License 3.0}\\
+%\url{http://creativecommons.org/licenses/by/3.0}\\
+%\end{center}
+%\end{frame}
+%}
+
+
+%\begin{frame}
+  %\tableofcontents[hideallsubsections]
+%\end{frame}
+
+%\setbeamertemplate{background}{\includegraphics[width=\paperwidth]{../Art/ITKv4_transparent}}
+
+%\include{SoftwarePreparation1}
+
+%\centeredlargetext{black}{white}{
+%ITKv4
+%}
+
+%\include{Overview}
+
+%\centeredlargetext{black}{white}{
+%Modularization
+%}
+
+%\include{Modularization}
+
+%\include{DICOM}
+
+%\include{ITKv4LevelSets}
+
+%\include{Registration}
+
+%\include{Statistics}
+
+%\include{FEM}
+
+%\section{Brief overview of other improvements}
+
+%\include{SimpleITK}
+
+%\centeredlargetext{black}{white}{
+%New Fields
+%}
+
+
+%\begin{frame}
+%\frametitle{New Fields}
+%\Huge
+%\begin{itemize}
+%\item Microscopy
+%\pause
+%\item Video
+%\pause
+%\item Remote Sensing
+%\end{itemize}
+%\end{frame}
+
+
+%\centeredlargetext{white}{black}{
+%Video Bridge
+%}
+
+
+%\begin{frame}
+%\frametitle{Video Bridge}
+%\Huge
+%\begin{itemize}
+%\item OpenCV
+%\pause
+%\item VXL
+%\pause
+%\item Video Filters
+%\end{itemize}
+%\end{frame}
+
+
+%\centeredlargetext{white}{black}{
+%Video Grabber
+%}
+
+
+%\begin{frame}
+%\frametitle{Video Grabber}
+%\Huge
+%\begin{itemize}
+%\item Laparoscopy
+%\pause
+%\item Ultrasound
+%\end{itemize}
+%\end{frame}
+
+
+%\centeredlargetext{white}{black}{
+%Microscopy
+%}
+
+
+%\begin{frame}
+%\frametitle{Microscopy}
+%\Huge
+%\begin{itemize}
+%\item Deconvolution
+%\pause
+%\item Denoising
+%\pause
+%\item Color correction
+%\pause
+%\item Colocalization
+%\pause
+%\item File Formats
+%\end{itemize}
+%\end{frame}
+
+
+%\centeredlargetext{black}{white}{
+%Large Images
+%}
+
+
+%\begin{frame}
+%\frametitle{Large Images}
+%\Huge
+%\begin{itemize}
+%\item JPEG 2000
+%\pause
+%\item Tiling
+%\pause
+%\item HDF5
+%\pause
+%\item Multi-Resolution Levels
+%\end{itemize}
+%\end{frame}
+
+
+%\centeredlargetext{black}{white}{
+%Insight Journal
+%}
+
+%\begin{frame}
+%\frametitle{Insight Journal}
+%\Huge
+%\begin{itemize}
+%\item Git Backend
+%\pause
+%\item Virtual Appliances
+%\pause
+%\item CDE
+%\pause
+%\item Reproducible Research
+%\end{itemize}
+%\end{frame}
+
+
+%\centeredlargetext{black}{white}{
+%Migration Guide
+%}
+
+
+%\centeredlargetext{white}{black}{
+%\url{http://itk.org/migrationv4}
+%}
+
+
+\centeredlargetext{white}{black}{
+Live Long\\
+and\\
+Prosper !
+}
+
+
+\end{document}
