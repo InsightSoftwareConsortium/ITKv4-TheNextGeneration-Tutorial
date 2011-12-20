@@ -14,7 +14,7 @@ file(
 
 
 add_latex_document( ITK_4_0_0_webinar.tex
-  INPUTS Overview.tex
+  INPUTS Overview.tex Modularization.tex
   IMAGE_DIRS ../Art
   DEFAULT_PDF
   )
