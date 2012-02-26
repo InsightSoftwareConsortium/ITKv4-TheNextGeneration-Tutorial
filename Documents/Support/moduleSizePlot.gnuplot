@@ -6,4 +6,4 @@ set xrange [-1:100]
 set xlabel "Module"
 set ylabel "Size (bytes)"
 set nokey
-plot "./moduleSizeSortedNoThirdPartyBeta1.txt" using 1 with boxes
+plot "./moduleSizeSortedBeta1.txt" using 1 with boxes
