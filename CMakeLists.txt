@@ -7,10 +7,14 @@ set( CMAKE_RUNTIME_OUTPUT_DIRECTORY
 
 file(GLOB_RECURSE CXX_FILES "Exercises/*.cxx")
 
-add_subdirectory(Exercises)
-
 option(BUILD_PRESENTATION "Build the PDF Presentation." OFF)
 
 if(BUILD_PRESENTATION)
   add_subdirectory(Documents)
+endif()
+
+option(BUILD_EXERCISES "Build the Exercises." OFF)
+
+if(BUILD_EXERCISES)
+  add_subdirectory(Exercises)
 endif()
