@@ -21,16 +21,17 @@
 #include "itkImageFileWriter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkLevelSetDomainMapImageFilter.h"
-#include "itkLevelSetContainerBase.h"
+#include "itkLevelSetContainer.h"
 #include "itkLevelSetEquationChanAndVeseInternalTerm.h"
 #include "itkLevelSetEquationChanAndVeseExternalTerm.h"
 #include "itkLevelSetEquationTermContainerBase.h"
 #include "itkLevelSetEquationContainerBase.h"
 #include "itkSinRegularizedHeavisideStepFunction.h"
-#include "itkLevelSetSparseEvolutionBase.h"
-#include "itkBinaryImageToWhitakerSparseLevelSetAdaptor.h"
+#include "itkLevelSetEvolution.h"
+#include "itkBinaryImageToLevelSetImageAdaptor.h"
 #include "itkLevelSetEvolutionNumberOfIterationsStoppingCriterion.h"
 #include "itkNumericTraits.h"
+#include "itkWhitakerSparseLevelSetImage.h"
 
 #include "itkWhitakerCommandIterationUpdate.h"
 #include "itkShiCommandIterationUpdate.h"
@@ -106,8 +107,10 @@ int main( int argc, char* argv[] )
   // maintained, the rest of the domain is either -3 or +3.
   typedef float PixelType;
 
-  typedef itk::BinaryImageToWhitakerSparseLevelSetAdaptor< InputImageType,
-    PixelType > BinaryToSparseAdaptorType;
+  typedef itk::WhitakerSparseLevelSetImage< PixelType, Dimension > WhitakerSparseLevelSetImageType;
+
+  typedef itk::BinaryImageToLevelSetImageAdaptor< InputImageType,
+    WhitakerSparseLevelSetImageType > BinaryToSparseAdaptorType;
 
   BinaryToSparseAdaptorType::Pointer adaptor = BinaryToSparseAdaptorType::New();
   adaptor->SetInputImage( binary );
@@ -117,7 +120,7 @@ int main( int argc, char* argv[] )
   // Here get the resulting level-set function
   typedef BinaryToSparseAdaptorType::LevelSetType SparseLevelSetType;
 
-  SparseLevelSetType::Pointer level_set = adaptor->GetSparseLevelSet();
+  SparseLevelSetType::Pointer level_set = adaptor->GetLevelSet();
 
   // Create here the bounds in which this level-set can evolved.
 
@@ -154,7 +157,7 @@ int main( int argc, char* argv[] )
   heaviside->SetEpsilon( 1.0 );
 
   // Insert the levelsets in a levelset container
-  typedef itk::LevelSetContainerBase< IdentifierType, SparseLevelSetType >
+  typedef itk::LevelSetContainer< IdentifierType, SparseLevelSetType >
       LevelSetContainerType;
 
   LevelSetContainerType::Pointer lscontainer = LevelSetContainerType::New();
@@ -219,8 +222,7 @@ int main( int argc, char* argv[] )
   StoppingCriterionType::Pointer criterion = StoppingCriterionType::New();
   criterion->SetNumberOfIterations( atoi( argv[2]) );
 
-  typedef itk::LevelSetSparseEvolutionBase< EquationContainerType >
-                                                            LevelSetEvolutionType;
+  typedef itk::LevelSetEvolution< EquationContainerType, SparseLevelSetType > LevelSetEvolutionType;
 
   LevelSetEvolutionType::Pointer evolution = LevelSetEvolutionType::New();
 

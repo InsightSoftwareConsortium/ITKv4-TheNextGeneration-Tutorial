@@ -37,7 +37,7 @@ public:
   typedef typename LevelSetFilterType::Pointer  LevelSetFilterPointer;
 
   typedef typename LevelSetFilterType::LevelSetType     LevelSetType;
-  typedef typename LevelSetFilterType::LevelSetPointer  LevelSetPointer;
+  typedef typename LevelSetType::Pointer                LevelSetPointer;
 
   itkNewMacro( WhitakerCommandIterationUpdate );
 
