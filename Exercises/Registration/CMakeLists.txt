@@ -1,3 +1,0 @@
-project(ITKRegistrationRefactoring)
-set(ITKRegistrationRefactoring_LIBRARIES ITKRegistrationRefactoring)
-itk_module_impl()
