@@ -1,0 +1,14 @@
+\section{New Fields}
+
+\begin{frame}
+\frametitle{New Fields}
+\Huge
+\begin{itemize}
+\item Microscopy
+\pause
+\item Video
+\pause
+\item Remote Sensing
+\end{itemize}
+\end{frame}
+
