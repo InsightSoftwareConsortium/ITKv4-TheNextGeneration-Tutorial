@@ -10,3 +10,6 @@ add_executable(ImageReadWrite ImageReadWrite.cxx )
 target_link_libraries(ImageReadWrite ${ITK_LIBRARIES})
 
 add_subdirectory( LevelSets )
+add_subdirectory( OpenCVIntroduction ) 
+add_subdirectory( ITKOpenCVBridge ) 
+add_subdirectory( ITKVideoPipeline )

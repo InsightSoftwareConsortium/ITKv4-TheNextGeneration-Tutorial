@@ -1,0 +1,197 @@
+%\documentclass[handout,18pt]{beamer}
+\documentclass[18pt]{beamer}
+\usetheme{Madrid}
+
+\usepackage{graphics}
+\usepackage{listings}
+\usepackage{url}
+
+\definecolor{listcomment}{rgb}{0.0,0.0,1.0}
+\definecolor{listkeyword}{rgb}{0.5,0.0,0.0}
+\definecolor{listidentifier}{rgb}{0.0,0.3,0.0}
+\definecolor{listdirective}{rgb}{0.5,0.0,1.0}
+\definecolor{liststring}{rgb}{1.0,0.0,1.0}
+\definecolor{listnumbers}{gray}{0.65}
+\definecolor{listlightgray}{gray}{0.955}
+\definecolor{listwhite}{gray}{1.0}
+\definecolor{listbackground}{rgb}{0.9,0.9,1.0}
+
+
+\lstset{language=C++}
+\lstset{numbers=left}
+\lstset{frame=tb}
+\lstset{xleftmargin=0.05\linewidth}
+\lstset{backgroundcolor=\color{listbackground}}
+\lstset{basicstyle=\tiny}
+\lstset{keywordstyle=\color{listkeyword}\bfseries}
+\lstset{identifierstyle=\color{listidentifier}}
+\lstset{directivestyle=\color{listdirective}}
+\lstset{commentstyle=\color{listcomment}}
+\lstset{stringstyle=\ttfamily\color{liststring}}
+\lstset{showstringspaces=false}
+
+\newcommand{\lstlistingwithnumber}[3]{
+\begin{center}
+\lstinputlisting[linerange={#1-#2},firstnumber=#1,numbers=left]{#3}
+\end{center}
+}
+
+\newcommand{\centeredlargetext}[3]{
+{
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{background canvas}{bg={#1}}
+\color{#2}
+\begin{frame}[plain]
+\fontsize{36pt}{36pt}\selectfont
+\center
+\begin{center}
+{#3}
+\end{center}
+\end{frame}
+}}
+
+\newcommand{\centeredhugetext}[3]{
+{
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{background canvas}{bg={#1}}
+\fontsize{72pt}{72pt}\selectfont
+\color{#2}
+\begin{frame}[plain]
+\center
+\begin{center}
+{#3}
+\end{center}
+\end{frame}
+}}
+
+
+\begin{document}
+
+\title[ITK - OpenCV]{ITK Meets OpenCV}
+\subtitle[ITK-OpenCV]{A New Open Source Software Resource for CV}
+\institute[Insight Software Consortium]{Insight Software Consortium}
+\date[June 2011]{June 2011}
+
+\begin{frame}
+\titlepage
+\begin{tabular}{cp{.15\textwidth}p{.15\textwidth}p{.15\textwidth}p{.15\textwidth}p{.15\textwidth}c}
+&
+\centering\includegraphics[height=2cm]{ibanez} &
+\centering\includegraphics[height=2cm]{reynolds} &
+\centering\includegraphics[height=2cm]{hart} &
+\centering\includegraphics[height=2cm]{leotta} &
+\centering\includegraphics[height=2cm]{perera} & \\
+&
+\centering{}Luis \\Ib\'a\~nez &
+\centering{}Patrick \\Reynolds &
+\centering{}Gabe \\Hart &
+\centering{}Matt \\Leotta &
+\centering{}Amitha \\Perera & \\
+\end{tabular}
+\end{frame}
+
+
+{
+\setbeamertemplate{navigation symbols}{}
+\begin{frame}[plain]
+\center
+\begin{center}
+This presentation is copyrighted by\\
+The \textbf{Insight Software Consortium}\\
+\bigskip
+distributed under the\\
+\textbf{Creative Commons by Attribution License 3.0}\\
+\url{http://creativecommons.org/licenses/by/3.0}\\
+\end{center}
+\end{frame}
+}
+
+
+%\begin{frame}
+%  \tableofcontents
+%\end{frame}
+
+
+\begin{frame}
+\frametitle{What this Tutorial is about}
+\begin{itemize}
+\item Introduce the Insight Toolkit (ITK) to Computer Vision
+\item Hands-on code examples as a starting point for using ITK
+\item Preview of the upcoming video extensions to ITK
+\item Raffle of ASUS Eee Pad Transformer
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Who is Kitware}
+\begin{center}
+\includegraphics[width=.8\textwidth]{KitwareFocusAreas}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Program}
+
+%\begin{itemize}
+%\item Virtual Machines Preparation (10min)
+%\item ITK Overview (30min)
+%\item \textcolor{gray}{Short Break (10min)}
+%\item Software Environment (10min)
+%\item ITK Introduction (30min)
+%\item \textcolor{gray}{Coffee Break (30min)}
+%\item OpenCV Introduction (30min)
+%\item OpenCV+ITK (30min)
+%\item \textcolor{gray}{Short Break (10min)}
+%\item ITK Video Filters (40min)
+%\item Wrap-up (10min)
+%\end{itemize}
+
+\begin{tabular}{ll}
+1:35--1:40 & Virtual Machine Preparation \\
+1:40--2:10 & ITK Overview \\
+2:10--2:20 & Software Environment \\
+\textcolor{gray}{2:20--2:30} & \textcolor{gray}{Break} \\
+2:30--3:00 & ITK Introduction \\
+\textcolor{gray}{3:00--3:30} & \textcolor{gray}{Coffee Break} \\
+3:30--4:00 & OpenCV Introduction \\
+4:00--4:30 & OpenCV+ITK \\
+\textcolor{gray}{4:30--4:40} & \textcolor{gray}{Break} \\
+4:40--5:15 & ITK Video Filters \\
+5:15--5:30 & Wrap-up
+\end{tabular}
+
+\end{frame}
+
+
+\include{SoftwarePreparation1}
+
+\include{ITKOverview}
+
+\include{SoftwarePreparation2}
+
+\include{SoftwareEnvironment}
+
+\include{ITKIntroduction}
+
+\include{OpenCVIntroduction}
+
+\include{ITKOpenCVBridge}
+
+\include{ITKVideoFilters}
+
+\begin{frame}
+\frametitle{Wrap-up}
+\begin{itemize}
+\item Send us feedback (good or bad) \\
+luis.ibanez@kitware.com \\
+patrick.reynolds@kitware.com \\
+gabe.hart@kitware.com \\
+matt.leotta@kitware.com \\
+amitha.perera@kitware.com
+\item Raffle\\
+\includegraphics[height=1.5in]{asus}
+\end{itemize}
+\end{frame}
+
+
+\end{document}
