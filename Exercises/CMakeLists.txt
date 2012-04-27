@@ -11,3 +11,6 @@ target_link_libraries(ImageReadWrite ${ITK_LIBRARIES})
 
 add_subdirectory( LevelSets )
 add_subdirectory( Registration )
+add_subdirectory( OpenCVIntroduction )
+add_subdirectory( ITKOpenCVBridge )
+add_subdirectory( ITKVideoPipeline )

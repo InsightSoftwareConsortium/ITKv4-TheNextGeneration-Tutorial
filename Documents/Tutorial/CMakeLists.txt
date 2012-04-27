@@ -14,7 +14,8 @@ file(
 
 
 add_latex_document( ITKv4TheNextGenerationTutorial.tex
-  INPUTS FEM.tex ITKv4LevelSets.tex Modularization.tex Registration.tex Overview.tex SoftwareEnvironment.tex SoftwarePreparation1.tex SoftwarePreparation2.tex DICOM.tex SimpleITK.tex Statistics.tex
+  INPUTS FEM.tex ITKv4LevelSets.tex Modularization.tex Registration.tex Overview.tex SoftwareEnvironment.tex SoftwarePreparation1.tex SoftwarePreparation2.tex DICOM.tex SimpleITK.tex Statistics.tex ITKOpenCVBridge.tex ITKOpenCVBridgeTutorial.tex OpenCVIntroduction.tex
   IMAGE_DIRS ../Art
+
   DEFAULT_PDF
   )

@@ -202,7 +202,11 @@ public:
     
       vtkSmartPointer< vtkImageActor > input_Actor =
           vtkSmartPointer< vtkImageActor >::New();
+#if VTK_MAJOR_VERSION <=5
       input_Actor->SetInput( VTKImage );
+#else
+      input_Actor->SetInputData( VTKImage );
+#endif
       input_Actor->InterpolateOff();
 
       std::stringstream counter;
