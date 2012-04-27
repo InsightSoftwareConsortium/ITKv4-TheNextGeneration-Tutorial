@@ -70,7 +70,12 @@ public:
         vtkSmartPointer< ImageWriterType > writer =
             vtkSmartPointer< ImageWriterType >::New( );
         writer->SetFileName ( iFileName.c_str( ) );
+#if VTK_MAJOR_VERSION <=5
         writer->SetInput ( Dumper->GetOutput( ) );
+#else
+        writer->SetInputData ( Dumper->GetOutput( ) );
+#endif
+
         writer->Write( );
         }
       }
