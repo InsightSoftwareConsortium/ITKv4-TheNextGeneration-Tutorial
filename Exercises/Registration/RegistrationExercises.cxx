@@ -85,34 +85,36 @@ int main( int argc, char *argv[] )
   // image by convention.
   typedef itk::ImageFileReader< FixedImageType >  ImageReaderType;
 
-  typename ImageReaderType::Pointer fixedImageReader = ImageReaderType::New();
+  ImageReaderType::Pointer fixedImageReader = ImageReaderType::New();
   fixedImageReader->SetFileName( argv[1] );
   fixedImageReader->Update();
-  typename FixedImageType::Pointer fixedImage = fixedImageReader->GetOutput();
+
+  FixedImageType::Pointer fixedImage = fixedImageReader->GetOutput();
   fixedImage->Update();
   fixedImage->DisconnectPipeline();
 
-  typename ImageReaderType::Pointer movingImageReader = ImageReaderType::New();
+  ImageReaderType::Pointer movingImageReader = ImageReaderType::New();
   movingImageReader->SetFileName( argv[2] );
   movingImageReader->Update();
-  typename MovingImageType::Pointer movingImage = movingImageReader->GetOutput();
+
+  MovingImageType::Pointer movingImage = movingImageReader->GetOutput();
   movingImage->Update();
   movingImage->DisconnectPipeline();
 
   // The Transform is a parameterized model of motion.
   typedef itk::AffineTransform< double, ImageDimension > TransformType;
-  typename TransformType::Pointer transform = TransformType::New();
+  TransformType::Pointer transform = TransformType::New();
   transform->SetIdentity();
 
   // The metric is the objective function for the optimization problem.
   //typedef itk::JointHistogramMutualInformationImageToImageMetricv4< FixedImageType, MovingImageType > MetricType;
   typedef itk::MeanSquaresImageToImageMetricv4< FixedImageType, MovingImageType >     MetricType;
-  typename MetricType::Pointer metric = MetricType::New();
+  MetricType::Pointer metric = MetricType::New();
 
   // The optimizer adjusts the parameters of the transform to improve the
   // metric.
   typedef itk::GradientDescentOptimizerv4 OptimizerType;
-  typename OptimizerType::Pointer optimizer = OptimizerType::New();
+  OptimizerType::Pointer optimizer = OptimizerType::New();
   optimizer->SetNumberOfIterations( atoi( argv[4] ) );
   optimizer->SetDoEstimateLearningRateOnce( false ); //true by default
   optimizer->SetDoEstimateLearningRateAtEachIteration( true );
@@ -122,7 +124,7 @@ int main( int argc, char *argv[] )
   // parameters.  However, that is not true.  This classe determines what good
   // scales should be for the given transform.
   typedef itk::RegistrationParameterScalesFromShift< MetricType > ScalesEstimatorType;
-  typename ScalesEstimatorType::Pointer scalesEstimator = ScalesEstimatorType::New();
+  ScalesEstimatorType::Pointer scalesEstimator = ScalesEstimatorType::New();
   scalesEstimator->SetMetric( metric );
   scalesEstimator->SetTransformForward( true );
   optimizer->SetScalesEstimator( scalesEstimator );
@@ -130,14 +132,14 @@ int main( int argc, char *argv[] )
 
   // Print out the optimizer status at every iteration.
   typedef  CommandIterationUpdate< OptimizerType > CommandType;
-  typename CommandType::Pointer observer = CommandType::New();
+  CommandType::Pointer observer = CommandType::New();
   optimizer->AddObserver( itk::IterationEvent(), observer );
 
   // The RegistrationMethod class coordinates the registration operation.
   // It needs all the pieces that come together to perform the registration
   // operation.
   typedef  itk::ImageRegistrationMethodv4< FixedImageType, MovingImageType, TransformType > RegistrationMethodType;
-  typename RegistrationMethodType::Pointer registrationMethod = RegistrationMethodType::New();
+  RegistrationMethodType::Pointer registrationMethod = RegistrationMethodType::New();
   registrationMethod->SetOptimizer( optimizer );
   registrationMethod->SetFixedImage( fixedImage );
   registrationMethod->SetMovingImage( movingImage );
@@ -162,7 +164,7 @@ int main( int argc, char *argv[] )
 
   // Get the moving image after resampling with the transform.
   typedef itk::ResampleImageFilter< MovingImageType, FixedImageType > ResampleFilterType;
-  typename ResampleFilterType::Pointer resampler = ResampleFilterType::New();
+  ResampleFilterType::Pointer resampler = ResampleFilterType::New();
   transform->SetParameters( optimizer->GetCurrentPosition() );
   resampler->SetTransform( transform );
   resampler->SetInput( movingImage );
@@ -177,11 +179,11 @@ int main( int argc, char *argv[] )
   typedef unsigned char                                           OutputPixelType;
   typedef itk::Image< OutputPixelType, ImageDimension >           OutputImageType;
   typedef itk::CastImageFilter< FixedImageType, OutputImageType > CastFilterType;
-  typename CastFilterType::Pointer caster = CastFilterType::New();
+  CastFilterType::Pointer caster = CastFilterType::New();
   caster->SetInput( resampler->GetOutput() );
 
   typedef itk::ImageFileWriter< OutputImageType >     WriterType;
-  typename WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( argv[3] );
   writer->SetInput( caster->GetOutput() );
 
