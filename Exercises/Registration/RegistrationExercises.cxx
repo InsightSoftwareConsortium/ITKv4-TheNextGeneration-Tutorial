@@ -28,6 +28,8 @@
 #include "itkImageRegistrationMethodv4.h"
 #include "itkRegistrationParameterScalesFromShift.h"
 
+#include "itkQuasiNewtonOptimizerv4.h"
+
 template<class TOptimizer>
 class CommandIterationUpdate : public itk::Command
 {
@@ -105,7 +107,6 @@ int main( int argc, char *argv[] )
   // The Transform is a parameterized model of motion.
   typedef itk::Euler2DTransform< double > TransformType;
   TransformType::Pointer transform = TransformType::New();
-  transform->SetIdentity();
   // The Euler transform is a rotation and translation about a center, so we
   // used the moments of the moving image to find the center.
   typedef itk::ImageMomentsCalculator< MovingImageType > ImageMomentsCalculatorType;
@@ -117,6 +118,8 @@ int main( int argc, char *argv[] )
   center[0] = centerOfGravity[0];
   center[1] = centerOfGravity[1];
   transform->SetCenter( center );
+  std::cout << "Transform: " << transform << std::endl;
+  transform->SetIdentity();
 
   // The metric is the objective function for the optimization problem.
   //typedef itk::JointHistogramMutualInformationImageToImageMetricv4< FixedImageType, MovingImageType > MetricType;
@@ -126,11 +129,14 @@ int main( int argc, char *argv[] )
   // The optimizer adjusts the parameters of the transform to improve the
   // metric.
   typedef itk::GradientDescentOptimizerv4 OptimizerType;
+  //typedef itk::QuasiNewtonOptimizerv4 OptimizerType;
   OptimizerType::Pointer optimizer = OptimizerType::New();
   optimizer->SetNumberOfIterations( atoi( argv[4] ) );
   optimizer->SetDoEstimateLearningRateOnce( false ); //true by default
   optimizer->SetDoEstimateLearningRateAtEachIteration( true );
   optimizer->SetMinimumConvergenceValue( 1e-5 );
+  optimizer->SetMaximumStepSizeInPhysicalUnits( 0.5 );
+  //optimizer->SetMaximumNewtonStepSizeInPhysicalUnits( 1.5 );
 
   // The optimizer assumes that the metric is equally sensitive to all transform
   // parameters.  However, that is not true.  This classe determines what good
