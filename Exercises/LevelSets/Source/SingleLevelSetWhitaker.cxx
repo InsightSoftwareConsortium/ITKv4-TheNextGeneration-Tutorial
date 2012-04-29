@@ -32,8 +32,8 @@
 #include "itkLevelSetEvolutionNumberOfIterationsStoppingCriterion.h"
 #include "itkNumericTraits.h"
 
-#include "itkWhitakerCommandIterationUpdate.h"
-#include "itkShiCommandIterationUpdate.h"
+#include "itkLevelSetIterationUpdateCommand.h"
+#include "vtkVisualize2DSparseLevelSetLayers.h"
 
 int main( int argc, char* argv[] )
 {
@@ -211,13 +211,25 @@ int main( int argc, char* argv[] )
 
   LevelSetEvolutionType::Pointer evolution = LevelSetEvolutionType::New();
 
-  typedef itk::WhitakerCommandIterationUpdate< LevelSetEvolutionType > CommandType;
+  // Create the visualizer
+  typedef vtkVisualize2DSparseLevelSetLayers< InputImageType, SparseLevelSetType > VisualizationType;
+  VisualizationType::Pointer visualizer = VisualizationType::New();
 
-  CommandType::Pointer observer = CommandType::New();
+  visualizer->SetInputImage( inputImage );
+  visualizer->SetLevelSet( levelSet );
+  visualizer->SetScreenCapture( false );
+  std::cout << "Visualizer created" << std::endl;
+
+
+  typedef itk::LevelSetIterationUpdateCommand< LevelSetEvolutionType, VisualizationType > IterationUpdateCommandType;
+
+  IterationUpdateCommandType::Pointer iterationUpdateCommand = IterationUpdateCommandType::New();
+  iterationUpdateCommand->SetFilterToUpdate( visualizer );
+  iterationUpdateCommand->SetUpdatePeriod( 1 );
 
   if( atoi( argv[3] ) == 1 )
     {
-    evolution->AddObserver( itk::IterationEvent(), observer );
+    evolution->AddObserver( itk::IterationEvent(), iterationUpdateCommand );
     }
 
   evolution->SetStoppingCriterion( criterion );

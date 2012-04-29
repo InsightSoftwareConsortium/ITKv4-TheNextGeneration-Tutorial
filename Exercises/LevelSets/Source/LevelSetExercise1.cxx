@@ -33,8 +33,8 @@
 #include "itkNumericTraits.h"
 #include "itkWhitakerSparseLevelSetImage.h"
 
-#include "itkWhitakerCommandIterationUpdate.h"
-#include "itkShiCommandIterationUpdate.h"
+#include "itkLevelSetIterationUpdateCommand.h"
+#include "vtkVisualize2DSparseLevelSetLayers.h"
 
 // ------------------------------------------------------------------------
 //
@@ -72,13 +72,13 @@ int main( int argc, char* argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
   reader->Update();
-  InputImageType::Pointer input = reader->GetOutput();
+  InputImageType::Pointer inputImage = reader->GetOutput();
 
   // Generate a binary mask that will be used as initialization
   // of the level set evolution.
   InputImageType::Pointer binary = InputImageType::New();
-  binary->SetRegions( input->GetLargestPossibleRegion() );
-  binary->CopyInformation( input );
+  binary->SetRegions( inputImage->GetLargestPossibleRegion() );
+  binary->CopyInformation( inputImage );
   binary->Allocate();
   binary->FillBuffer( itk::NumericTraits<InputPixelType>::Zero );
 
@@ -120,7 +120,7 @@ int main( int argc, char* argv[] )
   // Here get the resulting level-set function
   typedef BinaryToSparseAdaptorType::LevelSetType SparseLevelSetType;
 
-  SparseLevelSetType::Pointer level_set = adaptor->GetLevelSet();
+  SparseLevelSetType::Pointer levelSet = adaptor->GetLevelSet();
 
   // Create here the bounds in which this level-set can evolved.
 
@@ -136,7 +136,7 @@ int main( int argc, char* argv[] )
   // In this example the first level-set is defined on the whole image.
   typedef itk::Image< IdListType, Dimension >               IdListImageType;
   IdListImageType::Pointer id_image = IdListImageType::New();
-  id_image->SetRegions( input->GetLargestPossibleRegion() );
+  id_image->SetRegions( inputImage->GetLargestPossibleRegion() );
   id_image->Allocate();
   id_image->FillBuffer( list_ids );
 
@@ -164,7 +164,7 @@ int main( int argc, char* argv[] )
   lscontainer->SetHeaviside( heaviside );
   lscontainer->SetDomainMapFilter( domainMapFilter );
 
-  lscontainer->AddLevelSet( 0, level_set );
+  lscontainer->AddLevelSet( 0, levelSet );
 
   std::cout << "Level set container created" << std::endl;
 
@@ -175,7 +175,7 @@ int main( int argc, char* argv[] )
       LevelSetContainerType > ChanAndVeseInternalTermType;
 
   ChanAndVeseInternalTermType::Pointer cvInternalTerm0 = ChanAndVeseInternalTermType::New();
-  cvInternalTerm0->SetInput( input );
+  cvInternalTerm0->SetInput( inputImage );
   cvInternalTerm0->SetCoefficient( 1.0 );
   cvInternalTerm0->SetCurrentLevelSetId( 0 );
   cvInternalTerm0->SetLevelSetContainer( lscontainer );
@@ -186,7 +186,7 @@ int main( int argc, char* argv[] )
       LevelSetContainerType > ChanAndVeseExternalTermType;
 
   ChanAndVeseExternalTermType::Pointer cvExternalTerm0 = ChanAndVeseExternalTermType::New();
-  cvExternalTerm0->SetInput( input );
+  cvExternalTerm0->SetInput( inputImage );
   cvExternalTerm0->SetCoefficient( 1.0 );
   cvExternalTerm0->SetCurrentLevelSetId( 0 );
   cvExternalTerm0->SetLevelSetContainer( lscontainer );
@@ -205,7 +205,8 @@ int main( int argc, char* argv[] )
   typedef itk::LevelSetEquationTermContainerBase< InputImageType, LevelSetContainerType >
                                                             TermContainerType;
   TermContainerType::Pointer termContainer0 = TermContainerType::New();
-  termContainer0->SetInput( input );
+  termContainer0->SetInput( inputImage );
+  termContainer0->SetLevelSetContainer( lscontainer );
 
   termContainer0->AddTerm( 0, cvInternalTerm0 );
   termContainer0->AddTerm( 1, cvExternalTerm0 );
@@ -216,6 +217,7 @@ int main( int argc, char* argv[] )
                                                             EquationContainerType;
   EquationContainerType::Pointer equationContainer = EquationContainerType::New();
   equationContainer->AddEquation( 0, termContainer0 );
+  equationContainer->SetLevelSetContainer( lscontainer );
 
   typedef itk::LevelSetEvolutionNumberOfIterationsStoppingCriterion< LevelSetContainerType >
       StoppingCriterionType;
@@ -226,13 +228,24 @@ int main( int argc, char* argv[] )
 
   LevelSetEvolutionType::Pointer evolution = LevelSetEvolutionType::New();
 
-  typedef itk::WhitakerCommandIterationUpdate< LevelSetEvolutionType > CommandType;
+  // Create the visualizer
+  typedef vtkVisualize2DSparseLevelSetLayers< InputImageType, SparseLevelSetType > VisualizationType;
+  VisualizationType::Pointer visualizer = VisualizationType::New();
 
-  CommandType::Pointer observer = CommandType::New();
+  visualizer->SetInputImage( inputImage );
+  visualizer->SetLevelSet( levelSet );
+  visualizer->SetScreenCapture( false );
+  std::cout << "Visualizer created" << std::endl;
+
+  typedef itk::LevelSetIterationUpdateCommand< LevelSetEvolutionType, VisualizationType > IterationUpdateCommandType;
+  IterationUpdateCommandType::Pointer iterationUpdateCommand = IterationUpdateCommandType::New();
+  iterationUpdateCommand->SetFilterToUpdate( visualizer );
+  iterationUpdateCommand->SetUpdatePeriod( 1 );
+  evolution->AddObserver( itk::IterationEvent(), iterationUpdateCommand );
 
   if( atoi( argv[4] ) == 1 )
     {
-    evolution->AddObserver( itk::IterationEvent(), observer );
+    evolution->AddObserver( itk::IterationEvent(), iterationUpdateCommand );
     }
 
   evolution->SetEquationContainer( equationContainer );
@@ -251,8 +264,8 @@ int main( int argc, char* argv[] )
 
   typedef itk::Image< char, Dimension > OutputImageType;
   OutputImageType::Pointer outputImage = OutputImageType::New();
-  outputImage->SetRegions( input->GetLargestPossibleRegion() );
-  outputImage->CopyInformation( input );
+  outputImage->SetRegions( inputImage->GetLargestPossibleRegion() );
+  outputImage->CopyInformation( inputImage );
   outputImage->Allocate();
   outputImage->FillBuffer( 0 );
 
@@ -265,7 +278,7 @@ int main( int argc, char* argv[] )
   while( !oIt.IsAtEnd() )
     {
     idx = oIt.GetIndex();
-    oIt.Set( level_set->GetLabelMap()->GetPixel(idx) );
+    oIt.Set( levelSet->GetLabelMap()->GetPixel(idx) );
     ++oIt;
     }
 
