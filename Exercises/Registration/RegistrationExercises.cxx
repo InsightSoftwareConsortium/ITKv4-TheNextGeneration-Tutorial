@@ -19,10 +19,11 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkCastImageFilter.h"
+#include "itkImageMomentsCalculator.h"
 
 #include "itkJointHistogramMutualInformationImageToImageMetricv4.h"
 #include "itkMeanSquaresImageToImageMetricv4.h"
-#include "itkAffineTransform.h"
+#include "itkEuler2DTransform.h"
 #include "itkGradientDescentOptimizerv4.h"
 #include "itkImageRegistrationMethodv4.h"
 #include "itkRegistrationParameterScalesFromShift.h"
@@ -100,13 +101,24 @@ int main( int argc, char *argv[] )
   movingImage->DisconnectPipeline();
 
   // The Transform is a parameterized model of motion.
-  typedef itk::AffineTransform< double, ImageDimension > TransformType;
+  typedef itk::Euler2DTransform< double > TransformType;
   typename TransformType::Pointer transform = TransformType::New();
   transform->SetIdentity();
+  // The Euler transform is a rotation and translation about a center, so we
+  // used the moments of the moving image to find the center.
+  //typedef itk::ImageMomentsCalculator< MovingImageType > ImageMomentsCalculatorType;
+  //ImageMomentsCalculatorType::Pointer imageMomentsCalculator = ImageMomentsCalculatorType::New();
+  //imageMomentsCalculator->SetImage( fixedImage );
+  //imageMomentsCalculator->Compute();
+  //const ImageMomentsCalculatorType::VectorType centerOfGravity = imageMomentsCalculator->GetCenterOfGravity();
+  //MovingImageType::PointType center;
+  //center[0] = centerOfGravity[0];
+  //center[1] = centerOfGravity[1];
+  //transform->SetCenter( center );
 
   // The metric is the objective function for the optimization problem.
-  //typedef itk::JointHistogramMutualInformationImageToImageMetricv4< FixedImageType, MovingImageType > MetricType;
-  typedef itk::MeanSquaresImageToImageMetricv4< FixedImageType, MovingImageType >     MetricType;
+  typedef itk::JointHistogramMutualInformationImageToImageMetricv4< FixedImageType, MovingImageType > MetricType;
+  //typedef itk::MeanSquaresImageToImageMetricv4< FixedImageType, MovingImageType >     MetricType;
   typename MetricType::Pointer metric = MetricType::New();
 
   // The optimizer adjusts the parameters of the transform to improve the
@@ -116,7 +128,7 @@ int main( int argc, char *argv[] )
   optimizer->SetNumberOfIterations( atoi( argv[4] ) );
   optimizer->SetDoEstimateLearningRateOnce( false ); //true by default
   optimizer->SetDoEstimateLearningRateAtEachIteration( true );
-  optimizer->SetMinimumConvergenceValue( 1e-4 );
+  optimizer->SetMinimumConvergenceValue( 1e-5 );
 
   // The optimizer assumes that the metric is equally sensitive to all transform
   // parameters.  However, that is not true.  This classe determines what good
@@ -141,8 +153,9 @@ int main( int argc, char *argv[] )
   registrationMethod->SetOptimizer( optimizer );
   registrationMethod->SetFixedImage( fixedImage );
   registrationMethod->SetMovingImage( movingImage );
-  registrationMethod->SetMovingInitialTransform( transform );
-  registrationMethod->SetNumberOfLevels( 2 );
+  //registrationMethod->SetMovingInitialTransform( transform );
+  registrationMethod->SetFixedInitialTransform( transform );
+  registrationMethod->SetNumberOfLevels( 1 );
   registrationMethod->SetMetric( metric );
 
   try
