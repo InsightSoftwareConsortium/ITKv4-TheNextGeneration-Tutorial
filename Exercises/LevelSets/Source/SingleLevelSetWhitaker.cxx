@@ -186,6 +186,7 @@ int main( int argc, char* argv[] )
                                                             TermContainerType;
   TermContainerType::Pointer termContainer0 = TermContainerType::New();
   termContainer0->SetInput( input );
+  termContainer0->SetLevelSetContainer( lscontainer );
 
   termContainer0->AddTerm( 0, cvInternalTerm0 );
   termContainer0->AddTerm( 1, cvExternalTerm0 );
@@ -196,6 +197,7 @@ int main( int argc, char* argv[] )
                                                             EquationContainerType;
   EquationContainerType::Pointer equationContainer = EquationContainerType::New();
   equationContainer->AddEquation( 0, termContainer0 );
+  equationContainer->SetLevelSetContainer( lscontainer );
 
   typedef itk::LevelSetEvolutionNumberOfIterationsStoppingCriterion< LevelSetContainerType >
       StoppingCriterionType;
