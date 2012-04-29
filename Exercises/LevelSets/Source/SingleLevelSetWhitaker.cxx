@@ -60,15 +60,15 @@ int main( int argc, char* argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
   reader->Update();
-  InputImageType::Pointer input = reader->GetOutput();
+  InputImageType::Pointer inputImage = reader->GetOutput();
 
   // Generate a binary mask that will be used as initialization
   // of the level set evolution.
-  InputImageType::Pointer binary = InputImageType::New();
-  binary->SetRegions( input->GetLargestPossibleRegion() );
-  binary->CopyInformation( input );
-  binary->Allocate();
-  binary->FillBuffer( itk::NumericTraits<InputPixelType>::Zero );
+  InputImageType::Pointer binaryImage = InputImageType::New();
+  binaryImage->SetRegions( inputImage->GetLargestPossibleRegion() );
+  binaryImage->CopyInformation( inputImage );
+  binaryImage->Allocate();
+  binaryImage->FillBuffer( itk::NumericTraits<InputPixelType>::Zero );
 
   InputImageType::RegionType region;
   InputImageType::IndexType index;
@@ -81,7 +81,7 @@ int main( int argc, char* argv[] )
   region.SetSize( size );
 
   typedef itk::ImageRegionIteratorWithIndex< InputImageType > InputIteratorType;
-  InputIteratorType iIt( binary, region );
+  InputIteratorType iIt( binaryImage, region );
   iIt.GoToBegin();
   while( !iIt.IsAtEnd() )
     {
@@ -89,25 +89,27 @@ int main( int argc, char* argv[] )
     ++iIt;
     }
 
-  // Convert the binary mask into a level set function.
+  // Convert the binaryImage mask into a level set function.
   // Here the output level-set will be a "Whitaker" sparse level-set;
   // i.e. only few layers {-2, -1, 0, +1, +2 } around the zero-set are
   // maintained, the rest of the domain is either -3 or +3.
   typedef float PixelType;
 
-  typedef itk::WhitakerSparseLevelSetImage< PixelType, Dimension > WhitakerSparseLevelSetImageType;
+  typedef itk::WhitakerSparseLevelSetImage<
+    PixelType, Dimension > WhitakerSparseLevelSetImageType;
 
-  typedef itk::BinaryImageToLevelSetImageAdaptor< InputImageType, WhitakerSparseLevelSetImageType > BinaryToSparseAdaptorType;
+  typedef itk::BinaryImageToLevelSetImageAdaptor<
+   InputImageType, WhitakerSparseLevelSetImageType > BinaryToSparseAdaptorType;
 
   BinaryToSparseAdaptorType::Pointer adaptor = BinaryToSparseAdaptorType::New();
-  adaptor->SetInputImage( binary );
+  adaptor->SetInputImage( binaryImage );
   adaptor->Initialize();
   std::cout << "Finished converting to sparse format" << std::endl;
 
   // Here get the resulting level-set function
   typedef BinaryToSparseAdaptorType::LevelSetType SparseLevelSetType;
 
-  SparseLevelSetType::Pointer level_set = adaptor->GetLevelSet();
+  SparseLevelSetType::Pointer levelSet = adaptor->GetLevelSet();
 
   // Create here the bounds in which this level-set can evolved.
 
@@ -116,64 +118,64 @@ int main( int argc, char* argv[] )
   typedef itk::IdentifierType         IdentifierType;
   typedef std::list< IdentifierType > IdListType;
 
-  IdListType list_ids;
-  list_ids.push_back( 1 );
+  IdListType listIds;
+  listIds.push_back( 1 );
 
   // We create one image where for each pixel we provide which level-set exists.
   // In this example the first level-set is defined on the whole image.
   typedef itk::Image< IdListType, Dimension >               IdListImageType;
-  IdListImageType::Pointer id_image = IdListImageType::New();
-  id_image->SetRegions( input->GetLargestPossibleRegion() );
-  id_image->Allocate();
-  id_image->FillBuffer( list_ids );
+  IdListImageType::Pointer idImage = IdListImageType::New();
+  idImage->SetRegions( inputImage->GetLargestPossibleRegion() );
+  idImage->Allocate();
+  idImage->FillBuffer( listIds );
 
   typedef itk::Image< short, Dimension >                     CacheImageType;
   typedef itk::LevelSetDomainMapImageFilter< IdListImageType, CacheImageType >
                                                             DomainMapImageFilterType;
   DomainMapImageFilterType::Pointer domainMapFilter = DomainMapImageFilterType::New();
-  domainMapFilter->SetInput( id_image );
+  domainMapFilter->SetInput( idImage );
   domainMapFilter->Update();
   std::cout << "Domain map computed" << std::endl;
 
   // Define the Heaviside function
   typedef SparseLevelSetType::OutputRealType LevelSetOutputRealType;
 
-  typedef itk::SinRegularizedHeavisideStepFunction< LevelSetOutputRealType,
-      LevelSetOutputRealType > HeavisideFunctionBaseType;
+  typedef itk::SinRegularizedHeavisideStepFunction<
+    LevelSetOutputRealType, LevelSetOutputRealType > HeavisideFunctionBaseType;
   HeavisideFunctionBaseType::Pointer heaviside = HeavisideFunctionBaseType::New();
   heaviside->SetEpsilon( 1.0 );
 
   // Insert the levelsets in a levelset container
-  typedef itk::LevelSetContainer< IdentifierType, SparseLevelSetType >
-      LevelSetContainerType;
+  typedef itk::LevelSetContainer<
+    IdentifierType, SparseLevelSetType > LevelSetContainerType;
 
   LevelSetContainerType::Pointer lscontainer = LevelSetContainerType::New();
   lscontainer->SetHeaviside( heaviside );
   lscontainer->SetDomainMapFilter( domainMapFilter );
 
-  lscontainer->AddLevelSet( 0, level_set );
+  lscontainer->AddLevelSet( 0, levelSet );
 
   std::cout << "Level set container created" << std::endl;
 
   // **************** CREATE ALL TERMS ****************
 
   // Create ChanAndVese internal term for phi
-  typedef itk::LevelSetEquationChanAndVeseInternalTerm< InputImageType,
-      LevelSetContainerType > ChanAndVeseInternalTermType;
+  typedef itk::LevelSetEquationChanAndVeseInternalTerm<
+    InputImageType, LevelSetContainerType > InternalTermType;
 
-  ChanAndVeseInternalTermType::Pointer cvInternalTerm0 = ChanAndVeseInternalTermType::New();
-  cvInternalTerm0->SetInput( input );
+  InternalTermType::Pointer cvInternalTerm0 = InternalTermType::New();
+  cvInternalTerm0->SetInput( inputImage );
   cvInternalTerm0->SetCoefficient( 1.0 );
   cvInternalTerm0->SetCurrentLevelSetId( 0 );
   cvInternalTerm0->SetLevelSetContainer( lscontainer );
   std::cout << "Chan and Vese internal term created" << std::endl;
 
   // Create ChanAndVese external term for phi
-  typedef itk::LevelSetEquationChanAndVeseExternalTerm< InputImageType,
-      LevelSetContainerType > ChanAndVeseExternalTermType;
+  typedef itk::LevelSetEquationChanAndVeseExternalTerm<
+    InputImageType, LevelSetContainerType > ExternalTermType;
 
-  ChanAndVeseExternalTermType::Pointer cvExternalTerm0 = ChanAndVeseExternalTermType::New();
-  cvExternalTerm0->SetInput( input );
+  ExternalTermType::Pointer cvExternalTerm0 = ExternalTermType::New();
+  cvExternalTerm0->SetInput( inputImage );
   cvExternalTerm0->SetCoefficient( 1.0 );
   cvExternalTerm0->SetCurrentLevelSetId( 0 );
   cvExternalTerm0->SetLevelSetContainer( lscontainer );
@@ -182,10 +184,11 @@ int main( int argc, char* argv[] )
   // **************** CREATE ALL EQUATIONS ****************
 
   // Create Term Container which corresponds to the combination of terms in the PDE.
-  typedef itk::LevelSetEquationTermContainerBase< InputImageType, LevelSetContainerType >
-                                                            TermContainerType;
+  typedef itk::LevelSetEquationTermContainerBase<
+    InputImageType, LevelSetContainerType > TermContainerType;
+
   TermContainerType::Pointer termContainer0 = TermContainerType::New();
-  termContainer0->SetInput( input );
+  termContainer0->SetInput( inputImage );
   termContainer0->SetLevelSetContainer( lscontainer );
 
   termContainer0->AddTerm( 0, cvInternalTerm0 );
@@ -193,14 +196,14 @@ int main( int argc, char* argv[] )
 
   std::cout << "Term container 0 created" << std::endl;
 
-  typedef itk::LevelSetEquationContainerBase< TermContainerType >
-                                                            EquationContainerType;
+  typedef itk::LevelSetEquationContainerBase< TermContainerType > EquationContainerType;
   EquationContainerType::Pointer equationContainer = EquationContainerType::New();
   equationContainer->AddEquation( 0, termContainer0 );
   equationContainer->SetLevelSetContainer( lscontainer );
 
-  typedef itk::LevelSetEvolutionNumberOfIterationsStoppingCriterion< LevelSetContainerType >
-      StoppingCriterionType;
+  typedef itk::LevelSetEvolutionNumberOfIterationsStoppingCriterion<
+    LevelSetContainerType > StoppingCriterionType;
+
   StoppingCriterionType::Pointer criterion = StoppingCriterionType::New();
   criterion->SetNumberOfIterations( atoi( argv[2]) );
 
@@ -217,8 +220,9 @@ int main( int argc, char* argv[] )
     evolution->AddObserver( itk::IterationEvent(), observer );
     }
 
-  evolution->SetEquationContainer( equationContainer );
   evolution->SetStoppingCriterion( criterion );
+
+  evolution->SetEquationContainer( equationContainer );
   evolution->SetLevelSetContainer( lscontainer );
 
   try
@@ -233,8 +237,8 @@ int main( int argc, char* argv[] )
 
   typedef itk::Image< char, Dimension > OutputImageType;
   OutputImageType::Pointer outputImage = OutputImageType::New();
-  outputImage->SetRegions( input->GetLargestPossibleRegion() );
-  outputImage->CopyInformation( input );
+  outputImage->SetRegions( inputImage->GetLargestPossibleRegion() );
+  outputImage->CopyInformation( inputImage );
   outputImage->Allocate();
   outputImage->FillBuffer( 0 );
 
@@ -247,7 +251,7 @@ int main( int argc, char* argv[] )
   while( !oIt.IsAtEnd() )
     {
     idx = oIt.GetIndex();
-    oIt.Set( level_set->GetLabelMap()->GetPixel(idx) );
+    oIt.Set( levelSet->GetLabelMap()->GetPixel(idx) );
     ++oIt;
     }
 
