@@ -14,13 +14,10 @@ Refactored Level Sets
 
 \fontsize{12pt}{12pt}\selectfont
 Insight Software Consortium\\
-Megason Lab, Department of Systems Biology, Harvard Medical School
+Megason Lab, Department of Systems Biology\\
+Harvard Medical School
 \vskip12pt
 \begin{tabular}{cp{.3\textwidth}p{.3\textwidth}p{.3\textwidth}c}
-% &
-% \centering\includegraphics[height=2cm]{arnaud} &
-% \centering\includegraphics[height=2cm]{kishore} &
-% \centering\includegraphics[height=2cm]{sean} & \\
 \\
 \\
 &
@@ -75,7 +72,7 @@ Introduction
     \begin{itemize}
       \item<2->Regularized Advection
       \begin{equation*}
-      \frac{\partial \phi}{\partial \tau} = 
+      \frac{\partial \phi}{\partial \tau} =
       \alpha \cdot \overrightarrow{A}(p) \bullet \overrightarrow{\nabla} \phi +
       \gamma \cdot \text{div}\left( \frac{\overrightarrow{\nabla}
       \phi}{\|\overrightarrow{\nabla} \phi\|} \right) \cdot
@@ -97,7 +94,7 @@ Introduction
         \column{0.3\textwidth}
         \begin{block}{Curvature}
         \begin{center}
-          $\gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
+          $\gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot
             \text{div}\ \frac{\overrightarrow{\nabla}
             \phi}{\|\overrightarrow{\nabla} \phi\|}$\\
         \end{center}
@@ -108,7 +105,7 @@ Introduction
 
       \item<3->Regularized Propagation
       \begin{equation*}
-      \frac{\partial \phi}{\partial \tau} = 
+      \frac{\partial \phi}{\partial \tau} =
       \beta \cdot P(p) \cdot \|\overrightarrow{\nabla} \phi \| +
       \gamma \cdot \text{div}\left( \frac{\overrightarrow{\nabla}
       \phi}{\|\overrightarrow{\nabla} \phi\|} \right) \cdot
@@ -129,7 +126,7 @@ Introduction
         \column{0.3\textwidth}
         \begin{block}{Curvature}
           \begin{center}
-          $\gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot 
+          $\gamma \cdot \|\overrightarrow{\nabla} \phi\| \cdot
             \text{div}\ \frac{\overrightarrow{\nabla}
             \phi}{\|\overrightarrow{\nabla} \phi\|}$\\
           \end{center}
@@ -139,9 +136,9 @@ Introduction
       }
       \item<4->Chan and Vese
       \begin{equation*}
-      \frac{\partial \phi}{\partial \tau} = \delta_{\epsilon}(\phi) 
+      \frac{\partial \phi}{\partial \tau} = \delta_{\epsilon}(\phi)
       \left(
-      - \lambda_{in} \left( I - \mu_{in} \right) + 
+      - \lambda_{in} \left( I - \mu_{in} \right) +
       \lambda_{out} \left( I - \mu_{out} \right)
       \right)
       \end{equation*}
@@ -224,9 +221,9 @@ Introduction
   \item Dense
   \item<2-> Sparse
   \begin{enumerate}
-      \item<3-> Whitaker  
-      \item<4-> Shi       
-      \item<5-> Malcolm   
+      \item<3-> Whitaker
+      \item<4-> Shi
+      \item<5-> Malcolm
     \end{enumerate}
   \end{itemize}
 \end{block}
@@ -269,13 +266,13 @@ Introduction
 \frametitle{Level Sets Equation}
 
 \begin{columns}
-  \column{0.47\textwidth} 
+  \column{0.47\textwidth}
   \begin{block}{Term}
     \begin{itemize}
       \item Contribution for $\phi$ evolution
       \item Contribution for time step computation
       \item Coefficient
-    \end{itemize} 
+    \end{itemize}
   \alert<2>{Easy to contribute new terms!}
   \end{block}
 
@@ -284,7 +281,7 @@ Introduction
     \begin{itemize}
       \item Represent a given PDEs
       \item Mix of any term
-      \item Independant of the representation
+      \item Independent of the representation
     \end{itemize}
   \alert<4>{Easy to contribute new PDEs!}
   \end{block}
@@ -318,7 +315,7 @@ Introduction
   \frametitle{How to run the example?}
   \fontsize{8pt}{8pt}\selectfont
 \begin{verbatim}
-cd ~/bin/ITKv4-TheNextGeneration-Tutorial/bin/
+cd ~/bin/Documents/ITKv4-TheNextGeneration-Tutorial/bin/
 \end{verbatim}
 
 \begin{verbatim}
@@ -330,21 +327,23 @@ cd ~/bin/ITKv4-TheNextGeneration-Tutorial/bin/
 \end{verbatim}
 
 \begin{verbatim}
-./SingleLevelSetWhitaker 
-    ~/src/ITKv4-TheNextGeneration-Tutortial/Exercises/LevelSets/Input/cells.png 
-    800 
-    1 
+./SingleLevelSetWhitaker
+    ~/data/cells.png
+    800
+    1
     cells_segmented.mha
 \end{verbatim}
 \end{frame}
 \centeredlargetext{white}{black}{
-Example
+Example\\
+Code Walk-Through
 }
 
 \begin{frame}
   \frametitle{Create a level-set function from binary mask}
-  \lstlistingwithnumber{96}{103}{SingleLevelSetWhitaker.cxx}
-  \lstlistingwithnumber{107}{109}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{53}{53}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{96}{106}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{110}{112}{SingleLevelSetWhitaker.cxx}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -353,8 +352,8 @@ Example
 
 \begin{frame}
   \frametitle{Create a domain for the level-set function}
-  \lstlistingwithnumber{115}{119}{SingleLevelSetWhitaker.cxx}
-  \lstlistingwithnumber{123}{134}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{118}{122}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{126}{137}{SingleLevelSetWhitaker.cxx}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -363,8 +362,8 @@ Example
 
 \begin{frame}
   \frametitle{Setting up the level-set container}
-  \lstlistingwithnumber{138}{143}{SingleLevelSetWhitaker.cxx}
-  \lstlistingwithnumber{146}{153}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{141}{146}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{149}{156}{SingleLevelSetWhitaker.cxx}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -375,9 +374,9 @@ Example
   \frametitle{Creating PDE Terms}
   \begin{itemize}
     \item Chan and Vese internal term
-    \lstlistingwithnumber{160}{167}{SingleLevelSetWhitaker.cxx}
+    \lstlistingwithnumber{163}{170}{SingleLevelSetWhitaker.cxx}
     \item Chan and Vese external term
-    \lstlistingwithnumber{171}{178}{SingleLevelSetWhitaker.cxx}
+    \lstlistingwithnumber{174}{181}{SingleLevelSetWhitaker.cxx}
   \end{itemize}
 \end{frame}
 
@@ -387,8 +386,8 @@ Example
 
 \begin{frame}
   \frametitle{Setting up PDE}
-  \lstlistingwithnumber{184}{190}{SingleLevelSetWhitaker.cxx}
-  \lstlistingwithnumber{194}{197}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{187}{195}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{199}{202}{SingleLevelSetWhitaker.cxx}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -397,7 +396,7 @@ Example
 
 \begin{frame}
   \frametitle{Stopping criterion}
-  \lstlistingwithnumber{199}{202}{SingleLevelSetWhitaker.cxx}
+  \lstlistingwithnumber{204}{208}{SingleLevelSetWhitaker.cxx}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -408,11 +407,9 @@ Example
   \frametitle{Starts the evolution}
   \begin{itemize}
     \item Set a stopping criterion
-    \lstlistingwithnumber{209}{209}{SingleLevelSetWhitaker.cxx}
+    \lstlistingwithnumber{223}{223}{SingleLevelSetWhitaker.cxx}
     \item Evolve
-    \lstlistingwithnumber{218}{218}{SingleLevelSetWhitaker.cxx}
-    \lstlistingwithnumber{220}{220}{SingleLevelSetWhitaker.cxx}
-    \lstlistingwithnumber{224}{224}{SingleLevelSetWhitaker.cxx}
+    \lstlistingwithnumber{225}{236}{SingleLevelSetWhitaker.cxx}
   \end{itemize}
 \end{frame}
 
@@ -436,37 +433,19 @@ Exercise: Add a curvature term to LevelSetExercise1.cxx
 %   \item Geometrical Constraints
 % \end{itemize}
 % \end{frame}
-% 
+%
 % \end{colum}
 
-
-% \include{SoftwarePreparation1}
-
-% \include{ITKOverview}
-
-% \include{SoftwarePreparation2}
-
-% \include{SoftwareEnvironment}
-
-% \include{ITKIntroduction}
-
-% \include{OpenCVIntroduction}
-
-% \include{ITKOpenCVBridge}
-
-% \include{ITKVideoFilters}
 
 \begin{frame}
 \frametitle{Wrap-up}
 \begin{itemize}
   \item Send us feedback (good or bad)
   \begin{itemize}
-    \item \url{arnaud_gelas@hms.harvard.edu} 
-    \item \url{kishore_mosaliganti@hms.harvard.edu} 
+    \item \url{arnaudgelas@gmail.com}
+    \item \url{kishore_mosaliganti@hms.harvard.edu}
     \item \url{sean_megason@hms.harvard.edu}
+    \item \url{insight-users@public.kitware.com}
   \end{itemize}
-%   \item Raffle\\
-% \includegraphics[height=1.5in]{asus}
 \end{itemize}
 \end{frame}
-
