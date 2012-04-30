@@ -131,12 +131,13 @@ int main( int argc, char *argv[] )
   // sampling.
   typedef MetricType::FixedSampledPointSetType PointSetType;
   PointSetType::Pointer pointSet = PointSetType::New();
-  itk::IndexValueType pointIndex = 0;
-  itk::SizeValueType  pixelCount = 0;
+  itk::IndexValueType      pointIndex = 0;
+  itk::SizeValueType       pixelCount = 0;
+  const itk::SizeValueType pixelSkip  = 50;
   itk::ImageRegionIteratorWithIndex< FixedImageType > imageIt( fixedImage, fixedImage->GetLargestPossibleRegion() );
   for( imageIt.GoToBegin(); !imageIt.IsAtEnd(); ++imageIt )
     {
-    if( pixelCount % 200 == 0 )
+    if( pixelCount % pixelSkip == 0 )
       {
       typedef PointSetType::PointType PointType;
       PointType point;
@@ -156,7 +157,8 @@ int main( int argc, char *argv[] )
   optimizer->SetNumberOfIterations( atoi( argv[4] ) );
   //optimizer->SetDoEstimateLearningRateOnce( false ); //true by default
   //optimizer->SetDoEstimateLearningRateAtEachIteration( true );
-  optimizer->SetMinimumConvergenceValue( 1e-8 );
+  optimizer->SetMinimumConvergenceValue( 1e-16 );
+  optimizer->SetConvergenceWindowSize( 20 );
   optimizer->SetMaximumStepSizeInPhysicalUnits( 2.0 );
 
   // The optimizer assumes that the metric is equally sensitive to all transform
@@ -202,13 +204,10 @@ int main( int argc, char *argv[] )
   // Get the moving image after resampling with the transform.
   typedef itk::ResampleImageFilter< MovingImageType, FixedImageType > ResampleFilterType;
   ResampleFilterType::Pointer resampler = ResampleFilterType::New();
-  transform->SetParameters( optimizer->GetCurrentPosition() );
+  TransformType::ConstPointer newTransform = registrationMethod->GetOutput()->Get();
   resampler->SetTransform( transform );
   resampler->SetInput( movingImage );
-  resampler->SetSize( fixedImage->GetLargestPossibleRegion().GetSize() );
-  resampler->SetOutputOrigin(  fixedImage->GetOrigin() );
-  resampler->SetOutputSpacing( fixedImage->GetSpacing() );
-  resampler->SetOutputDirection( fixedImage->GetDirection() );
+  resampler->SetOutputParametersFromImage( fixedImage );
   resampler->SetDefaultPixelValue( 0 );
   resampler->Update();
 
