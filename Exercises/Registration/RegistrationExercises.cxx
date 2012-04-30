@@ -28,8 +28,6 @@
 #include "itkImageRegistrationMethodv4.h"
 #include "itkRegistrationParameterScalesFromShift.h"
 
-#include "itkQuasiNewtonOptimizerv4.h"
-
 template<class TOptimizer>
 class CommandIterationUpdate : public itk::Command
 {
@@ -125,18 +123,41 @@ int main( int argc, char *argv[] )
   //typedef itk::JointHistogramMutualInformationImageToImageMetricv4< FixedImageType, MovingImageType > MetricType;
   typedef itk::MeanSquaresImageToImageMetricv4< FixedImageType, MovingImageType >     MetricType;
   MetricType::Pointer metric = MetricType::New();
+  // Improve metric smoothness.
+  const bool gaussianSmooth = true;
+  metric->SetUseMovingImageGradientFilter( gaussianSmooth );
+  metric->SetUseFixedImageGradientFilter( gaussianSmooth );
+  // We can use a sparse point set from the fixed image instead of dense
+  // sampling.
+  typedef MetricType::FixedSampledPointSetType PointSetType;
+  PointSetType::Pointer pointSet = PointSetType::New();
+  itk::IndexValueType pointIndex = 0;
+  itk::SizeValueType  pixelCount = 0;
+  itk::ImageRegionIteratorWithIndex< FixedImageType > imageIt( fixedImage, fixedImage->GetLargestPossibleRegion() );
+  for( imageIt.GoToBegin(); !imageIt.IsAtEnd(); ++imageIt )
+    {
+    if( pixelCount % 200 == 0 )
+      {
+      typedef PointSetType::PointType PointType;
+      PointType point;
+      fixedImage->TransformIndexToPhysicalPoint( imageIt.GetIndex(), point );
+      pointSet->SetPoint( pointIndex, point );
+      ++pointIndex;
+      }
+    ++pixelCount;
+    }
+  metric->SetFixedSampledPointSet( pointSet );
+  metric->UseFixedSampledPointSetOn();
 
   // The optimizer adjusts the parameters of the transform to improve the
   // metric.
   typedef itk::GradientDescentOptimizerv4 OptimizerType;
-  //typedef itk::QuasiNewtonOptimizerv4 OptimizerType;
   OptimizerType::Pointer optimizer = OptimizerType::New();
   optimizer->SetNumberOfIterations( atoi( argv[4] ) );
-  optimizer->SetDoEstimateLearningRateOnce( false ); //true by default
-  optimizer->SetDoEstimateLearningRateAtEachIteration( true );
-  optimizer->SetMinimumConvergenceValue( 1e-5 );
-  optimizer->SetMaximumStepSizeInPhysicalUnits( 0.5 );
-  //optimizer->SetMaximumNewtonStepSizeInPhysicalUnits( 1.5 );
+  //optimizer->SetDoEstimateLearningRateOnce( false ); //true by default
+  //optimizer->SetDoEstimateLearningRateAtEachIteration( true );
+  optimizer->SetMinimumConvergenceValue( 1e-8 );
+  optimizer->SetMaximumStepSizeInPhysicalUnits( 2.0 );
 
   // The optimizer assumes that the metric is equally sensitive to all transform
   // parameters.  However, that is not true.  This classe determines what good
