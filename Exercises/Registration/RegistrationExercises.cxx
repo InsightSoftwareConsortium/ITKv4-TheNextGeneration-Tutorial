@@ -19,8 +19,8 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkCastImageFilter.h"
-#include "itkImageMomentsCalculator.h"
 
+#include "itkCompositeTransform.h"
 #include "itkJointHistogramMutualInformationImageToImageMetricv4.h"
 #include "itkMeanSquaresImageToImageMetricv4.h"
 #include "itkEuler2DTransform.h"
@@ -82,6 +82,8 @@ int main( int argc, char *argv[] )
   typedef itk::Image< PixelType, ImageDimension > FixedImageType;
   typedef itk::Image< PixelType, ImageDimension > MovingImageType;
 
+  typedef double                                  TransformScalarType;
+
   // Read in the two images we want to register -- called the "Fixed" and "Moving"
   // image by convention.
   typedef itk::ImageFileReader< FixedImageType >  ImageReaderType;
@@ -114,27 +116,6 @@ int main( int argc, char *argv[] )
   const bool gaussianSmooth = false;
   metric->SetUseMovingImageGradientFilter( gaussianSmooth );
   metric->SetUseFixedImageGradientFilter( gaussianSmooth );
-  // We can use a sparse point set from the fixed image instead of dense sampling.
-  typedef MetricType::FixedSampledPointSetType PointSetType;
-  PointSetType::Pointer pointSet = PointSetType::New();
-  itk::IndexValueType      pointIndex = 0;
-  itk::SizeValueType       pixelCount = 0;
-  const itk::SizeValueType pixelSkip  = 50;
-  itk::ImageRegionIteratorWithIndex< FixedImageType > imageIt( fixedImage, fixedImage->GetLargestPossibleRegion() );
-  for( imageIt.GoToBegin(); !imageIt.IsAtEnd(); ++imageIt )
-    {
-    if( pixelCount % pixelSkip == 0 )
-      {
-      typedef PointSetType::PointType PointType;
-      PointType point;
-      fixedImage->TransformIndexToPhysicalPoint( imageIt.GetIndex(), point );
-      pointSet->SetPoint( pointIndex, point );
-      ++pointIndex;
-      }
-    ++pixelCount;
-    }
-  metric->SetFixedSampledPointSet( pointSet );
-  metric->UseFixedSampledPointSetOn();
 
   // The optimizer adjusts the parameters of the transform to improve the
   // metric.
@@ -173,6 +154,8 @@ int main( int argc, char *argv[] )
   registrationMethod->SetMovingInitialTransform( transform );
   registrationMethod->SetNumberOfLevels( 1 );
   registrationMethod->SetMetric( metric );
+  registrationMethod->SetMetricSamplingStrategy( RegistrationMethodType::REGULAR );
+  registrationMethod->SetMetricSamplingPercentage( 0.1 );
 
   try
     {
@@ -190,8 +173,14 @@ int main( int argc, char *argv[] )
   // Get the moving image after resampling with the transform.
   typedef itk::ResampleImageFilter< MovingImageType, FixedImageType > ResampleFilterType;
   ResampleFilterType::Pointer resampler = ResampleFilterType::New();
-  TransformType::ConstPointer newTransform = registrationMethod->GetOutput()->Get();
-  resampler->SetTransform( newTransform );
+  // The registration method outputs a new transform.
+  TransformType::Pointer newTransform = const_cast< TransformType* >( registrationMethod->GetOutput()->Get() );
+  // A composite transform can sequentially apply multiple transforms,
+  typedef itk::CompositeTransform< TransformScalarType, ImageDimension > CompositeTransformType;
+  CompositeTransformType::Pointer compositeTransform = CompositeTransformType::New();
+  compositeTransform->AddTransform( transform );
+  compositeTransform->AddTransform( newTransform );
+  resampler->SetTransform( compositeTransform );
   resampler->SetInput( movingImage );
   resampler->SetOutputParametersFromImage( fixedImage );
   resampler->SetDefaultPixelValue( 0 );
