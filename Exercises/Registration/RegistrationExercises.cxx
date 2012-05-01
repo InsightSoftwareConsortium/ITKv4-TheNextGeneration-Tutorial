@@ -19,11 +19,11 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkCastImageFilter.h"
+#include "itkImageMomentsCalculator.h"
 
-#include "itkCompositeTransform.h"
-#include "itkJointHistogramMutualInformationImageToImageMetricv4.h"
 #include "itkMeanSquaresImageToImageMetricv4.h"
 #include "itkEuler2DTransform.h"
+#include "itkCompositeTransform.h"
 #include "itkGradientDescentOptimizerv4.h"
 #include "itkImageRegistrationMethodv4.h"
 #include "itkRegistrationParameterScalesFromShift.h"
@@ -82,8 +82,6 @@ int main( int argc, char *argv[] )
   typedef itk::Image< PixelType, ImageDimension > FixedImageType;
   typedef itk::Image< PixelType, ImageDimension > MovingImageType;
 
-  typedef double                                  TransformScalarType;
-
   // Read in the two images we want to register -- called the "Fixed" and "Moving"
   // image by convention.
   typedef itk::ImageFileReader< FixedImageType >  ImageReaderType;
@@ -106,8 +104,35 @@ int main( int argc, char *argv[] )
 
   // The Transform is a parameterized model of motion.
   typedef itk::Euler2DTransform< double > TransformType;
-  TransformType::Pointer transform = TransformType::New();
-  transform->SetIdentity();
+
+  TransformType::Pointer initialMovingTransform = TransformType::New();
+  TransformType::Pointer initialFixedTransform = TransformType::New();
+
+
+  // The Euler transform is a rotation and translation about a center, so we
+  // used the moments of the moving image to find the center.
+  typedef itk::ImageMomentsCalculator< MovingImageType > ImageMomentsCalculatorType;
+  ImageMomentsCalculatorType::Pointer imageMomentsCalculator = ImageMomentsCalculatorType::New();
+  imageMomentsCalculator->SetImage( fixedImage );
+  imageMomentsCalculator->Compute();
+  const ImageMomentsCalculatorType::VectorType centerOfGravity = imageMomentsCalculator->GetCenterOfGravity();
+
+  TransformType::OutputVectorType movingInitialTranslation;
+  movingInitialTranslation[0] = centerOfGravity[0];
+  movingInitialTranslation[1] = centerOfGravity[1];
+
+  initialMovingTransform->SetIdentity();
+  initialMovingTransform->SetTranslation( movingInitialTranslation );
+  std::cout << "Initial Moving Transform: " << initialMovingTransform << std::endl;
+
+  TransformType::OutputVectorType fixedInitialTranslation;
+  fixedInitialTranslation[0] = centerOfGravity[0];
+  fixedInitialTranslation[1] = centerOfGravity[1];
+
+  initialFixedTransform->SetIdentity();
+  initialFixedTransform->SetTranslation( fixedInitialTranslation );
+  std::cout << "Initial Fixed Transform: " << initialFixedTransform << std::endl;
+
 
   // The metric is the objective function for the optimization problem.
   typedef itk::MeanSquaresImageToImageMetricv4< FixedImageType, MovingImageType >     MetricType;
@@ -122,9 +147,8 @@ int main( int argc, char *argv[] )
   typedef itk::GradientDescentOptimizerv4 OptimizerType;
   OptimizerType::Pointer optimizer = OptimizerType::New();
   optimizer->SetNumberOfIterations( atoi( argv[4] ) );
-  optimizer->SetDoEstimateLearningRateOnce( false ); //true by default
-  optimizer->SetDoEstimateLearningRateAtEachIteration( true ); 
-  optimizer->SetMinimumConvergenceValue( 0 );
+  optimizer->SetDoEstimateLearningRateOnce( true );
+  optimizer->SetMinimumConvergenceValue( 1e-16 );
   optimizer->SetConvergenceWindowSize( 20 );
   optimizer->SetMaximumStepSizeInPhysicalUnits( 0.5 );
 
@@ -151,7 +175,8 @@ int main( int argc, char *argv[] )
   registrationMethod->SetOptimizer( optimizer );
   registrationMethod->SetFixedImage( fixedImage );
   registrationMethod->SetMovingImage( movingImage );
-  registrationMethod->SetMovingInitialTransform( transform );
+  registrationMethod->SetFixedInitialTransform( initialFixedTransform );
+  registrationMethod->SetMovingInitialTransform( initialMovingTransform );
   registrationMethod->SetNumberOfLevels( 1 );
   registrationMethod->SetMetric( metric );
   registrationMethod->SetMetricSamplingStrategy( RegistrationMethodType::REGULAR );
@@ -173,14 +198,38 @@ int main( int argc, char *argv[] )
   // Get the moving image after resampling with the transform.
   typedef itk::ResampleImageFilter< MovingImageType, FixedImageType > ResampleFilterType;
   ResampleFilterType::Pointer resampler = ResampleFilterType::New();
-  // The registration method outputs a new transform.
-  TransformType::Pointer newTransform = const_cast< TransformType* >( registrationMethod->GetOutput()->Get() );
-  // A composite transform can sequentially apply multiple transforms,
-  typedef itk::CompositeTransform< TransformScalarType, ImageDimension > CompositeTransformType;
-  CompositeTransformType::Pointer compositeTransform = CompositeTransformType::New();
-  compositeTransform->AddTransform( transform );
-  compositeTransform->AddTransform( newTransform );
-  resampler->SetTransform( compositeTransform );
+
+  TransformType::ConstPointer finalTransform = registrationMethod->GetOutput()->Get();
+
+  std::cout << "Initial Moving Transform" << std::endl;
+  initialMovingTransform->Print( std::cout );
+
+  std::cout << "Final Transform" << std::endl;
+  finalTransform->Print( std::cout );
+
+  typedef itk::CompositeTransform<double, ImageDimension>  CompositeTransformType;
+  CompositeTransformType::Pointer finalCompositeTransform = CompositeTransformType::New();
+
+  TransformType * finalTransformNonConst = const_cast< TransformType * >( finalTransform.GetPointer() );
+
+  TransformType::Pointer finalFixedTransform = TransformType::New();
+  finalFixedTransform->SetIdentity();
+
+  TransformType::OutputVectorType fixedFinalTranslation;
+  fixedFinalTranslation[0] = -centerOfGravity[0];
+  fixedFinalTranslation[1] = -centerOfGravity[1];
+
+  finalFixedTransform->SetTranslation( fixedFinalTranslation );
+  std::cout << "Final Fixed Transform: " << finalFixedTransform << std::endl;
+
+
+  finalCompositeTransform->ClearTransformQueue();
+  finalCompositeTransform->AddTransform( initialMovingTransform );
+  finalCompositeTransform->AddTransform( finalTransformNonConst );
+  finalCompositeTransform->AddTransform( finalFixedTransform );
+  finalCompositeTransform->FlattenTransformQueue();
+
+  resampler->SetTransform( finalCompositeTransform );
   resampler->SetInput( movingImage );
   resampler->SetOutputParametersFromImage( fixedImage );
   resampler->SetDefaultPixelValue( 0 );
