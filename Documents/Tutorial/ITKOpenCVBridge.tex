@@ -1,9 +1,43 @@
 \section{ITK OpenCV Bridge}
 
+\subsection{OpenCV Introduction}
 
 \centeredlargetext{white}{black}{
 ITK OpenCV Bridge
 }
+
+
+
+
+\begin{frame}
+\frametitle{OpenCV Overview}
+\begin{center}
+\begin{columns}[c]
+\column{0.8\textwidth}
+\begin{itemize}
+\item What is OpenCV?  OpenCV is \ldots
+  \begin{itemize}
+  \item an open source computer vision library.
+  \item written in C, but has C++ and Python APIs.
+  \item released under a BSD license.
+  \item supported and guided by Willow Garage.
+  \item found at \url{http://opencv.willowgarage.com/wiki/}.
+  \end{itemize}
+\end{itemize}
+\column{0.2\textwidth}
+ \includegraphics[width=0.8\textwidth]{../Art/OpenCVLogo.png}
+\end{columns}
+\pause
+\begin{itemize}
+\item We will be using OpenCV 2.4 (from subversion).
+\item The new C++ interface will be used when possible.
+\item We assume you have some prior experience with OpenCV
+\item \ldots but we will cover the basics in case you don't.
+\end{itemize}
+\end{center}
+\end{frame}
+
+
 
 \begin{frame}
 \frametitle{Introduction}
@@ -11,18 +45,10 @@ ITK OpenCV Bridge
 \item ITK Module for working with other libraries
 \item Moving frame and/or video data between OpenCV and ITK
 \item Bring biomedical and computer vision folks together
-\item \url{https://github.com/itkvideo/ITK}
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-\frametitle{Funding Source}
-\begin{itemize}
-\item Contract from the National Library of Medicine (HHSN276201000579P)
-\item Algorithms, Adapters \& Data Distribution Outreach 2010:
-  Increasing the Impact of the Insight Toolkit (ITK)
-\end{itemize}
-\end{frame}
+
 
 \begin{frame}
 \frametitle{Design Choices}
@@ -30,13 +56,14 @@ ITK OpenCV Bridge
 \item OpenCV users and ITK users should both be comfortable
 \item Image to image utility functions
 \item cv::Source to itk::VideoStream
-\item (Later) Focus on performance
 \end{itemize}
 \end{frame}
 
+%-------------------------------------------
+\subsection{Image Filtering}
+
 \centeredlargetext{white}{black}{
-Basic Image Filtering (Revisited)
-}
+Basic Image Filtering }
 
 \begin{frame}
 \frametitle{Include Header Files}
@@ -120,109 +147,21 @@ median-filtered image.
 \begin{columns}[c]
 \column{0.33\textwidth}
 \begin{center}
-\includegraphics[width=1\textwidth]{mandrilgray.png} \\
+\includegraphics[width=1\textwidth]{../Art/mandrilgray.png} \\
 Original
 \end{center}
 \column{0.33\textwidth}
 \begin{center}
-\includegraphics[width=1\textwidth]{OpenCVITKex1.png} \\
+\includegraphics[width=1\textwidth]{../Art/OpenCVITKex1.png} \\
 Median Filter
 \end{center}
 \end{columns}
-\pause
-\begin{itemize}
-\item Now, the fun part. Let's modify our example to use Curvature Flow, an
-anisotropic diffusion filter built into ITK.
-\end{itemize}
 \end{frame}
 
-\begin{frame}
-\begin{itemize}
-\frametitle{Exercise 1}
-\framesubtitle{ITKOpenCVBridge/exercise1/BasicFilteringITKOpenCVBridge.cxx}
-\item Hint 1: Curvature Flow requires {\tt float} as the output pixel
-  type.
-\pause
-\item Hint 2: Curvature Flow does not take a radius parameter. It's
-  salient functions are:
-\lstlistingwithnumber{50}{51}{BasicFilteringITKOpenCVBridgeAnswer.cxx}
-\end{itemize}
-\end{frame}
 
-\begin{frame}
-\begin{itemize}
-\frametitle{Exercise 1: Answer}
-\framesubtitle{ITKOpenCVBridge/exercise1/BasicFilteringITKOpenCVBridgeAnswer.cxx}
-\item First, change the included filter
-\lstlistingwithnumber{24}{24}{BasicFilteringITKOpenCVBridgeAnswer.cxx}
-\pause
-\item The type definitions also need to change to reflect the new
-  filter and output image types.
-\lstlistingwithnumber{37}{44}{BasicFilteringITKOpenCVBridgeAnswer.cxx}
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\begin{itemize}
-\frametitle{Exercise 1: Answer}
-\framesubtitle{ITKOpenCVBridge/exercise1/BasicFilteringITKOpenCVBridgeAnswer.cxx}
-\item The semantics of calling the filter also has to change:
-\lstlistingwithnumber{50}{51}{BasicFilteringITKOpenCVBridgeAnswer.cxx}
-\pause
-\item That's it! Now you're using a ``better'' blurring scheme.
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\begin{itemize}
-\frametitle{Exercise 1: Answer}
-\framesubtitle{ITKOpenCVBridge/exercise1/BasicFilteringITKOpenCVBridgeAnswer.cxx}
-\item The final pipeline should look like this:
-\lstlistingwithnumber{35}{35}{BasicFilteringITKOpenCVBridgeAnswer.cxx}
-\lstlistingwithnumber{46}{62}{BasicFilteringITKOpenCVBridgeAnswer.cxx}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Running the Answer}
-\framesubtitle{ITKOpenCVBridge/exercise1/BasicFilteringITKOpenCVBridgeAnswer.cxx}
-\begin{itemize}
-\item Run the answer with the following command
-\begin{verbatim}
-      ./BasicFilteringITKOpenCVBridgeAnswer     \
-      ~/data/mandrillgray.png                   \
-      ./mandrillgrayCurvatureFlow.png 
-\end{verbatim}
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\begin{itemize}
-\frametitle{Exercise 1: Answer}
-\framesubtitle{ITKOpenCVBridge/exercise1/BasicFilteringITKOpenCVBridgeAnswer.cxx}
-\item The results should look like this:
-\end{itemize}
-\begin{columns}[c]
-\column{0.33\textwidth}
-\begin{center}
-\includegraphics[width=1\textwidth]{mandrilgray.png} \\
-Original
-\end{center}
-\column{0.33\textwidth}
-\begin{center}
-\includegraphics[width=1\textwidth]{OpenCVITKex1.png} \\
-Median Filter
-\end{center}
-\column{0.33\textwidth}
-\begin{center}
-\includegraphics[width=1\textwidth]{OpenCVITKex1-ans.png} \\
-Curvature Flow
-\end{center}
-\end{columns}
-\end{frame}
-
+\subsection{Video Filtering}
 \centeredlargetext{white}{black}{
-Basic Video Filtering (Revisited)
+Basic Video Filtering
 }
 
 \begin{frame}
@@ -317,3 +256,6 @@ cast image filter for producing output
 \end{verbatim}
 \end{itemize}
 \end{frame}
+
+
+
