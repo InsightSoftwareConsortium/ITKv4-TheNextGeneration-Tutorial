@@ -1,9 +1,40 @@
 \section{ITK OpenCV Bridge}
 
+\subsection{OpenCV Introduction}
 
 \centeredlargetext{white}{black}{
 ITK OpenCV Bridge
 }
+
+
+
+
+\begin{frame}
+\frametitle{OpenCV Overview}
+\begin{center}
+\begin{columns}[c]
+\column{0.8\textwidth}
+\begin{itemize}
+\item What is OpenCV?  OpenCV is \ldots
+  \begin{itemize}
+  \item an open source computer vision library.
+  \item written in C, but has C++ and Python APIs.
+  \item released under a BSD license.
+  \item supported and guided by Willow Garage.
+  \item found at \url{http://opencv.willowgarage.com/wiki/}.
+  \end{itemize}
+\end{itemize}
+\column{0.2\textwidth}
+ \includegraphics[width=0.8\textwidth]{../Art/OpenCVLogo.png}
+\end{columns}
+\pause
+\begin{itemize}
+\item We will be using OpenCV 2.4 (from subversion).
+\end{itemize}
+\end{center}
+\end{frame}
+
+
 
 \begin{frame}
 \frametitle{Introduction}
@@ -11,18 +42,10 @@ ITK OpenCV Bridge
 \item ITK Module for working with other libraries
 \item Moving frame and/or video data between OpenCV and ITK
 \item Bring biomedical and computer vision folks together
-\item \url{https://github.com/itkvideo/ITK}
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-\frametitle{Funding Source}
-\begin{itemize}
-\item Contract from the National Library of Medicine (HHSN276201000579P)
-\item Algorithms, Adapters \& Data Distribution Outreach 2010:
-  Increasing the Impact of the Insight Toolkit (ITK)
-\end{itemize}
-\end{frame}
+
 
 \begin{frame}
 \frametitle{Design Choices}
@@ -30,13 +53,16 @@ ITK OpenCV Bridge
 \item OpenCV users and ITK users should both be comfortable
 \item Image to image utility functions
 \item cv::Source to itk::VideoStream
-\item (Later) Focus on performance
+\item Video Group Modules: BridgeOpenCV,BridgeVXL,Core,Filterig,IO
 \end{itemize}
 \end{frame}
 
+%-------------------------------------------
+\subsection{Image Filtering}
+
 \centeredlargetext{white}{black}{
-Basic Image Filtering (Revisited)
-}
+Basic Image Filtering 
+itk::image \& cv:mat}
 
 \begin{frame}
 \frametitle{Include Header Files}
@@ -105,7 +131,9 @@ output to a writer
 \begin{verbatim}
       ./BasicFilteringITKOpenCVBridge     \
       ~/data/mandrillgray.png             \
-      ./mandrillgrayMedian.png 
+      ./mandrillgrayMedian.png            
+
+       eog .mandrillgrayMedian.png
 \end{verbatim}
 \end{itemize}
 \end{frame}
@@ -120,12 +148,12 @@ median-filtered image.
 \begin{columns}[c]
 \column{0.33\textwidth}
 \begin{center}
-\includegraphics[width=1\textwidth]{mandrilgray.png} \\
+\includegraphics[width=1\textwidth]{../Art/mandrilgray.png} \\
 Original
 \end{center}
 \column{0.33\textwidth}
 \begin{center}
-\includegraphics[width=1\textwidth]{OpenCVITKex1.png} \\
+\includegraphics[width=1\textwidth]{../Art/OpenCVITKex1.png} \\
 Median Filter
 \end{center}
 \end{columns}
@@ -135,6 +163,7 @@ Median Filter
 anisotropic diffusion filter built into ITK.
 \end{itemize}
 \end{frame}
+
 
 \begin{frame}
 \begin{itemize}
@@ -205,115 +234,58 @@ anisotropic diffusion filter built into ITK.
 \begin{columns}[c]
 \column{0.33\textwidth}
 \begin{center}
-\includegraphics[width=1\textwidth]{mandrilgray.png} \\
+\includegraphics[width=1\textwidth]{../Art/mandrilgray.png} \\
 Original
 \end{center}
 \column{0.33\textwidth}
 \begin{center}
-\includegraphics[width=1\textwidth]{OpenCVITKex1.png} \\
+\includegraphics[width=1\textwidth]{../Art/OpenCVITKex1.png} \\
 Median Filter
 \end{center}
 \column{0.33\textwidth}
 \begin{center}
-\includegraphics[width=1\textwidth]{OpenCVITKex1-ans.png} \\
+\includegraphics[width=1\textwidth]{../Art/OpenCVITKex1-ans.png} \\
 Curvature Flow
 \end{center}
 \end{columns}
 \end{frame}
 
-\centeredlargetext{white}{black}{
-Basic Video Filtering (Revisited)
-}
+\subsection{Video Filtering}
+
 
 \begin{frame}
-\frametitle{Basic Layout}
-\framesubtitle{ITKOpenCVBridge/exercise2/BasicVideoFilteringITKOpenCVBridge.cxx}
+\frametitle{Basic Video Filtering}
+\begin{center}
 \begin{itemize}
-\item The basic layout of this file is the same as the OpenCV Video
-  Examples:
-\item There are three functions as before.
-\lstlistingwithnumber{28}{28}{BasicVideoFilteringITKOpenCVBridge.cxx}
-\lstlistingwithnumber{63}{63}{BasicVideoFilteringITKOpenCVBridge.cxx}
-\lstlistingwithnumber{89}{89}{BasicVideoFilteringITKOpenCVBridge.cxx}
-\pause
-\item We only need to modify {\tt processFrame} to incorporate ITK.
+\item Video filtering is similar to image filtering, except
+  \begin{itemize}
+  \item use a {\tt VideoCapture} object to read a video file.
+  \item loop over each frame in the video and process each one.
+  \item display or encode each output frame within the loop.
+  \end{itemize}
 \end{itemize}
+\end{center}
 \end{frame}
+
+
 
 \begin{frame}
-\frametitle{Filtering with ITK}
-\framesubtitle{ITKOpenCVBridge/exercise2/BasicVideoFilteringITKOpenCVBridge.cxx}
+\frametitle{Video Filters}
 \begin{itemize}
-\item The median filtering is again normal ITK code.
-\lstlistingwithnumber{28}{29}{BasicVideoFilteringITKOpenCVBridge.cxx}
-\lstlistingwithnumber{39}{60}{BasicVideoFilteringITKOpenCVBridge.cxx}
+\item Support video processing natively in ITK
+\item Standard framework for multi-frame filters
+\item Use ITK's library of image filters in video context
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]
-\frametitle{Running the Example}
-\framesubtitle{ITKOpenCVBridge/exercise2/BasicVideoFilteringITKOpenCVBridge.cxx}
-\begin{itemize}
-\item Run the example with the following command
-\begin{verbatim}
-      ./BasicVideoFilteringITKOpenCVBridge     \
-      ~/data/Walk1.mpg                         \
-      ./Walk1Median.mpg
-\end{verbatim}
-\end{itemize}
-\end{frame}
 
 \begin{frame}
+\frametitle{More Tutorial Material}
 \begin{itemize}
-\frametitle{Exercise 2}
-\framesubtitle{ITKOpenCVBridge/exercise2/BasicVideoFilteringITKOpenCVBridge.cxx}
-\item Let's modify this example to use the same canny edge detection
-  from the ITK examples
-\pause 
-\item Hint 1: You should use the following function instead of ITK's
-cast image filter for producing output
-\lstlistingwithnumber{72}{72}{BasicVideoFilteringITKOpenCVBridgeAnswer.cxx}
-\pause
-\item Hint 2: You should only have to modify {\tt processFrame}
+\item  More excercises can be found at:  https://github.com/InsightSoftwareConsortium/ITK-OpenCV-Bridge-Tutorial 
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-\begin{itemize}
-\frametitle{Exercise 2: Answer}
-\framesubtitle{ITKOpenCVBridge/exercise2/BasicVideoFilteringITKOpenCVBridgeAnswer.cxx}
-\item You should now have some extra typedefs:
-\lstlistingwithnumber{39}{44}{BasicVideoFilteringITKOpenCVBridgeAnswer.cxx}
-\end{itemize}
-\end{frame}
 
-\begin{frame}
-\begin{itemize}
-\frametitle{Exercise 2: Answer}
-\framesubtitle{ITKOpenCVBridge/exercise2/BasicVideoFilteringITKOpenCVBridgeAnswer.cxx}
-\item Your new ITK pipeline will look like this:
-\lstlistingwithnumber{46}{67}{BasicVideoFilteringITKOpenCVBridgeAnswer.cxx}
-\end{itemize}
-\end{frame}
 
-\begin{frame}
-\begin{itemize}
-\frametitle{Exercise 2: Answer}
-\framesubtitle{ITKOpenCVBridge/exercise2/BasicVideoFilteringITKOpenCVBridgeAnswer.cxx}
-\item With the following code for output purposes:
-\lstlistingwithnumber{69}{74}{BasicVideoFilteringITKOpenCVBridgeAnswer.cxx}
-\end{itemize}
-\end{frame}
 
-\begin{frame}[fragile]
-\frametitle{Running the Answer}
-\framesubtitle{ITKOpenCVBridge/exercise2/BasicVideoFilteringITKOpenCVBridgeAnswer.cxx}
-\begin{itemize}
-\item Run the answer with the following command
-\begin{verbatim}
-      ./BasicVideoFilteringITKOpenCVBridgeAnswer   \
-      ~/data/Walk1.mpg                             \
-      ./Walk1Edges.mpg
-\end{verbatim}
-\end{itemize}
-\end{frame}
