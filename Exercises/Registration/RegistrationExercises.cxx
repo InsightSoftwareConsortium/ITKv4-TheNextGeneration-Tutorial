@@ -122,8 +122,8 @@ int main( int argc, char *argv[] )
   typedef itk::GradientDescentOptimizerv4 OptimizerType;
   OptimizerType::Pointer optimizer = OptimizerType::New();
   optimizer->SetNumberOfIterations( atoi( argv[4] ) );
-  optimizer->SetDoEstimateLearningRateOnce( true ); //true by default
-  //optimizer->SetDoEstimateLearningRateAtEachIteration( true ); 
+  optimizer->SetDoEstimateLearningRateOnce( false ); //true by default
+  optimizer->SetDoEstimateLearningRateAtEachIteration( true ); 
   optimizer->SetMinimumConvergenceValue( 0 );
   optimizer->SetConvergenceWindowSize( 20 );
   optimizer->SetMaximumStepSizeInPhysicalUnits( 0.5 );
