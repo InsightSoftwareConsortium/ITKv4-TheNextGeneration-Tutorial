@@ -48,7 +48,7 @@
 \begin{frame}
 \frametitle{ITK Module Grouping}
 \begin{itemize}
-\item  12 groups, 110 modules and counting
+\item  12 groups, 107 modules and counting
 \pause
 \item  Grouped by module functionality
 \pause
@@ -106,6 +106,27 @@ Core           & GPU        & Numerics  & ThirdParty \\
 \end{frame}
 
 
+\begin{frame}
+\frametitle{External Modules }
+\begin{itemize}
+\item Externally distributed ITK modules.
+\item Share the same modular structure as other interal modules.
+\item Needs to be manually downloaded to be used as a module.
+\item Facilitate code sharing and diverse development. 
+\item Refer to: Lesion Sizing Toolkit Module (Modules/External/LesionSizingToolkit)
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Remote Modules }
+\begin{itemize}
+\item Modules distributed remotely.
+\item Can be fetched through cmake automatcially(Super build).
+\item With version control.
+\item Should have the same code quality standards as other internal ITK modules.
+\end{itemize}
+\end{frame}
 % -----------------------------------
 \subsection{Exercise}
 \begin{frame}
@@ -114,8 +135,8 @@ Core           & GPU        & Numerics  & ThirdParty \\
 \begin{itemize}
 \item  Insight Journal article on itkRobustAutomaticThresholdImageFilter(RAT)
 \item
-\texttt{~/src/ITKv4-TheNextGenerationTutorial/}\\
-\texttt{Exercises/Modularization/IJ-submission-rat}
+\texttt{~/Documents/ITKv4-TheNextGeneration-Tutorial/Exercises/Modularization}
+\texttt{/IJ-submission-rat}
 \item  Make into an External module: ITKRAT
 \end{itemize}
 \end{frame}
