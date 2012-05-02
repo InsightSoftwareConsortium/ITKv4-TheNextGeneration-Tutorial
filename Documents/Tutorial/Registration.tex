@@ -56,7 +56,7 @@ ITK v4 framework
 \includegraphics[height=2.2in]{../Art/itkv4reg}
  }
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{Exercise 1: Look at options for a registration program}
 \begin{verbatim}
 ~/bin/ANTS/bin/antsRegistration --help | less
@@ -74,9 +74,7 @@ ITK v4 framework
 \frametitle{Image Registration Refactoring}
 \Large
 \begin{itemize}
-\item Unify frameworks: local \& global 
-\pause
-\item New metrics and transform operations for vectors \&  tensors
+\item Transform operations for vectors \&  tensors
 \pause
 \item Unbiased registration
 \pause
@@ -91,104 +89,48 @@ ITK v4 framework
 \Large
 \begin{itemize}
 \item Local \& global transforms treated the same in resampler
+\pause 
 \item Both types available to (revised) optimizers
+\pause 
 \item Revised metrics optimized for these operations
-\item Tensors, vector, scalars treated transparently
 \end{itemize}
 \end{frame}
-\subsection{Example}
+
+\subsection{Exercises}
  \centeredlargetext{white}{black}{
 \centering Example Registration
 }
 
-\begin{frame}
-\frametitle{Image Registration Refactoring: Brain + N-hood CC}
-\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest}\\
-\textcolor{blue}{r16slice.jpg r64slice.jpg out.nii.gz  50 500 }\\
-\includegraphics[height=2.2in]{../Art/r16slice.jpg}
-\includegraphics[height=2.2in]{../Art/r64slice.jpg}
+\begin{frame}[fragile]
+\frametitle{Exercise 2: Perform a simple registration}
+\begin{verbatim}
+gedit ~/Documents/ITKv4-TheNextGeneration-Tutorial/\
+Exercises/Registration/RegistrationExercises.cxx &
+
+cd ~/bin/Documents/ITKv4-TheNextGeneration-Tutorial
+make
+
+eog ~/data/BrainProtonDensitySliceBorder20.png &
+eog ~/data/BrainProtonDensitySliceR10X13Y17.png &
+\end{verbatim}
 \end{frame}
 
-\begin{frame}
-\frametitle{Image Registration Code: Brain + N-hood CC}
-\begin{itemize}
-\item Define the metric
-\lstlistingwithnumber{171}{175}{itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest.cxx}
-\item Define the transforms
-\lstlistingwithnumber{165}{168}{itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest.cxx}
-\lstlistingwithnumber{138}{141}{itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest.cxx}
-\item Resample the image
-\lstlistingwithnumber{201}{202}{itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest.cxx}
-\end{itemize}
+\begin{frame}[fragile]
+\frametitle{Exercise 2: Perform a simple registration}
+\begin{verbatim}
+./bin/RegistrationExercises ~/data/BrainProtonDensitySliceBorder20.png \
+  ~/data/BrainProtonDensitySliceR10X13Y17.png \
+  ./Registered.png
 
+eog ./Registered.png
+\end{verbatim}
 \end{frame}
 
-\begin{frame}
-\frametitle{Image Registration Refactoring: Composite Tx + MI}
-\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkThevenazMutualInformationImageToImageObjectRegistrationTest }\\
-\textcolor{blue}{face\_avg.jpg face\_c.jpg out.nii.gz  50 0.001 0.75 }\\
-\includegraphics[height=2.2in]{../Art/face_avg.jpg}
-\includegraphics[height=2.2in]{../Art/face_c.jpg}
-\end{frame}
-
-\begin{frame}
-\frametitle{Image Registration Result: Composite Tx + MI}
-\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkThevenazMutualInformationImageToImageObjectRegistrationTest }\\
-\textcolor{blue}{face\_avg.jpg face\_c.jpg out.nii.gz  50 0.001 0.75 }\\
-\includegraphics[height=2.2in]{../Art/face_avg.jpg}
-\includegraphics[height=2.2in]{../Art/face_c_to_face_avg.jpg}
-\end{frame}
-
-\begin{frame}
-\frametitle{Image Registration Code: Composite Tx + MI}
-\begin{itemize}
-\item Define the metric
-\lstlistingwithnumber{186}{189}{itkThevenazMutualInformationImageToImageObjectRegistrationTest.cxx}
-\item Estimate scaling parameters for the affine transform
-\lstlistingwithnumber{207}{210}{itkThevenazMutualInformationImageToImageObjectRegistrationTest.cxx}
-\item Run the affine then add it to composite along with a new
-  deformation transform
-\lstlistingwithnumber{233}{238}{itkThevenazMutualInformationImageToImageObjectRegistrationTest.cxx}
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Image Registration Refactoring Example}
-\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkThevenazMutualInformationImageToImageObjectRegistrationTest }\\
-\textcolor{blue}{face\_avg.jpg face\_b.jpg out.nii.gz  50 0.001 0.75 }\\
-\includegraphics[height=2.2in]{../Art/face_avg.jpg}
-\includegraphics[height=2.2in]{../Art/face_b.jpg}
-\end{frame}
-
-\begin{frame}
-\frametitle{Image Registration Refactoring Example}
-\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkThevenazMutualInformationImageToImageObjectRegistrationTest }\\
-\textcolor{blue}{face\_avg.jpg face\_b.jpg out.nii.gz  50 0.001 0.75 }\\
-\includegraphics[height=2.2in]{../Art/face_avg.jpg}
-\includegraphics[height=2.2in]{../Art/face_b_to_face_avg_aff.jpg}
-\end{frame}
-\begin{frame}
-\frametitle{Image Registration Refactoring Example}
-\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkThevenazMutualInformationImageToImageObjectRegistrationTest }\\
-\textcolor{blue}{face\_avg.jpg face\_b.jpg out.nii.gz  50 0.001 0.75 }\\
-\includegraphics[height=2.2in]{../Art/face_avg.jpg}
-\includegraphics[height=2.2in]{../Art/face_b_to_face_avg.jpg}
-\vskip12pt
-25 seconds (1 thread) vs 16 seconds (2 threads) on Macbook Air.
-\end{frame}
-
-\begin{frame}
-\frametitle{Image Registration Refactoring Example}
-\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkThevenazMutualInformationImageToImageObjectRegistrationTest }\\
-\textcolor{blue}{r16slice.jpg r64slice\_neg.jpg out.nii.gz  50 0.001 0.75 }\\
-\includegraphics[height=2.2in]{../Art/r16slice.jpg}
-\includegraphics[height=2.2in]{../Art/r64slice_neg.jpg}
-\end{frame}
-
-\begin{frame}
-\frametitle{Image Registration Refactoring Example}
-\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkThevenazMutualInformationImageToImageObjectRegistrationTest }\\
-\textcolor{blue}{r16slice.jpg r64slice\_neg.jpg out.nii.gz  50 0.001 0.75 }\\
-\includegraphics[height=2.2in]{../Art/r16slice.jpg}
-\includegraphics[height=2.2in]{../Art/r64slice_neg_to_16.jpg}
+\begin{frame}[fragile]
+\frametitle{Exercise 3: Do not scale the optimizer parameters}
+  \begin{itemize}
+    \item In \texttt{RegistrationExercises.cxx}, \textbf{line 163}, turn off
+      automatic optimizer paramer scaling.
+    \item What happens and why?
+  \end{itemize}
 \end{frame}
