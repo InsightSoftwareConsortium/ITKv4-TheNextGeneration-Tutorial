@@ -55,7 +55,7 @@ Software Environment
 \begin{itemize}
 \item Find source code of exercises
 \begin{verbatim}
-cd ~/src/ITKv4-TheNextGeneration-Tutorial/Exercises
+cd ~/Documents/ITKv4-TheNextGeneration-Tutorial/Exercises
 pwd
 ls
 nautilus .
@@ -63,7 +63,7 @@ nautilus .
 \pause
 \item Find binary build of exercises
 \begin{verbatim}
-cd ~/bin/ITKv4-TheNextGeneration-Tutorial/Exercises
+cd ~/bin/Documents/ITKv4-TheNextGeneration-Tutorial/Exercises
 pwd
 ls
 \end{verbatim}
@@ -74,14 +74,30 @@ ls
 {
 \setbeamertemplate{background}{}
 \begin{frame}[fragile]
+\frametitle{The TAB Key is your Friend}
+\begin{itemize}
+\item When writing filenames
+\item Use the TAB key for completions
+\item No need to type full filenames
+\end{itemize}
+\end{frame}
+}
+
+{
+\setbeamertemplate{background}{}
+\begin{frame}[fragile]
 \frametitle{How to View Images}
 \begin{itemize}
 \item Go to the directory
-\item Invoke ``eye of gnome" eog application
+\item Invoke ``ImageViewer'' application
 \begin{verbatim}
-cd ~/src/ITK/Examples/Data/
-eog BrainProtonDensitySlice.png
+cd ~/data
+ImageViewer BrainProtonDensitySlice.png
 \end{verbatim}
+\pause
+\item Hit ``+'' key to zoom in
+\pause
+\item Hit ``-'' key to zoom out
 \pause
 \item Hit ESC key to quit the application
 \end{itemize}
