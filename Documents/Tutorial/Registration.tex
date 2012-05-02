@@ -57,11 +57,10 @@ ITK v4 framework
  }
 
 \begin{frame}
-\frametitle{Exercise 1: Perform a registration}
-\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest}\\
-\textcolor{blue}{r16slice.jpg r64slice.jpg out.nii.gz  50 500 }\\
-\includegraphics[height=2.2in]{../Art/r16slice.jpg}
-\includegraphics[height=2.2in]{../Art/r64slice.jpg}
+\frametitle{Exercise 1: Look at options for a registration program}
+\begin{verbatim}
+~/bin/ANTS/bin/antsRegistration --help | less
+\end{verbatim}
 \end{frame}
 
 \begin{frame}
