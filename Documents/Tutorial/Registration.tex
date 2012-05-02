@@ -45,19 +45,31 @@ Baohua Wu, Michael Stauffer, James C. Gee
 \end{frame}
 
  \centeredlargetext{white}{black}{
-\centering Enhanced user experience
-%\includegraphics[height=1.8in]{../Art/ITKv4}
+ITK v3 framework
+\vskip20pt
+\includegraphics[height=2.2in]{../Art/itkv3reg}
  }
 
  \centeredlargetext{white}{black}{
-\centering Unified multi-core framework + parameter-estimation
-% \includegraphics[height=1.8in]{../Art/ITKv4}
+ITK v4 framework
+\vskip20pt
+\includegraphics[height=2.2in]{../Art/itkv4reg}
  }
 
+\begin{frame}
+\frametitle{Exercise 1: Perform a registration}
+\textcolor{red}{./bin/ITKRegistrationRefactoringTestDriver itkANTSNeighborhoodCorrelationImageToImageObjectRegistrationTest}\\
+\textcolor{blue}{r16slice.jpg r64slice.jpg out.nii.gz  50 500 }\\
+\includegraphics[height=2.2in]{../Art/r16slice.jpg}
+\includegraphics[height=2.2in]{../Art/r64slice.jpg}
+\end{frame}
+
+\begin{frame}
+\frametitle{Composite transformations}
+\includegraphics[height=2.5in]{../Art/composite}
+\end{frame}
 
 \subsection{Refactoring overview}
-\begin{comment}
-{
 
 \begin{frame}
 \frametitle{Image Registration Refactoring}
@@ -66,12 +78,10 @@ Baohua Wu, Michael Stauffer, James C. Gee
 \item Unify frameworks: local \& global 
 \pause
 \item New metrics and transform operations for vectors \&  tensors
-\pause 
-\item Composite Transform
 \pause
 \item Unbiased registration
 \pause
-\item Multi-threading 
+\item Multi-threading throughout the metrics
 \pause 
 \item Automated parameter scaling
 \end{itemize}
@@ -87,42 +97,10 @@ Baohua Wu, Michael Stauffer, James C. Gee
 \item Tensors, vector, scalars treated transparently
 \end{itemize}
 \end{frame}
-}
-\end{comment}
-
- \centeredlargetext{white}{black}{
-ITK v3 framework
-\vskip20pt
-\includegraphics[height=2.2in]{../Art/itkv3reg}
- }
-
- \centeredlargetext{white}{black}{
-ITK v4 framework
-\vskip20pt
-\includegraphics[height=2.2in]{../Art/itkv4reg}
- }
-
-\begin{frame}
-\frametitle{Composite transformations}
-\includegraphics[height=2.5in]{../Art/composite}
-\end{frame}
-
 \subsection{Example}
  \centeredlargetext{white}{black}{
 \centering Example Registration
 }
-
-\begin{frame}
-\frametitle{Compile external module}
-\begin{itemize}
-\item We link the external module
-\lstlistingwithnumber{4}{5}{install_registration_code.cxx}
-\item We recompile
-\lstlistingwithnumber{6}{9}{install_registration_code.cxx}
-\item Be sure to compile in Release mode for real applications!
-\end{itemize}
-\end{frame}
-
 
 \begin{frame}
 \frametitle{Image Registration Refactoring: Brain + N-hood CC}
@@ -214,79 +192,4 @@ ITK v4 framework
 \textcolor{blue}{r16slice.jpg r64slice\_neg.jpg out.nii.gz  50 0.001 0.75 }\\
 \includegraphics[height=2.2in]{../Art/r16slice.jpg}
 \includegraphics[height=2.2in]{../Art/r64slice_neg_to_16.jpg}
-\end{frame}
-
-\subsection{Summary of new features}
-
-\begin{frame}
-\frametitle{New metrics}
-\Large
-\begin{itemize}
-\item Metrics produce consistent results across threads.
-\item Sparse and dense neighborhood correlation.
-\item New mutual information implementation.
-\item Point sets ---  euclidean, pse, Jensen-Havrda-Charvat-Tsallis (JHCT).
-\item Tensor --- deviatoric and Euclidean.
-\item Vector --- arbitrary length (non-geometric) and covariant.
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{New transform models}
-\Large
-\begin{itemize}
-\item As in ITKv3 $+$ some new ones + thread safety 
-\item Displacement transforms
-\item Updated bspline transforms
-\item Poly-affine
-\item Diffeomorphic (TBD)
-\item Velocityfield --- needs optimizer
-\item GPU Demons!!
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{New optimizers}
-\Large
-\begin{itemize}
-\item Multi-threaded update functions
-\item Efficient use of parameters for high-dimensional transformations
-\item Automated parameter adjustment via Quasi-Newton $+$ moving parameter estimation.
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\Large
-\frametitle{Multi-threading}
-\textcolor{red}{ ITK\_GLOBAL\_DEFAULT\_NUMBER\_OF\_THREADS=NT}\\
-\textcolor{red}{export ITK\_GLOBAL\_DEFAULT\_NUMBER\_OF\_THREADS}
-\vskip20pt
-\textcolor{blue}{metric-$>$SetNumberOfThreads(2)}
-\includegraphics[height=1.5in]{../Art/cctran}~~\includegraphics[height=1.5in]{../Art/ccfield}
-\end{frame}
-
-\subsection{Conclusion}
-
-\begin{frame}
-\Large
-\frametitle{References relevant to ITKv4 development}
-\includegraphics[height=3.2in]{../Art/registration_references}
-\end{frame}
-
-\begin{frame}
-\Large
-\frametitle{Recap \& Conclusion}
-\begin{itemize}
-\item Local \& global support transforms in same framework
-\pause
-\item Speed-up on multi-core machines for all high-dimensional metrics ($~N$-cores)
-\pause
-\item Multivariate and multi-component metrics coming!
-\pause
-\item Tensors, vector, scalars, landmarks, diffeomorphisms ... 
-\pause
-\item Evaluation will take some time and could use your help.
-\pause
-\item Looking forward to getting feedback on insight-users! 
-\end{itemize}
 \end{frame}
