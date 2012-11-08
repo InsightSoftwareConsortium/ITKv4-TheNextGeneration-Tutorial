@@ -26,7 +26,7 @@
 #include "itkCompositeTransform.h"
 #include "itkGradientDescentOptimizerv4.h"
 #include "itkImageRegistrationMethodv4.h"
-#include "itkRegistrationParameterScalesFromShift.h"
+#include "itkRegistrationParameterScalesFromPhysicalShift.h"
 
 template<class TOptimizer>
 class CommandIterationUpdate : public itk::Command
@@ -153,9 +153,9 @@ int main( int argc, char *argv[] )
   optimizer->SetMaximumStepSizeInPhysicalUnits( 0.5 );
 
   // The optimizer assumes that the metric is equally sensitive to all transform
-  // parameters.  However, that is not true.  This classe determines what good
+  // parameters.  However, that is not true.  This class determines what good
   // scales should be for the given transform.
-  typedef itk::RegistrationParameterScalesFromShift< MetricType > ScalesEstimatorType;
+  typedef itk::RegistrationParameterScalesFromPhysicalShift< MetricType > ScalesEstimatorType;
   ScalesEstimatorType::Pointer scalesEstimator = ScalesEstimatorType::New();
   scalesEstimator->SetMetric( metric );
   scalesEstimator->SetTransformForward( true );

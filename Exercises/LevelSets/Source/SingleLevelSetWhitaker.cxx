@@ -24,8 +24,8 @@
 #include "itkLevelSetContainer.h"
 #include "itkLevelSetEquationChanAndVeseInternalTerm.h"
 #include "itkLevelSetEquationChanAndVeseExternalTerm.h"
-#include "itkLevelSetEquationTermContainerBase.h"
-#include "itkLevelSetEquationContainerBase.h"
+#include "itkLevelSetEquationTermContainer.h"
+#include "itkLevelSetEquationContainer.h"
 #include "itkSinRegularizedHeavisideStepFunction.h"
 #include "itkLevelSetEvolution.h"
 #include "itkBinaryImageToLevelSetImageAdaptor.h"
@@ -184,7 +184,7 @@ int main( int argc, char* argv[] )
   // **************** CREATE ALL EQUATIONS ****************
 
   // Create Term Container which corresponds to the combination of terms in the PDE.
-  typedef itk::LevelSetEquationTermContainerBase<
+  typedef itk::LevelSetEquationTermContainer<
     InputImageType, LevelSetContainerType > TermContainerType;
 
   TermContainerType::Pointer termContainer0 = TermContainerType::New();
@@ -196,7 +196,7 @@ int main( int argc, char* argv[] )
 
   std::cout << "Term container 0 created" << std::endl;
 
-  typedef itk::LevelSetEquationContainerBase< TermContainerType > EquationContainerType;
+  typedef itk::LevelSetEquationContainer< TermContainerType > EquationContainerType;
   EquationContainerType::Pointer equationContainer = EquationContainerType::New();
   equationContainer->AddEquation( 0, termContainer0 );
   equationContainer->SetLevelSetContainer( lscontainer );
