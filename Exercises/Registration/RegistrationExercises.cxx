@@ -78,7 +78,7 @@ int main( int argc, char *argv[] )
   // want to use for the pixel.
   static const unsigned int ImageDimension = 2;
 
-  typedef float                                   PixelType;
+  typedef double                                  PixelType;
   typedef itk::Image< PixelType, ImageDimension > FixedImageType;
   typedef itk::Image< PixelType, ImageDimension > MovingImageType;
 
