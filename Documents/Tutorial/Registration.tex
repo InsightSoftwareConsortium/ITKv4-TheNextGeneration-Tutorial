@@ -44,6 +44,10 @@ Baohua Wu, Michael Stauffer, James C. Gee
 \end{displaymath}
 \end{frame}
 
+\subsection{Refactoring overview}
+
+\subsection{ITK Registration Framework}
+
  \centeredlargetext{white}{black}{
 ITK v3 framework
 \vskip20pt
@@ -56,78 +60,42 @@ ITK v4 framework
 \includegraphics[height=2.2in]{../Art/itkv4reg}
  }
 
-\begin{frame}[fragile]
-\frametitle{Exercise 1: Look at options for a registration program}
-\begin{verbatim}
-~/bin/ANTS/bin/antsRegistration --help | less
-\end{verbatim}
-\end{frame}
-
 \begin{frame}
 \frametitle{Composite transformations}
 \includegraphics[height=2.5in]{../Art/composite}
 \end{frame}
 
-\subsection{Refactoring overview}
+\subsection{Exercise}
 
-\begin{frame}
-\frametitle{Image Registration Refactoring}
-\Large
-\begin{itemize}
-\item Transform operations for vectors \&  tensors
-\pause
-\item Unbiased registration
-\pause
-\item Multi-threading throughout the metrics
-\pause 
-\item Automated parameter scaling
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Unified framework}
-\Large
-\begin{itemize}
-\item Local \& global transforms treated the same in resampler
-\pause 
-\item Both types available to (revised) optimizers
-\pause 
-\item Revised metrics optimized for these operations
-\end{itemize}
-\end{frame}
-
-\subsection{Exercises}
  \centeredlargetext{white}{black}{
 \centering Example Registration
 }
 
 \begin{frame}[fragile]
-\frametitle{Exercise 2: Perform a simple registration}
+\frametitle{Example: Perform a simple registration}
 \begin{verbatim}
-gedit ~/Documents/ITKv4-TheNextGeneration-Tutorial/\
+leafpad ~/src/ITKv4-TheNextGeneration-Tutorial/\
 Exercises/Registration/RegistrationExercises.cxx &
 
-cd ~/bin/Documents/ITKv4-TheNextGeneration-Tutorial
-make
-
-eog ~/data/BrainProtonDensitySliceBorder20.png &
-eog ~/data/BrainProtonDensitySliceR10X13Y17.png &
+ImageViewer ~/data/BrainProtonDensitySliceBorder20.png &
+ImageViewer ~/data/BrainProtonDensitySliceR10X13Y17.png &
 \end{verbatim}
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{Exercise 2: Perform a simple registration}
+\frametitle{Example: Perform a simple registration}
 \begin{verbatim}
 ./bin/RegistrationExercises ~/data/BrainProtonDensitySliceBorder20.png \
   ~/data/BrainProtonDensitySliceR10X13Y17.png \
-  ./Registered.png
+  ./Registered.png \
+  3000
 
-eog ./Registered.png
+ImageViewer ./Registered.png &
 \end{verbatim}
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{Exercise 3: Do not scale the optimizer parameters}
+\frametitle{Exercise: Do not scale the optimizer parameters}
   \begin{itemize}
     \item In \texttt{RegistrationExercises.cxx}, \textbf{line 163}, turn off
       automatic optimizer paramer scaling.
