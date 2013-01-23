@@ -68,10 +68,10 @@ public:
 
 int main( int argc, char *argv[] )
 {
-  if( argc < 4 )
+  if( argc < 5 )
     {
-    std::cout << argv[0] << " fixedImage movingImage outputImage numberIterations " << std::endl;
-    exit( 1 );
+    std::cerr << argv[0] << " fixedImage movingImage outputImage numberIterations " << std::endl;
+    return EXIT_FAILURE;
     }
 
   // Define what image dimension we will be working with and what type we
